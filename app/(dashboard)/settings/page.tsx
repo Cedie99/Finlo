@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Plus, Trash2, User, DollarSign, BookTemplate } from "lucide-react";
+import { Plus, Trash2, User, DollarSign, BookTemplate, ShieldCheck } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { formatCurrency } from "@/lib/utils/currency";
 import { formatDate, getMonthYear } from "@/lib/utils/dates";
 import { toast } from "@/lib/utils/toast";
 import { cn } from "@/lib/utils";
+import { useUpdateUserPreferences, useUserPreferences } from "@/lib/hooks/useUserPreferences";
 
 interface IncomeTemplate { id: string; source: string; amount: string; dayOfMonth: number | null; }
 interface Income { id: string; source: string; amount: string; receivedAt: string | null; monthYear: string; }
@@ -24,7 +25,15 @@ export default function SettingsPage() {
   const [templateDialog, setTemplateDialog] = useState(false);
   const [income, setIncome] = useState({ source: "", amount: "", monthYear, receivedAt: "" });
   const [newTemplate, setNewTemplate] = useState({ source: "", amount: "", dayOfMonth: "" });
+  const [cashGuard, setCashGuard] = useState({
+    bufferPercentage: "10",
+    minimumCashBuffer: "",
+    paydayDays: "15",
+    enableDailyDigest: true,
+  });
   const qc = useQueryClient();
+  const { data: preferences } = useUserPreferences();
+  const updatePreferences = useUpdateUserPreferences();
 
   const { data: incomes = [] } = useQuery<Income[]>({
     queryKey: ["incomes", monthYear],
@@ -116,6 +125,63 @@ export default function SettingsPage() {
     setIncome((s) => ({ ...s, source: t.source, amount: t.amount, receivedAt }));
   }
 
+  useEffect(() => {
+    if (!preferences) return;
+    setCashGuard({
+      bufferPercentage: preferences.bufferPercentage,
+      minimumCashBuffer: preferences.minimumCashBuffer ?? "",
+      paydayDays: preferences.paydayDaysOfMonth.join(", "),
+      enableDailyDigest: preferences.enableDailyDigest,
+    });
+  }, [preferences]);
+
+  function parsePaydayDays(value: string): number[] {
+    const parsed = value
+      .split(",")
+      .map((v) => parseInt(v.trim(), 10))
+      .filter((v) => Number.isFinite(v) && v >= 1 && v <= 31);
+
+    return Array.from(new Set(parsed)).sort((a, b) => a - b).slice(0, 4);
+  }
+
+  async function saveCashGuardSettings() {
+    const bufferPercentage = parseFloat(cashGuard.bufferPercentage);
+    if (!Number.isFinite(bufferPercentage) || bufferPercentage <= 0 || bufferPercentage > 100) {
+      toast.error("Invalid buffer percentage", "Use a number between 0.01 and 100.");
+      return;
+    }
+
+    const paydayDays = parsePaydayDays(cashGuard.paydayDays);
+    if (paydayDays.length === 0) {
+      toast.error("Invalid payday days", "Provide at least one day between 1 and 31.");
+      return;
+    }
+
+    const fixedBuffer = cashGuard.minimumCashBuffer.trim() === ""
+      ? null
+      : parseFloat(cashGuard.minimumCashBuffer);
+
+    if (fixedBuffer !== null && (!Number.isFinite(fixedBuffer) || fixedBuffer < 0)) {
+      toast.error("Invalid fixed buffer", "Use a non-negative amount or leave it blank.");
+      return;
+    }
+
+    try {
+      await updatePreferences.mutateAsync({
+        bufferPercentage,
+        minimumCashBuffer: fixedBuffer,
+        paydayDaysOfMonth: paydayDays,
+        enableDailyDigest: cashGuard.enableDailyDigest,
+      });
+      toast.success("Cash Guard updated", "Safe-to-spend now uses your latest settings.");
+    } catch (error) {
+      toast.error(
+        "Failed to update Cash Guard",
+        error instanceof Error ? error.message : "Please try again."
+      );
+    }
+  }
+
   const initials = (session?.user?.name ?? "U")
     .split(" ").map((n: string) => n[0]).slice(0, 2).join("").toUpperCase();
 
@@ -133,13 +199,87 @@ export default function SettingsPage() {
             <h2 className="font-bold text-gray-900">Profile</h2>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white font-bold text-lg shadow-sm shadow-indigo-200">
+            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white font-bold text-lg shadow-sm shadow-indigo-200">
               {initials}
             </div>
             <div>
               <p className="font-semibold text-gray-900">{session?.user?.name}</p>
               <p className="text-sm text-gray-400">{session?.user?.email}</p>
             </div>
+          </div>
+        </div>
+
+        {/* Cash Guard Settings */}
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-8 bg-sky-50 rounded-2xl flex items-center justify-center">
+              <ShieldCheck size={16} className="text-sky-600" />
+            </div>
+            <div>
+              <h2 className="font-bold text-gray-900">Cash Guard</h2>
+              <p className="text-xs text-gray-400">Control how Safe to Spend is calculated and how daily alerts behave</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label className="text-sm font-medium text-gray-700">Buffer percentage of monthly income</Label>
+              <Input
+                type="number"
+                min={0.01}
+                max={100}
+                step="0.01"
+                value={cashGuard.bufferPercentage}
+                onChange={(e) => setCashGuard((s) => ({ ...s, bufferPercentage: e.target.value }))}
+                className="mt-1.5 rounded-xl border-gray-200 h-11"
+                placeholder="10"
+              />
+              <p className="text-xs text-gray-400 mt-1">Used when fixed minimum buffer is empty.</p>
+            </div>
+
+            <div>
+              <Label className="text-sm font-medium text-gray-700">Fixed minimum cash buffer (optional)</Label>
+              <Input
+                type="number"
+                min={0}
+                step="0.01"
+                value={cashGuard.minimumCashBuffer}
+                onChange={(e) => setCashGuard((s) => ({ ...s, minimumCashBuffer: e.target.value }))}
+                className="mt-1.5 rounded-xl border-gray-200 h-11"
+                placeholder="e.g. 5000"
+              />
+              <p className="text-xs text-gray-400 mt-1">If set, this overrides the percentage rule.</p>
+            </div>
+
+            <div className="sm:col-span-2">
+              <Label className="text-sm font-medium text-gray-700">Payday days of month</Label>
+              <Input
+                value={cashGuard.paydayDays}
+                onChange={(e) => setCashGuard((s) => ({ ...s, paydayDays: e.target.value }))}
+                className="mt-1.5 rounded-xl border-gray-200 h-11"
+                placeholder="15, 30"
+              />
+              <p className="text-xs text-gray-400 mt-1">Comma-separated values between 1 and 31.</p>
+            </div>
+
+            <label className="sm:col-span-2 flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={cashGuard.enableDailyDigest}
+                onChange={(e) => setCashGuard((s) => ({ ...s, enableDailyDigest: e.target.checked }))}
+              />
+              Enable daily safe-to-spend digest notification
+            </label>
+          </div>
+
+          <div className="mt-5 flex justify-end">
+            <Button
+              onClick={saveCashGuardSettings}
+              disabled={updatePreferences.isPending}
+              className="rounded-full bg-sky-600 hover:bg-sky-700"
+            >
+              {updatePreferences.isPending ? "Saving..." : "Save Cash Guard"}
+            </Button>
           </div>
         </div>
 

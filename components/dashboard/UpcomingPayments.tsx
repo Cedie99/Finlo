@@ -100,7 +100,10 @@ export function UpcomingPayments({
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-bold text-gray-800">{formatCurrency(e.amount)}</p>
+                    <p className="text-sm font-bold text-gray-800">
+                      {e.kind === "payday" ? "+" : "-"}
+                      {formatCurrency(e.amount)}
+                    </p>
                     <span className={cn(
                       "text-xs font-semibold px-2 py-0.5 rounded-full",
                       isUrgent ? "bg-red-100 text-red-600" :

@@ -27,7 +27,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
     .toUpperCase();
 
   return (
-    <header className="h-14 border-b border-gray-100 bg-white flex items-center justify-between px-5 sticky top-0 z-20">
+    <header className="h-14 border-b border-gray-100 bg-white flex items-center justify-between px-5 sticky top-0 z-100">
       <button
         onClick={onMenuClick}
         className="lg:hidden p-2 rounded-xl hover:bg-gray-50 text-gray-500"

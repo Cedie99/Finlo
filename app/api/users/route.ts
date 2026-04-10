@@ -46,6 +46,13 @@ export async function POST(request: Request) {
         name,
         email,
         passwordHash,
+        preferences: {
+          create: {
+            bufferPercentage: "10",
+            paydayDaysOfMonth: [15],
+            enableDailyDigest: true,
+          },
+        },
         budgetCategories: {
           create: DEFAULT_CATEGORIES.map((cat) => ({
             ...cat,

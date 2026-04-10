@@ -48,6 +48,17 @@ async function createUserWithCategories(email: string, name: string, password: s
     });
   }
 
+  await prisma.userPreference.upsert({
+    where: { userId: user.id },
+    update: {},
+    create: {
+      userId: user.id,
+      bufferPercentage: "10",
+      paydayDaysOfMonth: [15],
+      enableDailyDigest: true,
+    },
+  });
+
   return user;
 }
 

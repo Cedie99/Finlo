@@ -1,6 +1,17 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/lib/utils/toast";
 
+export class ApiError extends Error {
+  status: number;
+  payload: unknown;
+
+  constructor(message: string, status: number, payload: unknown) {
+    super(message);
+    this.status = status;
+    this.payload = payload;
+  }
+}
+
 export interface Transaction {
   id: string;
   type: "INCOME" | "EXPENSE";
@@ -51,7 +62,10 @@ export function useCreateTransaction() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) { const err = await res.json(); throw new Error(err.error || "Failed"); }
+      if (!res.ok) {
+        const err = await res.json();
+        throw new ApiError(err.error || "Failed", res.status, err);
+      }
       return res.json();
     },
     onSuccess: (_, vars: any) => {
@@ -61,9 +75,15 @@ export function useCreateTransaction() {
       qc.invalidateQueries({ queryKey: ["dashboard"] });
       qc.invalidateQueries({ queryKey: ["budget"] });
       qc.invalidateQueries({ queryKey: ["cash-flow-plan"] });
+      qc.invalidateQueries({ queryKey: ["safe-to-spend"] });
       qc.invalidateQueries({ queryKey: ["reports"] });
     },
-    onError: (err: Error) => toast.error("Failed to record transaction", err.message),
+    onError: (err: Error) => {
+      if (err instanceof ApiError && err.status === 409) {
+        return;
+      }
+      toast.error("Failed to record transaction", err.message);
+    },
   });
 }
 
@@ -81,6 +101,7 @@ export function useDeleteTransaction() {
       qc.invalidateQueries({ queryKey: ["dashboard"] });
       qc.invalidateQueries({ queryKey: ["budget"] });
       qc.invalidateQueries({ queryKey: ["cash-flow-plan"] });
+      qc.invalidateQueries({ queryKey: ["safe-to-spend"] });
       qc.invalidateQueries({ queryKey: ["reports"] });
     },
     onError: (err: Error) => toast.error("Failed to delete transaction", err.message),

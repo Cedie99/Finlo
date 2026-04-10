@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { differenceInCalendarDays } from "date-fns";
 import { notificationStore } from "@/lib/stores/notificationStore";
 import type { DashboardData } from "./useDashboard";
+import type { SafeToSpendData } from "./useSafeToSpend";
+import { formatCurrency } from "@/lib/utils/currency";
 
 let pageCheckDone = false;
 
@@ -68,4 +70,29 @@ export function usePaymentNotifications(data: DashboardData | undefined) {
       });
     }
   }, [data]);
+}
+
+export function useDailyCashDigest(
+  safeToSpend: SafeToSpendData | undefined,
+  dueTodayCount: number,
+  enabled: boolean
+) {
+  useEffect(() => {
+    if (!safeToSpend || !enabled) return;
+
+    const key = `daily-digest:${safeToSpend.targetDate}`;
+    if (typeof window === "undefined") return;
+    if (window.localStorage.getItem(key)) return;
+
+    notificationStore.add({
+      type: "info",
+      title: `Safe to spend today: ${formatCurrency(safeToSpend.safeToSpendToday)}`,
+      description:
+        dueTodayCount > 0
+          ? `${dueTodayCount} payment${dueTodayCount > 1 ? "s" : ""} due today.`
+          : "No payments due today.",
+    });
+
+    window.localStorage.setItem(key, "1");
+  }, [safeToSpend, dueTodayCount, enabled]);
 }

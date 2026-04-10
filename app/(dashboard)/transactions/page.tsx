@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Plus, Filter, X, ArrowLeftRight, RefreshCw } from "lucide-react";
-import { useTransactions, useCreateTransaction, useDeleteTransaction } from "@/lib/hooks/useTransactions";
+import { ApiError, useTransactions, useCreateTransaction, useDeleteTransaction } from "@/lib/hooks/useTransactions";
 import { useRecurringTransactions, useCreateRecurringTransaction, useToggleRecurring, useDeleteRecurringTransaction, useProcessRecurring } from "@/lib/hooks/useRecurringTransactions";
 import { useBudgetCategories } from "@/lib/hooks/useBudget";
 import { TransactionRow } from "@/components/transactions/TransactionRow";
@@ -17,12 +17,17 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
+import { toast } from "@/lib/utils/toast";
 import type { TransactionInput, RecurringTransactionInput } from "@/lib/validations/transactions";
 
 export default function TransactionsPage() {
   const [tab, setTab] = useState<"transactions" | "recurring">("transactions");
   const [open, setOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [riskDialogOpen, setRiskDialogOpen] = useState(false);
+  const [riskDialogText, setRiskDialogText] = useState("This transaction may impact upcoming bills.");
+  const [pendingTransaction, setPendingTransaction] = useState<TransactionInput | null>(null);
   const [filters, setFilters] = useState<{
     type?: "INCOME" | "EXPENSE" | null;
     categoryId?: string | null;
@@ -48,8 +53,39 @@ export default function TransactionsPage() {
   const transactions = pages?.pages.flatMap((p) => p.items) ?? [];
 
   async function handleCreate(data: TransactionInput) {
-    await create.mutateAsync(data);
-    setOpen(false);
+    try {
+      await create.mutateAsync(data);
+      setOpen(false);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 409) {
+        const payload = error.payload as {
+          requiresConfirmation?: boolean;
+          risks?: Array<{ message?: string; shortfall?: string }>;
+        };
+
+        if (payload.requiresConfirmation) {
+          const firstRisk = payload.risks?.[0];
+          const shortfall = firstRisk?.shortfall ? ` Shortfall: ${firstRisk.shortfall}.` : "";
+          setRiskDialogText(`${firstRisk?.message ?? "This transaction may put your buffer at risk."}${shortfall}`);
+          setPendingTransaction(data);
+          setRiskDialogOpen(true);
+          return;
+        }
+      }
+    }
+  }
+
+  async function confirmRiskyCreate() {
+    if (!pendingTransaction) return;
+    try {
+      await create.mutateAsync({ ...pendingTransaction, ignoreRisks: true });
+      setRiskDialogOpen(false);
+      setPendingTransaction(null);
+      setOpen(false);
+      toast.success("Transaction recorded", "Saved with risk override.");
+    } catch {
+      toast.error("Failed to record transaction", "Try again or adjust the amount/date.");
+    }
   }
 
   async function handleCreateRecurring(data: RecurringTransactionInput) {
@@ -221,6 +257,16 @@ export default function TransactionsPage() {
           )}
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={riskDialogOpen}
+        onOpenChange={setRiskDialogOpen}
+        title="Potential cash flow risk"
+        description={riskDialogText}
+        confirmLabel="Save anyway"
+        cancelLabel="Adjust transaction"
+        onConfirm={confirmRiskyCreate}
+      />
     </div>
   );
 }

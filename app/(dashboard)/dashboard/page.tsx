@@ -8,19 +8,36 @@ import { CashFlowPlanner } from "@/components/dashboard/CashFlowPlanner";
 import { PaydayCalendar } from "@/components/dashboard/PaydayCalendar";
 import { UpcomingPayments } from "@/components/dashboard/UpcomingPayments";
 import { BudgetSummaryRow } from "@/components/dashboard/BudgetSummaryRow";
+import { SafeToSpendHero } from "@/components/dashboard/SafeToSpendHero";
+import { WhatIfSimulator } from "@/components/dashboard/WhatIfSimulator";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { usePaymentNotifications } from "@/lib/hooks/usePaymentNotifications";
+import { useDailyCashDigest, usePaymentNotifications } from "@/lib/hooks/usePaymentNotifications";
 import { FullPageSpinner } from "@/components/shared/LoadingSpinner";
 import { getMonthYear, formatMonthYear, getMonthYear as getMonth } from "@/lib/utils/dates";
 import { addMonths, subMonths } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useSafeToSpend } from "@/lib/hooks/useSafeToSpend";
+import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 
 export default function DashboardPage() {
   const [monthYear, setMonthYear] = useState(getMonthYear());
+  const safeToSpendTargetDate = monthYear === getMonthYear() ? undefined : `${monthYear}-01`;
   const { data, isLoading } = useDashboard(monthYear);
   const { data: cashFlow, isLoading: cashFlowLoading } = useCashFlowPlan(monthYear);
+  const { data: safeToSpend } = useSafeToSpend(monthYear, safeToSpendTargetDate);
+  const { data: preferences } = useUserPreferences();
   usePaymentNotifications(data);
+  const dueTodayCount = data?.upcomingPayments.filter((p) => {
+    const due = new Date(p.nextDueDate);
+    const now = new Date();
+    return (
+      due.getFullYear() === now.getFullYear() &&
+      due.getMonth() === now.getMonth() &&
+      due.getDate() === now.getDate()
+    );
+  }).length ?? 0;
+  useDailyCashDigest(safeToSpend, dueTodayCount, preferences?.enableDailyDigest ?? true);
 
   function prevMonth() {
     const d = new Date(monthYear + "-01");
@@ -40,7 +57,16 @@ export default function DashboardPage() {
         action={
           <div className="flex items-center gap-1">
             <Button variant="outline" size="icon" onClick={prevMonth}><ChevronLeft size={14} /></Button>
-            <span className="text-sm font-medium px-2">{formatMonthYear(monthYear)}</span>
+            {cashFlow ? (
+              <PaydayCalendar
+                inline
+                monthYear={monthYear}
+                paydays={cashFlow.calendar.paydays}
+                dueDates={cashFlow.calendar.dueDates}
+              />
+            ) : (
+              <span className="text-sm font-medium px-2">{formatMonthYear(monthYear)}</span>
+            )}
             <Button variant="outline" size="icon" onClick={nextMonth}><ChevronRight size={14} /></Button>
           </div>
         }
@@ -50,6 +76,9 @@ export default function DashboardPage() {
         <FullPageSpinner />
       ) : data ? (
         <div className="space-y-6">
+          {safeToSpend ? <SafeToSpendHero data={safeToSpend} /> : null}
+          <WhatIfSimulator monthYear={monthYear} targetDate={safeToSpendTargetDate} />
+
           <CashFlowCard income={data.totalIncome} expenses={data.totalExpenses} />
 
           {cashFlowLoading ? (
@@ -60,11 +89,6 @@ export default function DashboardPage() {
                 obligations={cashFlow.obligations}
                 income={cashFlow.income}
                 dtiRatio={cashFlow.dtiRatio}
-              />
-              <PaydayCalendar
-                monthYear={monthYear}
-                paydays={cashFlow.calendar.paydays}
-                dueDates={cashFlow.calendar.dueDates}
               />
             </>
           ) : null}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { transactionSchema } from "@/lib/validations/transactions";
+import { assessTransactionRisks } from "@/lib/utils/transactionRisks";
 
 export async function GET(request: Request) {
   const session = await auth();
@@ -54,8 +55,28 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
+    const ignoreRisks = Boolean(body?.ignoreRisks);
     const parsed = transactionSchema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ error: "Validation failed", issues: parsed.error.issues }, { status: 400 });
+
+    if (!ignoreRisks) {
+      const riskCheck = await assessTransactionRisks(session.user.id, {
+        type: parsed.data.type,
+        amount: parsed.data.amount,
+        date: parsed.data.date,
+      });
+
+      if (riskCheck.hasRisk) {
+        return NextResponse.json(
+          {
+            error: "Transaction risk detected",
+            requiresConfirmation: true,
+            risks: riskCheck.risks,
+          },
+          { status: 409 }
+        );
+      }
+    }
 
     const { amount, date, budgetCategoryId, installmentPlanId, ...rest } = parsed.data;
 
