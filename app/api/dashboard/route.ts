@@ -75,7 +75,7 @@ export async function GET(request: Request) {
     }),
     prisma.budgetLimit.findMany({
       where: { userId, monthYear },
-      include: { budgetCategory: { select: { name: true, color: true, icon: true } } },
+      include: { budgetCategory: { select: { name: true, color: true } } },
     }),
   ]);
 
@@ -89,12 +89,11 @@ export async function GET(request: Request) {
   const budgetSummary = budgetLimits.map((l: {
     budgetCategoryId: string;
     limitAmount: { toString: () => string };
-    budgetCategory: { name: string; color: string; icon: string };
+    budgetCategory: { name: string; color: string };
   }) => ({
     categoryId: l.budgetCategoryId,
     categoryName: l.budgetCategory.name,
     categoryColor: l.budgetCategory.color,
-    categoryIcon: l.budgetCategory.icon,
     limitAmount: l.limitAmount.toString(),
     spent: spendingMap[l.budgetCategoryId] ?? "0",
   }));

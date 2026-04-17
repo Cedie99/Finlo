@@ -276,7 +276,7 @@ export default function SettingsPage() {
             <Button
               onClick={saveCashGuardSettings}
               disabled={updatePreferences.isPending}
-              className="rounded-full bg-sky-600 hover:bg-sky-700"
+              className="rounded-full bg-[#245bff] hover:bg-[#1a47cc]"
             >
               {updatePreferences.isPending ? "Saving..." : "Save Cash Guard"}
             </Button>
@@ -287,8 +287,8 @@ export default function SettingsPage() {
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-violet-50 rounded-2xl flex items-center justify-center">
-                <BookTemplate size={16} className="text-violet-600" />
+              <div className="w-8 h-8 bg-[#edf2ff] rounded-2xl flex items-center justify-center">
+                <BookTemplate size={16} className="text-[#2d53c9]" />
               </div>
               <div>
                 <h2 className="font-bold text-gray-900">Income Templates</h2>
@@ -298,7 +298,7 @@ export default function SettingsPage() {
             <Button
               size="sm"
               onClick={() => setTemplateDialog(true)}
-              className="rounded-full bg-violet-600 hover:bg-violet-700 shadow-sm shadow-violet-100"
+              className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
             >
               <Plus size={14} className="mr-1" /> New Template
             </Button>
@@ -313,8 +313,8 @@ export default function SettingsPage() {
               {templates.map((t) => (
                 <div key={t.id} className="flex items-center justify-between py-3 px-3 rounded-2xl hover:bg-gray-50 group transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-violet-50 flex items-center justify-center">
-                      <BookTemplate size={13} className="text-violet-500" />
+                    <div className="w-8 h-8 rounded-xl bg-[#edf2ff] flex items-center justify-center">
+                      <BookTemplate size={13} className="text-[#4c68ac]" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-800">{t.source}</p>
@@ -322,7 +322,7 @@ export default function SettingsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-violet-600">{formatCurrency(t.amount)}</span>
+                    <span className="text-sm font-bold text-[#2d53c9]">{formatCurrency(t.amount)}</span>
                     <button
                       onClick={() => removeTemplate.mutate(t.id)}
                       className="w-7 h-7 rounded-xl hover:bg-red-50 flex items-center justify-center text-gray-400 hover:text-red-500 transition-all"
@@ -351,7 +351,7 @@ export default function SettingsPage() {
             <Button
               size="sm"
               onClick={() => setIncomeDialog(true)}
-              className="rounded-full bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-100"
+              className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
             >
               <Plus size={14} className="mr-1" /> Add Income
             </Button>
@@ -402,8 +402,8 @@ export default function SettingsPage() {
                       className={cn(
                         "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
                         income.source === t.source && income.amount === t.amount
-                          ? "bg-violet-600 text-white border-violet-600"
-                          : "bg-violet-50 text-violet-700 border-violet-100 hover:bg-violet-100"
+                          ? "bg-[#245bff] text-white border-[#245bff]"
+                          : "bg-[#edf2ff] text-[#2d53c9] border-[#d8e1ff] hover:bg-[#e3ebff]"
                       )}
                     >
                       <BookTemplate size={11} />
@@ -430,7 +430,7 @@ export default function SettingsPage() {
               <Label className="text-sm font-medium text-gray-700">Received Date (optional)</Label>
               <Input type="date" value={income.receivedAt} onChange={(e) => setIncome((s) => ({ ...s, receivedAt: e.target.value }))} className="mt-1.5 rounded-xl border-gray-200 h-11" />
             </div>
-            <Button onClick={() => addIncome.mutate(income)} className="w-full rounded-full bg-indigo-600 hover:bg-indigo-700 h-11" disabled={addIncome.isPending || !income.source || !income.amount}>
+            <Button onClick={() => addIncome.mutate(income)} className="w-full rounded-full bg-[#245bff] hover:bg-[#1a47cc] h-11" disabled={addIncome.isPending || !income.source || !income.amount}>
               {addIncome.isPending ? "Adding..." : "Add Income"}
             </Button>
           </div>
@@ -458,7 +458,7 @@ export default function SettingsPage() {
             </div>
             <Button
               onClick={() => addTemplate.mutate(newTemplate)}
-              className="w-full rounded-full bg-violet-600 hover:bg-violet-700 h-11"
+              className="w-full rounded-full bg-[#245bff] hover:bg-[#1a47cc] h-11"
               disabled={addTemplate.isPending || !newTemplate.source || !newTemplate.amount}
             >
               {addTemplate.isPending ? "Saving…" : "Save Template"}

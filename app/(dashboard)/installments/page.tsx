@@ -36,7 +36,7 @@ export default function InstallmentsPage() {
         action={
           <Button
             onClick={() => setOpen(true)}
-            className="rounded-full bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-100"
+            className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
           >
             <Plus size={15} className="mr-1" /> New Plan
           </Button>
@@ -51,7 +51,7 @@ export default function InstallmentsPage() {
           title="No installment plans"
           description="Add your first installment plan to start tracking"
           action={
-            <Button onClick={() => setOpen(true)} className="rounded-full bg-indigo-600 hover:bg-indigo-700">
+            <Button onClick={() => setOpen(true)} className="rounded-full bg-[#245bff] hover:bg-[#1a47cc]">
               New Plan
             </Button>
           }

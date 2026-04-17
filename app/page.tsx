@@ -1,653 +1,235 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  CreditCard,
-  ListChecks,
-  PiggyBank,
-  BarChart3,
-  ArrowLeftRight,
-  TrendingUp,
-  ShieldCheck,
-  Bell,
-  ChevronRight,
-  Plus,
-  Minus,
-  Check,
-  Zap,
-  Users,
-  Star,
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, CheckCircle2, PlayCircle, Sparkles } from "lucide-react";
 
-/* ─── Animation variants ─────────────────────────────── */
-const fadeUp = {
+const navItems = ["Features", "How It Works", "Use Cases", "FAQ"];
+const metrics = [
+  { label: "Installments tracked", value: "120K+", detail: "Across cards, BNPL, and personal plans." },
+  { label: "Average safe-to-spend", value: "PHP 48K", detail: "Calculated from your real commitments." },
+  { label: "On-time payment confidence", value: "95%", detail: "With alerts and overlap detection." },
+  { label: "Debt payoff plans created", value: "50K+", detail: "Built by users reducing financial stress." },
+];
+const capabilities = [
+  {
+    title: "Smart Installment Tracking",
+    description:
+      "Track every due date in one timeline so you always know what is coming next and what is already paid.",
+  },
+  {
+    title: "Safe-to-Spend Guidance",
+    description:
+      "Get a clear weekly budget ceiling based on upcoming obligations, recurring bills, and your available balance.",
+  },
+  {
+    title: "Debt Payoff Simulation",
+    description:
+      "Test payment scenarios and compare payoff timelines before making a decision so you can pay smarter.",
+  },
+];
+
+const riseIn = {
   hidden: { opacity: 0, y: 28 },
-  visible: (i = 0) => ({
+  visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+    transition: {
+      duration: 0.65,
+      delay,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+    },
   }),
 };
 
-/* ─── Data ────────────────────────────────────────────── */
-const navLinks = ["Features", "How It Works", "FAQ"];
-
-const features = [
-  {
-    icon: CreditCard,
-    color: "bg-indigo-100 text-indigo-600",
-    title: "Credit Card Tracking",
-    desc: "Manage multiple credit cards, monitor balances, billing cycles, and due dates — all in one dashboard.",
-    mockup: <CreditMockup />,
-  },
-  {
-    icon: ListChecks,
-    color: "bg-violet-100 text-violet-600",
-    title: "Installment Plans",
-    desc: "Track every BNPL, loan, and installment plan with real-time progress bars and upcoming due alerts.",
-    mockup: <InstallmentMockup />,
-  },
-  {
-    icon: PiggyBank,
-    color: "bg-purple-100 text-purple-600",
-    title: "Budget & Spending",
-    desc: "Set category limits, visualize spending, and stay within your budget every single month.",
-    mockup: <BudgetMockup />,
-  },
-];
-
-const whyTrust = [
-  { icon: ShieldCheck, title: "Secure & Private", desc: "Your financial data is encrypted and never shared with third parties." },
-  { icon: BarChart3, title: "Real-Time Insights", desc: "Up-to-date reports and dashboard charts that reflect every transaction instantly." },
-  { icon: Bell, title: "Stay on Top of Budgets", desc: "Set smart budget limits and get a clear picture before you overspend." },
-];
-
-const steps = [
-  { icon: Users, step: "01", title: "Create Your Free Account", desc: "Sign up instantly and securely. No credit card required — start in seconds." },
-  { icon: TrendingUp, step: "02", title: "See Smart Reports, Instantly", desc: "Automated reports and charts that help you understand your finances at a glance." },
-  { icon: PiggyBank, step: "03", title: "Track Spending & Stay on Budget", desc: "Visualize your expenses, set clear budget goals, and never lose track of where money goes." },
-];
-
-const faqs = [
-  { q: "Is Finlo free to use?", a: "Yes, Finlo is completely free. Create an account and start tracking your finances right away with no hidden fees." },
-  { q: "What kinds of installments can I track?", a: "You can track credit card installments, personal loans, buy-now-pay-later (BNPL) plans, and any recurring payment split over time." },
-  { q: "Can I manage multiple credit cards?", a: "Absolutely. Add as many credit cards as you need, each with their own billing cycle, limit, and balance tracking." },
-  { q: "Is my financial data safe?", a: "Yes. Your data is stored securely with industry-standard encryption. We never sell or share your personal information." },
-  { q: "Do I need technical skills to use Finlo?", a: "Not at all. Finlo is designed to be simple and intuitive — if you can use a notes app, you can use Finlo." },
-];
-
-const trustedLogos = ["Metrobank", "BDO", "BPI", "GCash", "Maya", "UnionBank"];
-
-/* ─── Mockup components ───────────────────────────────── */
-function CreditMockup() {
+function CapabilityCard({ title, description, index }: { title: string; description: string; index: number }) {
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 p-4 text-white shadow-lg shadow-indigo-200 w-full">
-      <div className="flex justify-between items-start mb-6">
-        <div>
-          <p className="text-indigo-200 text-xs mb-1">Credit Limit</p>
-          <p className="text-2xl font-bold">₱50,000</p>
-        </div>
-        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-          <CreditCard size={16} />
-        </div>
-      </div>
-      <div className="flex gap-1 mb-4">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="h-1.5 flex-1 rounded-full bg-white/30" />
-        ))}
-        <div className="h-1.5 flex-1 rounded-full bg-white/10" />
-      </div>
-      <div className="flex justify-between text-xs">
-        <span className="text-indigo-200">BDO Visa Platinum</span>
-        <span>•••• 4821</span>
-      </div>
-    </div>
-  );
-}
-
-function InstallmentMockup() {
-  const items = [
-    { label: "iPhone 16 Pro", amount: "₱4,166", progress: 60, color: "bg-violet-500" },
-    { label: "Laptop Loan", amount: "₱2,500", progress: 35, color: "bg-indigo-500" },
-    { label: "Appliance BNPL", amount: "₱1,800", progress: 80, color: "bg-purple-500" },
-  ];
-  return (
-    <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm w-full space-y-3">
-      {items.map(({ label, amount, progress, color }) => (
-        <div key={label}>
-          <div className="flex justify-between text-xs mb-1.5">
-            <span className="font-medium text-gray-700">{label}</span>
-            <span className="text-gray-500">{amount}/mo</span>
-          </div>
-          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div className={`h-full rounded-full ${color}`} style={{ width: `${progress}%` }} />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function BudgetMockup() {
-  const cats = [
-    { label: "Food & Dining", used: 70, color: "bg-amber-400" },
-    { label: "Shopping", used: 45, color: "bg-indigo-400" },
-    { label: "Transport", used: 90, color: "bg-red-400" },
-  ];
-  return (
-    <div className="rounded-2xl bg-white border border-gray-100 p-4 shadow-sm w-full space-y-3">
-      {cats.map(({ label, used, color }) => (
-        <div key={label}>
-          <div className="flex justify-between text-xs mb-1.5">
-            <span className="font-medium text-gray-700">{label}</span>
-            <span className="text-gray-500">{used}% used</span>
-          </div>
-          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div className={`h-full rounded-full ${color}`} style={{ width: `${used}%` }} />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ─── FAQ Item ────────────────────────────────────────── */
-function FaqItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div
-      className="border border-gray-100 rounded-2xl overflow-hidden cursor-pointer"
-      onClick={() => setOpen(!open)}
+    <motion.article
+      custom={0.1 + index * 0.08}
+      variants={riseIn}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      className="rounded-2xl border border-[#d8dff5] bg-white/85 p-6 backdrop-blur-sm"
     >
-      <div className="flex items-center justify-between px-5 py-4">
-        <span className="font-medium text-gray-800 dark:text-gray-100 text-sm">{q}</span>
-        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-colors ${open ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-500"}`}>
-          {open ? <Minus size={12} /> : <Plus size={12} />}
-        </div>
+      <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#eef2ff] text-[#245bff]">
+        <Sparkles size={18} />
       </div>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-          >
-            <p className="px-5 pb-4 text-sm text-gray-500 leading-relaxed">{a}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      <h3 className="font-heading text-xl font-semibold text-[#0f1a34]">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-[#5b6785]">{description}</p>
+      <Link
+        href="/register"
+        className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#245bff] transition-colors hover:text-[#1640c4]"
+      >
+        Read more <ArrowRight size={14} />
+      </Link>
+    </motion.article>
   );
 }
 
-/* ─── Page ────────────────────────────────────────────── */
-export default function LandingPage() {
+export default function HomePage() {
   const { data: session } = useSession();
   const userName = session?.user?.name;
-  const initials = userName
-    ? userName.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()
-    : null;
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f6f8ff] text-[#151d34]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(45,95,255,0.15),transparent_42%),radial-gradient(circle_at_10%_70%,rgba(64,186,255,0.16),transparent_38%)]" />
 
-      {/* ── Navbar ── */}
-      <motion.header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4 }}
-        className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100"
-      >
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <header className="relative z-20 px-4 pt-5 sm:px-8">
+        <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between rounded-full border border-[#d8dff5] bg-white/85 px-6 backdrop-blur-md">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">F</span>
-            </div>
-            <span className="font-bold text-lg">Finlo</span>
+            <div className="h-7 w-7 rounded-full bg-linear-to-br from-[#245bff] to-[#5f8cff]" />
+            <span className="font-heading text-sm font-semibold tracking-wide">FINLO</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+          <div className="hidden items-center gap-7 lg:flex">
+            {navItems.map((item) => (
               <a
-                key={link}
-                href={`#${link.toLowerCase().replace(/\s/g, "-")}`}
-                className="text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium"
+                key={item}
+                href="#capabilities"
+                className="text-sm font-medium text-[#536082] transition-colors hover:text-[#1f3568]"
               >
-                {link}
+                {item}
               </a>
             ))}
-          </nav>
+          </div>
 
           <div className="flex items-center gap-3">
             {userName ? (
-              <>
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white text-xs font-semibold">
-                    {initials}
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 hidden sm:block">{userName}</span>
-                </div>
-                <Link
-                  href="/dashboard"
-                  className="flex items-center gap-1.5 text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full transition-colors"
-                >
-                  Dashboard <ChevronRight size={14} />
-                </Link>
-              </>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 rounded-full bg-[#245bff] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1947cd]"
+              >
+                Enter dashboard <ArrowRight size={14} />
+              </Link>
             ) : (
               <>
-                <Link href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors hidden sm:block">
-                  Sign in
+                <Link href="/login" className="hidden text-sm font-medium text-[#546288] sm:inline-block">
+                  Login
                 </Link>
                 <Link
                   href="/register"
-                  className="flex items-center gap-1.5 text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full transition-colors"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#245bff] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1947cd]"
                 >
-                  Get Started <ChevronRight size={14} />
+                  Explore <ArrowRight size={14} />
                 </Link>
               </>
             )}
           </div>
-        </div>
-      </motion.header>
+        </nav>
+      </header>
 
-      {/* ── Hero ── */}
-      <section className="bg-gradient-to-b from-indigo-50/60 to-white pt-20 pb-24 px-6">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left */}
-          <div>
-            <motion.div
-              variants={fadeUp} initial="hidden" animate="visible" custom={0}
-              className="inline-flex items-center gap-2 bg-white border border-indigo-100 text-indigo-600 text-xs font-semibold px-3 py-1.5 rounded-full mb-6 shadow-sm"
-            >
-              <Zap size={12} /> Your Money, Your Control
-            </motion.div>
-
-            <motion.h1
-              variants={fadeUp} initial="hidden" animate="visible" custom={1}
-              className="text-5xl sm:text-6xl font-bold leading-[1.1] tracking-tight mb-6"
-            >
-              Take Control of Your{" "}
-              <span className="text-indigo-600">Financial Future</span>
-            </motion.h1>
-
-            <motion.p
-              variants={fadeUp} initial="hidden" animate="visible" custom={2}
-              className="text-gray-500 text-lg leading-relaxed mb-8 max-w-md"
-            >
-              Track your spending, manage installments, and save smarter — all in one easy-to-use app.
-            </motion.p>
-
-            <motion.div
-              variants={fadeUp} initial="hidden" animate="visible" custom={3}
-              className="flex flex-wrap gap-3 mb-10"
-            >
-              <Link
-                href="/register"
-                className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-full transition-colors shadow-lg shadow-indigo-200"
-              >
-                Start for Free <ChevronRight size={16} />
-              </Link>
-              <Link
-                href="/login"
-                className="flex items-center gap-2 text-gray-700 border border-gray-200 hover:border-indigo-200 bg-white font-semibold px-6 py-3 rounded-full transition-colors"
-              >
-                Sign in
-              </Link>
-            </motion.div>
-
-            <motion.p
-              variants={fadeUp} initial="hidden" animate="visible" custom={4}
-              className="text-xs text-gray-400 flex items-center gap-1"
-            >
-              <Star size={12} className="fill-amber-400 text-amber-400" />
-              <Star size={12} className="fill-amber-400 text-amber-400" />
-              <Star size={12} className="fill-amber-400 text-amber-400" />
-              <Star size={12} className="fill-amber-400 text-amber-400" />
-              <Star size={12} className="fill-amber-400 text-amber-400" />
-              <span className="ml-1">Trusted by thousands of users</span>
-            </motion.p>
-          </div>
-
-          {/* Right — dashboard mockup */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
-          >
-            <div className="bg-white rounded-3xl shadow-2xl shadow-indigo-100 border border-gray-100 p-5 space-y-4">
-              {/* Mock topbar */}
-              <div className="flex items-center justify-between pb-3 border-b border-gray-50">
-                <span className="font-bold text-gray-800 text-sm">Dashboard</span>
-                <span className="text-xs text-gray-400">April 2026</span>
-              </div>
-              {/* Stat cards */}
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { label: "Income", value: "₱28,000", color: "text-emerald-600", bg: "bg-emerald-50" },
-                  { label: "Expenses", value: "₱12,400", color: "text-red-500", bg: "bg-red-50" },
-                  { label: "Savings", value: "₱15,600", color: "text-indigo-600", bg: "bg-indigo-50" },
-                ].map(({ label, value, color, bg }) => (
-                  <div key={label} className={`${bg} rounded-2xl p-3`}>
-                    <p className="text-xs text-gray-500 mb-1">{label}</p>
-                    <p className={`font-bold text-sm ${color}`}>{value}</p>
-                  </div>
-                ))}
-              </div>
-              {/* Recent transactions */}
-              <div className="space-y-2">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Recent Transactions</p>
-                {[
-                  { name: "Grab Food", amount: "-₱350", date: "Today" },
-                  { name: "Salary", amount: "+₱28,000", date: "Apr 1" },
-                  { name: "Netflix", amount: "-₱549", date: "Mar 30" },
-                  { name: "SM Installment", amount: "-₱2,500", date: "Mar 28" },
-                ].map(({ name, amount, date }) => (
-                  <div key={name} className="flex items-center justify-between py-1.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
-                        {name[0]}
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium text-gray-800">{name}</p>
-                        <p className="text-xs text-gray-400">{date}</p>
-                      </div>
-                    </div>
-                    <span className={`text-xs font-semibold ${amount.startsWith("+") ? "text-emerald-600" : "text-gray-700"}`}>
-                      {amount}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Floating badge */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-2.5 flex items-center gap-2"
-            >
-              <div className="w-7 h-7 bg-emerald-50 rounded-full flex items-center justify-center">
-                <TrendingUp size={14} className="text-emerald-600" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-gray-800">Savings up 12%</p>
-                <p className="text-xs text-gray-400">vs last month</p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
-              className="absolute -top-4 -right-4 bg-indigo-600 rounded-2xl shadow-lg px-4 py-2.5 flex items-center gap-2"
-            >
-              <Bell size={14} className="text-white" />
-              <p className="text-xs font-semibold text-white">Payment due in 3 days</p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Trusted by ── */}
-      <section className="border-y border-gray-100 py-8 px-6">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-center text-xs text-gray-400 uppercase tracking-widest font-semibold mb-6">Works with your bank &amp; wallet</p>
-          <div className="flex flex-wrap justify-center gap-8">
-            {trustedLogos.map((name) => (
-              <span key={name} className="text-gray-300 font-bold text-sm tracking-wide">{name}</span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Features ── */}
-      <section id="features" className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <p className="text-indigo-600 text-xs font-semibold uppercase tracking-widest mb-3">Simple. Smart. Financial Control</p>
-            <h2 className="text-4xl font-bold mb-4">Powerful Features to Take Control<br />of Your Finances</h2>
-            <p className="text-gray-500 max-w-lg mx-auto text-base">
-              Manage your finances with Finlo. Monitor expenses, save efficiently — all within a user-friendly app.
+      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-8 sm:pt-16">
+        <section className="grid items-start gap-10 lg:grid-cols-[1.35fr_0.8fr]">
+          <motion.div custom={0} variants={riseIn} initial="hidden" animate="visible">
+            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d7def4] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#245bff]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#245bff]" />
+              Built for real-life budgeting
             </p>
+            <h1 className="font-heading text-[clamp(2.2rem,7vw,4.7rem)] leading-[0.95] tracking-tight text-[#111a31]">
+              Turn Monthly Chaos
+              <br />
+              into <span className="bg-linear-to-r from-[#2158ff] to-[#2ba8ff] bg-clip-text text-transparent">Financial Clarity</span>
+            </h1>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {features.map(({ icon: Icon, color, title, desc, mockup }, i) => (
-              <motion.div
-                key={title}
-                variants={fadeUp} initial="hidden" whileInView="visible"
-                viewport={{ once: true }} custom={i}
-                whileHover={{ y: -4 }}
-                className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all"
-              >
-                <div className={`w-10 h-10 rounded-2xl ${color} flex items-center justify-center mb-4`}>
-                  <Icon size={20} />
-                </div>
-                <h3 className="font-bold text-lg mb-2">{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">{desc}</p>
-                {mockup}
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-full transition-colors shadow-lg shadow-indigo-100"
-            >
-              Explore All Features <ChevronRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Why Trust ── */}
-      <section className="bg-gray-50 py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="text-center mb-14"
-          >
-            <p className="text-indigo-600 text-xs font-semibold uppercase tracking-widest mb-3">Why Choose Finlo</p>
-            <h2 className="text-4xl font-bold">Why Thousands Trust Finlo</h2>
-            <p className="text-gray-500 mt-3 max-w-md mx-auto text-sm">Experience a smarter, more personal financial management tool built for simplicity.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {whyTrust.map(({ icon: Icon, title, desc }, i) => (
-              <motion.div
-                key={title}
-                variants={fadeUp} initial="hidden" whileInView="visible"
-                viewport={{ once: true }} custom={i}
-                className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm"
-              >
-                <div className="w-11 h-11 bg-indigo-50 rounded-2xl flex items-center justify-center mb-4">
-                  <Icon size={22} className="text-indigo-600" />
-                </div>
-                <h3 className="font-bold text-base mb-2">{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── How it works ── */}
-      <section id="how-it-works" className="py-24 px-6">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left — visual */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl p-8 text-white"
-          >
-            <p className="text-indigo-200 text-xs font-semibold uppercase tracking-widest mb-4">How It Works</p>
-            <div className="space-y-4">
-              {[
-                { label: "Transactions", items: ["Parents  +₱50.00", "Peet's Coffee  -₱6.80", "Ali & Nino  -₱21.40"] },
-              ].map(({ label, items }) => (
-                <div key={label} className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm">
-                  <p className="font-semibold text-sm mb-3">{label}</p>
-                  <div className="space-y-2">
-                    {items.map((item) => {
-                      const isPos = item.includes("+");
-                      return (
-                        <div key={item} className="flex justify-between text-xs">
-                          <span className="text-indigo-100">{item.split("  ")[0]}</span>
-                          <span className={isPos ? "text-emerald-300" : "text-red-300"}>{item.split("  ")[1]}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-              <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm">
-                <p className="text-xs text-indigo-200 mb-1">Monthly Budget Used</p>
-                <p className="text-2xl font-bold mb-2">68%</p>
-                <div className="h-2 bg-white/20 rounded-full overflow-hidden">
-                  <div className="h-full bg-white rounded-full w-[68%]" />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right — steps */}
-          <div>
-            <motion.div
-              variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            >
-              <p className="text-indigo-600 text-xs font-semibold uppercase tracking-widest mb-3">How It Works</p>
-              <h2 className="text-4xl font-bold mb-3">Manage Your Finances in<br />3 Simple Steps</h2>
-              <p className="text-gray-500 text-sm mb-10">It&apos;s quick, easy, and stress-free to stay on top of your money — no technical skills required.</p>
-            </motion.div>
-
-            <div className="space-y-6">
-              {steps.map(({ icon: Icon, step, title, desc }, i) => (
-                <motion.div
-                  key={step}
-                  variants={fadeUp} initial="hidden" whileInView="visible"
-                  viewport={{ once: true }} custom={i}
-                  className="flex gap-4"
-                >
-                  <div className="flex-shrink-0 w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-100">
-                    <Icon size={18} className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-base mb-1">{title}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section id="faq" className="bg-gray-50 py-24 px-6">
-        <div className="max-w-3xl mx-auto">
-          <motion.div
-            variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <p className="text-indigo-600 text-xs font-semibold uppercase tracking-widest mb-3">FAQ</p>
-            <h2 className="text-4xl font-bold mb-3">Frequently Asked Questions</h2>
-            <p className="text-gray-500 text-sm">Got questions? We&apos;ve got answers to help you make the most out of Finlo.</p>
-          </motion.div>
-
-          <div className="space-y-3">
-            {faqs.map(({ q, a }) => (
-              <motion.div
-                key={q}
-                variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              >
-                <FaqItem q={q} a={a} />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl px-10 py-16 text-center text-white relative overflow-hidden"
-          >
-            <div className="absolute inset-0 opacity-10">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="absolute rounded-full bg-white" style={{ width: `${80 + i * 40}px`, height: `${80 + i * 40}px`, top: `${10 + i * 8}%`, left: `${5 + i * 15}%`, opacity: 0.3 }} />
-              ))}
-            </div>
-            <div className="relative">
-              <ShieldCheck size={40} className="mx-auto mb-4 text-indigo-200" />
-              <h2 className="text-3xl sm:text-4xl font-bold mb-3">Ready to Take Control?</h2>
-              <p className="text-indigo-200 mb-8 max-w-md mx-auto text-sm leading-relaxed">
-                Join Finlo and stop stressing about missed payments and overspending. It&apos;s free to get started.
-              </p>
+          <motion.div custom={0.08} variants={riseIn} initial="hidden" animate="visible" className="pt-2">
+            <p className="max-w-sm text-sm leading-relaxed text-[#5f6a89]">
+              Finlo helps you track installments, plan bills, and decide what is safe to spend so you can stay in control every month.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 bg-white text-indigo-600 hover:bg-indigo-50 font-bold px-8 py-3.5 rounded-full transition-colors shadow-xl"
+                className="inline-flex items-center gap-2 rounded-full bg-[#245bff] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1a47cc]"
               >
-                Create Your Free Account <ChevronRight size={16} />
+                Start free <ArrowRight size={14} />
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 rounded-full border border-[#cfd8f4] bg-white px-5 py-2.5 text-sm font-semibold text-[#24406d] transition-colors hover:bg-[#f3f6ff]"
+              >
+                <PlayCircle size={15} /> View dashboard
               </Link>
             </div>
           </motion.div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Footer ── */}
-      <footer className="border-t border-gray-100 py-12 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
-            <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="flex items-center gap-2 mb-3">
-                <div className="w-7 h-7 bg-indigo-600 rounded-md flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">F</span>
-                </div>
-                <span className="font-bold">Finlo</span>
-              </Link>
-              <p className="text-gray-400 text-xs leading-relaxed">Your personal finance companion for installments, budgets, and more.</p>
-            </div>
+        <motion.section
+          custom={0.16}
+          variants={riseIn}
+          initial="hidden"
+          animate="visible"
+          className="relative mt-10 h-55 overflow-hidden rounded-[2.2rem] border border-[#dae1f5] bg-white/80 shadow-[0_18px_60px_rgba(40,72,170,0.14)] sm:h-65"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(72,130,255,0.2),transparent_45%),radial-gradient(circle_at_10%_90%,rgba(106,205,255,0.25),transparent_45%)]" />
 
-            {[
-              { heading: "Features", links: ["Credit Cards", "Installments", "Budget", "Reports"] },
-              { heading: "Resources", links: ["How It Works", "FAQ"] },
-              { heading: "Company", links: ["About", "Contact"] },
-            ].map(({ heading, links }) => (
-              <div key={heading}>
-                <p className="font-semibold text-sm mb-3 text-gray-700">{heading}</p>
-                <ul className="space-y-2">
-                  {links.map((l) => (
-                    <li key={l}>
-                      <Link href="/register" className="text-gray-400 hover:text-gray-700 text-sm transition-colors">{l}</Link>
-                    </li>
-                  ))}
-                </ul>
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            className="absolute left-1/2 top-1/2 h-20 w-[92%] max-w-230 -translate-x-1/2 -translate-y-1/2 -rotate-12 rounded-[999px] border border-[#dce5ff] bg-[linear-gradient(130deg,#ffffff_10%,#e6ebff_38%,#f8f9ff_56%,#cbd7ff_86%)] shadow-[0_18px_35px_rgba(53,84,175,0.2),inset_0_8px_14px_rgba(255,255,255,0.8),inset_0_-8px_14px_rgba(144,163,220,0.25)] sm:h-24"
+          >
+            <div className="absolute right-[18%] top-[42%] h-7 w-20 -translate-y-1/2 rounded-full bg-white/70 blur-sm sm:h-9 sm:w-28" />
+            <div className="absolute left-[22%] top-[45%] h-6 w-18 -translate-y-1/2 rounded-full bg-[#b9c9ff]/50 blur-md sm:h-8 sm:w-24" />
+          </motion.div>
+
+          <motion.div
+            animate={{ x: [0, 8, 0] }}
+            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            className="absolute left-6 top-6 rounded-full border border-[#d6def7] bg-white/85 px-3 py-1 text-[11px] font-semibold text-[#2f5ae2]"
+          >
+            95% Faster
+          </motion.div>
+
+          <motion.div
+            animate={{ x: [0, -8, 0] }}
+            transition={{ duration: 8, delay: 1.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            className="absolute bottom-6 right-6 rounded-full border border-[#d6def7] bg-white/85 px-3 py-1 text-[11px] font-semibold text-[#2f5ae2]"
+          >
+            2x Growth
+          </motion.div>
+        </motion.section>
+
+        <motion.section
+          custom={0.2}
+          variants={riseIn}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="mt-10 overflow-hidden rounded-[1.6rem] border border-[#2953dd] bg-[linear-gradient(130deg,#1134aa_0%,#245bff_50%,#2985ff_100%)] text-white"
+        >
+          <div className="grid gap-px bg-[#3f65de] sm:grid-cols-2 lg:grid-cols-4">
+            {metrics.map((metric) => (
+              <div key={metric.label} className="bg-transparent p-6">
+                <p className="font-heading text-[2rem] leading-none">{metric.value}</p>
+                <p className="mt-2 text-sm font-semibold">{metric.label}</p>
+                <p className="mt-1 text-xs text-[#d8e4ff]">{metric.detail}</p>
               </div>
             ))}
           </div>
+        </motion.section>
 
-          <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-            <p className="text-xs text-gray-400">© {new Date().getFullYear()} Finlo. All rights reserved.</p>
-            <div className="flex gap-6">
-              <Link href="/login" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">Sign in</Link>
-              <Link href="/register" className="text-xs text-gray-400 hover:text-gray-600 transition-colors">Register</Link>
+        <section id="capabilities" className="mt-20 grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
+          <motion.div custom={0.05} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#2b59e8]">Our capabilities</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.9rem,5vw,3.2rem)] leading-tight text-[#111c36]">
+              Designed for people managing real expenses.
+            </h2>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-[#5f6b89]">
+              From installment calendars to payoff planning, Finlo gives you practical tools to avoid missed due dates and reduce money stress.
+            </p>
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#e9efff] px-4 py-2 text-xs font-semibold text-[#264dc6]">
+              <CheckCircle2 size={14} /> Private by default with encrypted account data
             </div>
+          </motion.div>
+
+          <div className="space-y-4">
+            {capabilities.map((item, index) => (
+              <CapabilityCard key={item.title} title={item.title} description={item.description} index={index} />
+            ))}
           </div>
-        </div>
-      </footer>
+        </section>
+      </main>
     </div>
   );
 }

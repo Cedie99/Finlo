@@ -58,7 +58,7 @@ export default function BudgetPage() {
             <Button
               onClick={() => setNewCategoryOpen(true)}
               size="sm"
-              className="rounded-full bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-100"
+              className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
             >
               <Plus size={14} className="mr-1" /> Category
             </Button>
@@ -100,7 +100,7 @@ export default function BudgetPage() {
             </div>
             <Button
               onClick={handleSetLimit}
-              className="w-full rounded-full bg-indigo-600 hover:bg-indigo-700 h-11"
+              className="w-full rounded-full bg-[#245bff] hover:bg-[#1a47cc] h-11"
               disabled={setLimit.isPending}
             >
               {setLimit.isPending ? "Saving..." : "Save Limit"}
@@ -141,7 +141,7 @@ export default function BudgetPage() {
             </div>
             <Button
               onClick={handleCreateCategory}
-              className="w-full rounded-full bg-indigo-600 hover:bg-indigo-700 h-11"
+              className="w-full rounded-full bg-[#245bff] hover:bg-[#1a47cc] h-11"
               disabled={createCategory.isPending}
             >
               {createCategory.isPending ? "Creating..." : "Create Category"}

@@ -1,82 +1,71 @@
 import Link from "next/link";
-import { ArrowLeft, ShieldCheck, BarChart3, CreditCard } from "lucide-react";
+import { ArrowRight, ShieldCheck, BarChart3, CreditCard } from "lucide-react";
+import { RouteTransition } from "@/components/layout/RouteTransition";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex">
-      {/* Left panel — branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-700 flex-col justify-between p-12 text-white relative overflow-hidden">
-        {/* Background circles */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-white/5" />
-          <div className="absolute top-40 -right-16 w-56 h-56 rounded-full bg-white/5" />
-          <div className="absolute -bottom-16 left-20 w-80 h-80 rounded-full bg-white/5" />
-        </div>
+    <div className="relative min-h-screen overflow-hidden bg-[#f6f8ff] text-[#151d34]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_8%,rgba(45,95,255,0.14),transparent_40%),radial-gradient(circle_at_15%_92%,rgba(64,186,255,0.14),transparent_44%)]" />
 
-        {/* Logo */}
-        <Link href="/" className="relative flex items-center gap-2 w-fit">
-          <div className="w-9 h-9 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
-            <span className="text-white font-bold text-sm">F</span>
-          </div>
-          <span className="font-bold text-xl">Finlo</span>
-        </Link>
-
-        {/* Middle content */}
-        <div className="relative space-y-8">
-          <div>
-            <h2 className="text-3xl font-bold leading-tight mb-3">
-              Take control of your financial future
-            </h2>
-            <p className="text-indigo-200 text-sm leading-relaxed">
-              Track installments, manage budgets, and monitor spending — all in one clean dashboard.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            {[
-              { icon: CreditCard, text: "Track all your credit cards & installments" },
-              { icon: BarChart3, text: "Real-time reports and spending insights" },
-              { icon: ShieldCheck, text: "Secure and private — your data stays yours" },
-            ].map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-white/15 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Icon size={15} />
-                </div>
-                <span className="text-sm text-indigo-100">{text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom */}
-        <p className="relative text-indigo-300 text-xs">
-          © {new Date().getFullYear()} Finlo. All rights reserved.
-        </p>
-      </div>
-
-      {/* Right panel — form */}
-      <div className="flex-1 flex flex-col bg-gray-50">
-        {/* Top nav */}
-        <div className="flex items-center justify-between px-8 py-5">
-          <Link
-            href="/"
-            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors"
-          >
-            <ArrowLeft size={14} />
-            Back to home
-          </Link>
-          {/* Mobile logo */}
-          <Link href="/" className="flex items-center gap-2 lg:hidden">
-            <div className="w-7 h-7 bg-indigo-600 rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-xs">F</span>
+      <div className="relative z-10 flex min-h-screen">
+        <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12">
+          <Link href="/" className="flex items-center gap-2.5 w-fit">
+            <div className="h-9 w-9 rounded-xl bg-linear-to-br from-[#245bff] to-[#5f8cff] flex items-center justify-center shadow-[0_10px_30px_rgba(36,91,255,0.3)]">
+              <span className="text-white font-semibold text-sm">F</span>
             </div>
-            <span className="font-bold text-sm">Finlo</span>
+            <span className="font-heading font-semibold text-xl text-[#15203d]">FINLO</span>
           </Link>
+
+          <div className="max-w-lg rounded-[2rem] border border-[#d8dff5] bg-white/80 p-10 backdrop-blur-md shadow-[0_24px_70px_rgba(45,78,175,0.13)]">
+            <h2 className="font-heading text-4xl leading-tight text-[#111c36]">
+              Budget better,
+              <br />
+              pay smarter.
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-[#5f6b89]">
+              Stay on top of installments, avoid due-date pileups, and get a daily safe-to-spend signal based on your actual commitments.
+            </p>
+
+            <div className="mt-8 space-y-4">
+              {[
+                { icon: CreditCard, text: "Track cards, loans, and BNPL in one timeline" },
+                { icon: BarChart3, text: "See cash flow and payment risk before it happens" },
+                { icon: ShieldCheck, text: "Private by default with encrypted financial records" },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-start gap-3 rounded-xl border border-[#e1e7f9] bg-white/85 p-3">
+                  <div className="mt-0.5 h-8 w-8 rounded-lg bg-[#ebf0ff] text-[#2b59e8] flex items-center justify-center shrink-0">
+                    <Icon size={15} />
+                  </div>
+                  <span className="text-sm text-[#324367] leading-relaxed">{text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-xs text-[#65739a]">© {new Date().getFullYear()} Finlo. All rights reserved.</p>
         </div>
 
-        {/* Form area */}
-        <div className="flex-1 flex items-center justify-center px-8 pb-12">
-          <div className="w-full max-w-md">{children}</div>
+        <div className="flex-1 flex flex-col">
+          <div className="flex items-center justify-end px-6 py-5 sm:px-8">
+            <Link href="/" className="flex items-center gap-2 lg:hidden">
+              <div className="h-7 w-7 rounded-lg bg-linear-to-br from-[#245bff] to-[#5f8cff] flex items-center justify-center">
+                <span className="text-white font-semibold text-xs">F</span>
+              </div>
+              <span className="font-heading text-sm font-semibold text-[#15203d]">FINLO</span>
+            </Link>
+          </div>
+
+          <div className="flex-1 flex flex-col items-center justify-center px-6 pb-14 sm:px-8">
+            <div className="w-full max-w-md">
+              <RouteTransition>{children}</RouteTransition>
+            </div>
+            <Link
+              href="/"
+              className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-[#667598] transition-colors hover:text-[#24406d]"
+            >
+              Home <ArrowRight size={12} />
+            </Link>
+          </div>
         </div>
       </div>
     </div>

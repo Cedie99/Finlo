@@ -42,18 +42,17 @@ export default function LoginPage() {
 
   return (
     <div>
-      {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h1>
-        <p className="text-gray-500 text-sm">Sign in to your Finlo account to continue</p>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#2b59e8]">Sign in</p>
+        <h1 className="font-heading text-3xl font-semibold text-[#111c36] mb-1.5">Welcome back</h1>
+        <p className="text-[#5d6a89] text-sm">Continue managing your installments and monthly cash flow.</p>
       </div>
 
-      {/* Card */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+      <div className="rounded-[1.7rem] border border-[#d8dff5] bg-white/90 shadow-[0_18px_55px_rgba(45,78,175,0.12)] p-8 backdrop-blur-sm">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             {error && (
-              <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-2xl border border-red-100">
+              <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl border border-red-100">
                 {error}
               </div>
             )}
@@ -63,12 +62,12 @@ export default function LoginPage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 text-sm font-medium">Email</FormLabel>
+                  <FormLabel className="text-[#37476d] text-sm font-medium">Email</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder="you@example.com"
-                      className="rounded-xl border-gray-200 focus:border-indigo-400 focus:ring-indigo-400/20 h-11"
+                      className="rounded-xl border-[#d7def4] bg-white h-11 text-[#1b2a4d] placeholder:text-[#8a96b6] focus:border-[#4d77ff] focus:ring-[#4d77ff]/20"
                       {...field}
                     />
                   </FormControl>
@@ -82,12 +81,12 @@ export default function LoginPage() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-700 text-sm font-medium">Password</FormLabel>
+                  <FormLabel className="text-[#37476d] text-sm font-medium">Password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="••••••••"
-                      className="rounded-xl border-gray-200 focus:border-indigo-400 focus:ring-indigo-400/20 h-11"
+                      className="rounded-xl border-[#d7def4] bg-white h-11 text-[#1b2a4d] placeholder:text-[#8a96b6] focus:border-[#4d77ff] focus:ring-[#4d77ff]/20"
                       {...field}
                     />
                   </FormControl>
@@ -99,7 +98,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="w-full h-11 rounded-full bg-indigo-600 hover:bg-indigo-700 font-semibold text-sm shadow-lg shadow-indigo-100"
+              className="w-full h-11 rounded-full bg-[#245bff] hover:bg-[#1a47cc] font-semibold text-sm shadow-[0_10px_28px_rgba(36,91,255,0.3)]"
             >
               {form.formState.isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
@@ -107,9 +106,9 @@ export default function LoginPage() {
         </Form>
       </div>
 
-      <p className="text-center text-sm text-gray-400 mt-6">
+      <p className="text-center text-sm text-[#6d7b9e] mt-6">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-indigo-600 hover:underline font-semibold">
+        <Link href="/register" className="text-[#245bff] hover:underline font-semibold">
           Create one free
         </Link>
       </p>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { formatCurrency } from "@/lib/utils/currency";
 import Decimal from "decimal.js";
@@ -50,9 +51,10 @@ export function CashFlowCard({ income, expenses }: CashFlowCardProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {cards.map(({ label, value, badge, icon: Icon, iconBg, iconColor, valuColor, bg, light }) => (
-        <div
+        <Link
           key={label}
-          className={`${bg} rounded-3xl p-5 border border-gray-100 shadow-sm`}
+          href="/transactions"
+          className={`${bg} rounded-3xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer`}
         >
           <div className="flex items-center justify-between mb-4">
             <p className={`text-sm font-medium ${light ? "text-white/80" : "text-gray-500"}`}>
@@ -70,7 +72,7 @@ export function CashFlowCard({ income, expenses }: CashFlowCardProps) {
               {badge}
             </span>
           )}
-        </div>
+        </Link>
       ))}
     </div>
   );

@@ -117,7 +117,7 @@ export default function TransactionsPage() {
             <Button
               size="sm"
               onClick={() => setOpen(true)}
-              className="rounded-full bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-100"
+              className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
             >
               <Plus size={14} className="mr-1" />
               {tab === "recurring" ? "Add Recurring" : "Add"}
@@ -185,7 +185,7 @@ export default function TransactionsPage() {
               title="No transactions"
               description="Add your first transaction to get started"
               action={
-                <Button onClick={() => setOpen(true)} className="rounded-full bg-indigo-600 hover:bg-indigo-700">
+                <Button onClick={() => setOpen(true)} className="rounded-full bg-[#245bff] hover:bg-[#1a47cc]">
                   Add Transaction
                 </Button>
               }
@@ -215,7 +215,7 @@ export default function TransactionsPage() {
               title="No recurring transactions"
               description="Set up automatic transactions for rent, subscriptions, salary, and more"
               action={
-                <Button onClick={() => setOpen(true)} className="rounded-full bg-indigo-600 hover:bg-indigo-700">
+                <Button onClick={() => setOpen(true)} className="rounded-full bg-[#245bff] hover:bg-[#1a47cc]">
                   Add Recurring
                 </Button>
               }

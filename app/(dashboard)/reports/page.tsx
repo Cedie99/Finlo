@@ -8,7 +8,6 @@ import { CashFlowChart } from "@/components/reports/CashFlowChart";
 import { InstallmentTimeline } from "@/components/reports/InstallmentTimeline";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { FullPageSpinner } from "@/components/shared/LoadingSpinner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getMonthYear, formatMonthYear } from "@/lib/utils/dates";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -35,63 +34,53 @@ export default function ReportsPage() {
       {isLoading ? (
         <FullPageSpinner />
       ) : (
-        <Tabs defaultValue="cashflow">
-          <TabsList className="mb-5 bg-white border border-gray-100 rounded-2xl p-1 shadow-sm">
-            {["cashflow", "spending", "categories", "timeline"].map((tab) => (
-              <TabsTrigger
-                key={tab}
-                value={tab}
-                className="rounded-xl text-sm capitalize data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
-              >
-                {tab === "cashflow" ? "Cash Flow" : tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          <TabsContent value="cashflow">
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-              <h2 className="font-bold text-gray-900 mb-5">Income vs Expenses (Last 6 Months)</h2>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          {/* Row 1 — Income vs Expenses (2/3) + By Category (1/3) */}
+          <div className="flex flex-col bg-white rounded-3xl border border-gray-100 shadow-sm p-6 lg:col-span-2">
+            <h2 className="font-bold text-gray-900 mb-1">Income vs Expenses</h2>
+            <p className="text-xs text-gray-400 mb-5">Last 6 months</p>
+            <div className="min-h-[260px]">
               {data?.monthlyData && <CashFlowChart data={data.monthlyData} />}
             </div>
-          </TabsContent>
+          </div>
 
-          <TabsContent value="spending">
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-              <h2 className="font-bold text-gray-900 mb-5">Monthly Spending (Last 6 Months)</h2>
+          <div className="flex flex-col bg-white rounded-3xl border border-gray-100 shadow-sm p-6 lg:col-span-1">
+            <div className="flex items-start justify-between mb-1">
+              <h2 className="font-bold text-gray-900">By Category</h2>
+              <Select value={selectedMonth} onValueChange={(v) => v && setSelectedMonth(v)}>
+                <SelectTrigger className="w-32 h-8 text-xs rounded-xl border-gray-200">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {data?.monthlyData?.map((d: { monthYear: string }) => (
+                    <SelectItem key={d.monthYear} value={d.monthYear}>
+                      {formatMonthYear(d.monthYear)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <p className="text-xs text-gray-400 mb-5">Spending breakdown</p>
+            {selectedMonthData && data?.categories && (
+              <CategoryPieChart data={selectedMonthData.byCategory} categories={data.categories} />
+            )}
+          </div>
+
+          {/* Row 2 — Monthly Spending (1/3) + Installment Timeline (2/3) */}
+          <div className="flex flex-col bg-white rounded-3xl border border-gray-100 shadow-sm p-6 lg:col-span-1">
+            <h2 className="font-bold text-gray-900 mb-1">Monthly Spending</h2>
+            <p className="text-xs text-gray-400 mb-5">Last 6 months</p>
+            <div className="min-h-[260px]">
               {data?.monthlyData && <MonthlySpendingChart data={data.monthlyData} />}
             </div>
-          </TabsContent>
+          </div>
 
-          <TabsContent value="categories">
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="font-bold text-gray-900">Spending by Category</h2>
-                <Select value={selectedMonth} onValueChange={(v) => v && setSelectedMonth(v)}>
-                  <SelectTrigger className="w-36 h-9 text-xs rounded-xl border-gray-200">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {data?.monthlyData?.map((d: { monthYear: string }) => (
-                      <SelectItem key={d.monthYear} value={d.monthYear}>
-                        {formatMonthYear(d.monthYear)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              {selectedMonthData && data?.categories && (
-                <CategoryPieChart data={selectedMonthData.byCategory} categories={data.categories} />
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="timeline">
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-              <h2 className="font-bold text-gray-900 mb-5">Installment Plan Timeline</h2>
-              {data?.installmentPlans && <InstallmentTimeline plans={data.installmentPlans} />}
-            </div>
-          </TabsContent>
-        </Tabs>
+          <div className="flex flex-col bg-white rounded-3xl border border-gray-100 shadow-sm p-6 lg:col-span-2">
+            <h2 className="font-bold text-gray-900 mb-1">Installment Timeline</h2>
+            <p className="text-xs text-gray-400 mb-5">All active plans</p>
+            {data?.installmentPlans && <InstallmentTimeline plans={data.installmentPlans} />}
+          </div>
+        </div>
       )}
     </div>
   );

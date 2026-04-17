@@ -17,7 +17,6 @@ export interface DashboardData {
     categoryId: string;
     categoryName: string;
     categoryColor: string;
-    categoryIcon: string;
     limitAmount: string;
     spent: string;
   }[];
