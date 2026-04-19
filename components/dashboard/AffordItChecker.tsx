@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { DollarSign, X, CheckCircle, AlertCircle, XCircle, Loader2 } from "lucide-react";
 import { formatCurrency, parseCurrency } from "@/lib/utils/currency";
 import { formatMonthYear } from "@/lib/utils/dates";
@@ -9,9 +11,14 @@ import type { AffordItResult } from "@/lib/hooks/useAffordIt";
 
 export function AffordItChecker() {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [input, setInput] = useState("");
   const [result, setResult] = useState<AffordItResult | null>(null);
   const { mutate, isPending } = useAffordIt();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   function handleCheck() {
     const amount = parseCurrency(input);
@@ -51,7 +58,9 @@ export function AffordItChecker() {
       }[result.verdict]
     : null;
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <>
       {/* Floating button */}
       <button
@@ -177,6 +186,7 @@ export function AffordItChecker() {
           </div>
         </div>
       )}
-    </>
+    </>,
+    document.body
   );
 }

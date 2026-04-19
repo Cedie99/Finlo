@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FinloLogo } from "@/components/layout/FinloLogo";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -50,10 +51,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Brand */}
         <div className="flex items-center justify-between h-16 px-5 border-b border-[#e1e7f9]">
           <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-linear-to-br from-[#245bff] to-[#5f8cff] rounded-xl flex items-center justify-center shadow-[0_10px_28px_rgba(36,91,255,0.25)]">
-              <span className="text-white font-bold text-sm">F</span>
-            </div>
-            <span className="font-heading font-semibold text-[#15203d] text-base">FINLO</span>
+            <FinloLogo size="md" />
           </Link>
           <button
             onClick={onClose}
