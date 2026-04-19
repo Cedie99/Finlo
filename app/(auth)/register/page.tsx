@@ -46,12 +46,12 @@ export default function RegisterPage() {
   return (
     <div>
       <div className="mb-8">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#2b59e8]">Register</p>
-        <h1 className="font-heading text-3xl font-semibold text-[#111c36] mb-1.5">Create your account</h1>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#287f75]">Register</p>
+        <h1 className="font-heading text-3xl font-semibold text-[#0f2424] mb-1.5">Create your account</h1>
         <p className="text-[#5d6a89] text-sm">Start tracking your finances with Finlo for free.</p>
       </div>
 
-      <div className="rounded-[1.7rem] border border-[#d8dff5] bg-white/90 shadow-[0_18px_55px_rgba(45,78,175,0.12)] p-8 backdrop-blur-sm">
+      <div className="rounded-[1.7rem] border border-[#d8e3df] bg-white/90 shadow-[0_18px_55px_rgba(15,36,36,0.11)] p-8 backdrop-blur-sm">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             {error && (
@@ -69,7 +69,7 @@ export default function RegisterPage() {
                   <FormControl>
                     <Input
                       placeholder="Juan dela Cruz"
-                      className="rounded-xl border-[#d7def4] bg-white h-11 text-[#1b2a4d] placeholder:text-[#8a96b6] focus:border-[#4d77ff] focus:ring-[#4d77ff]/20"
+                      className="rounded-xl border-[#d3e0dc] bg-white h-11 text-[#1a3d39] placeholder:text-[#819690] focus:border-[#3d9187] focus:ring-[#3d9187]/20"
                       {...field}
                     />
                   </FormControl>
@@ -88,7 +88,7 @@ export default function RegisterPage() {
                     <Input
                       type="email"
                       placeholder="you@example.com"
-                      className="rounded-xl border-[#d7def4] bg-white h-11 text-[#1b2a4d] placeholder:text-[#8a96b6] focus:border-[#4d77ff] focus:ring-[#4d77ff]/20"
+                      className="rounded-xl border-[#d3e0dc] bg-white h-11 text-[#1a3d39] placeholder:text-[#819690] focus:border-[#3d9187] focus:ring-[#3d9187]/20"
                       {...field}
                     />
                   </FormControl>
@@ -108,7 +108,7 @@ export default function RegisterPage() {
                       <Input
                         type="password"
                         placeholder="Min. 8 chars"
-                        className="rounded-xl border-[#d7def4] bg-white h-11 text-[#1b2a4d] placeholder:text-[#8a96b6] focus:border-[#4d77ff] focus:ring-[#4d77ff]/20"
+                        className="rounded-xl border-[#d3e0dc] bg-white h-11 text-[#1a3d39] placeholder:text-[#819690] focus:border-[#3d9187] focus:ring-[#3d9187]/20"
                         {...field}
                       />
                     </FormControl>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
                       <Input
                         type="password"
                         placeholder="••••••••"
-                        className="rounded-xl border-[#d7def4] bg-white h-11 text-[#1b2a4d] placeholder:text-[#8a96b6] focus:border-[#4d77ff] focus:ring-[#4d77ff]/20"
+                        className="rounded-xl border-[#d3e0dc] bg-white h-11 text-[#1a3d39] placeholder:text-[#819690] focus:border-[#3d9187] focus:ring-[#3d9187]/20"
                         {...field}
                       />
                     </FormControl>
@@ -140,7 +140,7 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="w-full h-11 rounded-full bg-[#245bff] hover:bg-[#1a47cc] font-semibold text-sm shadow-[0_10px_28px_rgba(36,91,255,0.3)]"
+              className="w-full h-11 rounded-full bg-[#2f7f76] hover:bg-[#266a63] font-semibold text-sm shadow-[0_10px_28px_rgba(47,127,118,0.3)]"
             >
               {form.formState.isSubmitting ? "Creating account..." : "Create free account"}
             </Button>
@@ -150,7 +150,7 @@ export default function RegisterPage() {
 
       <p className="text-center text-sm text-[#6d7b9e] mt-6">
         Already have an account?{" "}
-        <Link href="/login" className="text-[#245bff] hover:underline font-semibold">
+        <Link href="/login" className="text-[#2f7f76] hover:underline font-semibold">
           Sign in
         </Link>
       </p>

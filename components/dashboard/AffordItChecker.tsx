@@ -65,7 +65,7 @@ export function AffordItChecker() {
       {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-24 right-5 lg:bottom-6 lg:right-6 z-30 flex items-center gap-2 rounded-full bg-[#245bff] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(36,91,255,0.28)] hover:bg-[#1a47cc] transition-all active:scale-95"
+        className="fixed bottom-24 right-5 lg:bottom-6 lg:right-6 z-30 flex items-center gap-2 rounded-full bg-[#2f7f76] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(47,127,118,0.28)] hover:bg-[#266a63] transition-all active:scale-95"
         type="button"
       >
         <DollarSign size={16} />
@@ -79,7 +79,7 @@ export function AffordItChecker() {
           onClick={handleClose}
         >
           <div
-            className="w-full max-w-sm rounded-3xl border border-[#dbe4fb] bg-white p-6 shadow-[0_30px_70px_rgba(24,45,110,0.22)]"
+            className="w-full max-w-sm rounded-3xl border border-[#d1e3df] bg-white p-6 shadow-[0_30px_70px_rgba(15,36,36,0.18)]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -112,14 +112,14 @@ export function AffordItChecker() {
                 }}
                 onKeyDown={(e) => e.key === "Enter" && handleCheck()}
                 placeholder="0.00"
-                className="w-full rounded-2xl border border-[#d7def4] pl-8 pr-4 py-3 text-lg font-bold text-gray-900 outline-none focus:border-[#4d77ff] focus:ring-2 focus:ring-[#d9e4ff]"
+                className="w-full rounded-2xl border border-[#d3e0dc] pl-8 pr-4 py-3 text-lg font-bold text-gray-900 outline-none focus:border-[#3d9187] focus:ring-2 focus:ring-[#d3e6e2]"
               />
             </div>
 
             <button
               onClick={handleCheck}
               disabled={isPending || !input}
-              className="w-full rounded-2xl bg-[#245bff] py-3 text-sm font-semibold text-white hover:bg-[#1a47cc] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition"
+              className="w-full rounded-2xl bg-[#2f7f76] py-3 text-sm font-semibold text-white hover:bg-[#266a63] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition"
             >
               {isPending ? (
                 <>
@@ -175,7 +175,7 @@ export function AffordItChecker() {
                     </div>
 
                     {result.suggestedMonth && result.verdict !== "YES" && (
-                      <p className="mt-3 text-xs text-[#245bff] font-medium">
+                      <p className="mt-3 text-xs text-[#2f7f76] font-medium">
                         Comfortably affordable in {formatMonthYear(result.suggestedMonth)}
                       </p>
                     )}

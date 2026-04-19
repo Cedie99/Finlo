@@ -130,19 +130,19 @@ function CapabilityCard({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="rounded-2xl border border-[#d8dff5] bg-white/85 p-6 backdrop-blur-sm"
+      className="rounded-2xl border border-[#d8e3df] bg-white/85 p-6 backdrop-blur-sm"
     >
-      <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#eef2ff] text-[#245bff]">
+      <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#e7f3f0] text-[#2f7f76]">
         <Sparkles size={18} />
       </div>
-      <h3 className="font-heading text-xl font-semibold text-[#0f1a34]">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-[#5b6785]">{description}</p>
+      <h3 className="font-heading text-xl font-semibold text-[#0f2424]">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-[#546864]">{description}</p>
 
       <button
         type="button"
         onClick={() => setExpanded((prev) => !prev)}
         aria-expanded={expanded}
-        className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#245bff] transition-colors hover:text-[#1640c4]"
+        className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#2f7f76] transition-colors hover:text-[#225f58]"
       >
         {expanded ? "Hide details" : "Read more"}
         <ChevronDown size={14} className={`transition-transform duration-250 ${expanded ? "rotate-180" : "rotate-0"}`} />
@@ -152,11 +152,11 @@ function CapabilityCard({
         className={`grid transition-all duration-300 ease-out ${expanded ? "mt-4 grid-rows-[1fr] opacity-100" : "mt-0 grid-rows-[0fr] opacity-0"}`}
       >
         <div className="overflow-hidden">
-          <div className="rounded-xl border border-[#e4e9fb] bg-[#f7f9ff] p-4">
+          <div className="rounded-xl border border-[#e6eeeb] bg-[#f3f8f6] p-4">
             <ul className="space-y-2">
               {dropdown.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-xs leading-relaxed text-[#4b5b83]">
-                  <span className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[#3c66ea]" />
+                <li key={item} className="flex items-start gap-2 text-xs leading-relaxed text-[#4d625e]">
+                  <span className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[#2f7f76]" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -173,11 +173,11 @@ export default function HomePage() {
   const userName = session?.user?.name;
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f6f8ff] text-[#151d34]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(45,95,255,0.15),transparent_42%),radial-gradient(circle_at_10%_70%,rgba(64,186,255,0.16),transparent_38%)]" />
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f4f2ec] text-[#142929]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(47,127,118,0.15),transparent_42%),radial-gradient(circle_at_10%_70%,rgba(69,167,157,0.16),transparent_38%)]" />
 
       <header className="relative z-20 px-4 pt-5 sm:px-8">
-        <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between rounded-full border border-[#d8dff5] bg-white/85 px-6 backdrop-blur-md">
+        <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between rounded-full border border-[#d8e3df] bg-white/85 px-6 backdrop-blur-md">
           <Link href="/" className="flex items-center gap-2">
             <FinloLogo size="sm" />
           </Link>
@@ -187,7 +187,7 @@ export default function HomePage() {
               <a
                 key={item.label}
                 href={item.href}
-                className="text-sm font-medium text-[#536082] transition-colors hover:text-[#1f3568]"
+                className="text-sm font-medium text-[#4f635f] transition-colors hover:text-[#1a4742]"
               >
                 {item.label}
               </a>
@@ -198,18 +198,18 @@ export default function HomePage() {
             {userName ? (
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-full bg-[#245bff] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1947cd]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#2f7f76] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#266a63]"
               >
                 Enter dashboard <ArrowRight size={14} />
               </Link>
             ) : (
               <>
-                <Link href="/login" className="hidden text-sm font-medium text-[#546288] sm:inline-block">
+                <Link href="/login" className="hidden text-sm font-medium text-[#516561] sm:inline-block">
                   Login
                 </Link>
                 <Link
                   href="/register"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#245bff] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1947cd]"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#2f7f76] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#266a63]"
                 >
                   Explore <ArrowRight size={14} />
                 </Link>
@@ -222,31 +222,31 @@ export default function HomePage() {
       <main className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-8 sm:pt-16">
         <section className="grid items-start gap-10 lg:grid-cols-[1.35fr_0.8fr]">
           <motion.div custom={0} variants={riseIn} initial="hidden" animate="visible">
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d7def4] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#245bff]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#245bff]" />
+            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d3e0dc] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#2f7f76]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#2f7f76]" />
               Built for real-life budgeting
             </p>
-            <h1 className="font-heading text-[clamp(2.2rem,7vw,4.7rem)] leading-[0.95] tracking-tight text-[#111a31]">
+            <h1 className="font-heading text-[clamp(2.2rem,7vw,4.7rem)] leading-[0.95] tracking-tight text-[#0f2424]">
               Turn Monthly Chaos
               <br />
-              into <span className="bg-linear-to-r from-[#2158ff] to-[#2ba8ff] bg-clip-text text-transparent">Financial Clarity</span>
+              into <span className="bg-linear-to-r from-[#2f7f76] to-[#45a79d] bg-clip-text text-transparent">Financial Clarity</span>
             </h1>
           </motion.div>
 
           <motion.div custom={0.08} variants={riseIn} initial="hidden" animate="visible" className="pt-2">
-            <p className="max-w-sm text-sm leading-relaxed text-[#5f6a89]">
+            <p className="max-w-sm text-sm leading-relaxed text-[#596d68]">
               Finlo helps you track installments, plan bills, and decide what is safe to spend so you can stay in control every month.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 rounded-full bg-[#245bff] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1a47cc]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#2f7f76] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#266a63]"
               >
                 Start free <ArrowRight size={14} />
               </Link>
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-full border border-[#cfd8f4] bg-white px-5 py-2.5 text-sm font-semibold text-[#24406d] transition-colors hover:bg-[#f3f6ff]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#c9ddd8] bg-white px-5 py-2.5 text-sm font-semibold text-[#1c4f49] transition-colors hover:bg-[#edf5f2]"
               >
                 <PlayCircle size={15} /> View dashboard
               </Link>
@@ -259,44 +259,37 @@ export default function HomePage() {
           variants={riseIn}
           initial="hidden"
           animate="visible"
-          className="relative mt-10 h-68 overflow-hidden rounded-[2.2rem] border border-[#dae1f5] bg-white/80 shadow-[0_18px_60px_rgba(40,72,170,0.14)] sm:h-80"
+          className="relative mt-10 h-68 overflow-hidden rounded-[2.2rem] border border-[#d7e4df] bg-white/80 shadow-[0_18px_60px_rgba(24,73,67,0.14)] sm:h-80"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(72,130,255,0.2),transparent_45%),radial-gradient(circle_at_10%_90%,rgba(106,205,255,0.25),transparent_45%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(60,137,127,0.2),transparent_45%),radial-gradient(circle_at_10%_90%,rgba(118,185,176,0.25),transparent_45%)]" />
 
           <motion.div
             animate={{ y: [0, -7, 0], rotate: [-0.45, 0.45, -0.45], scale: [1, 1.008, 1] }}
             transition={{ duration: 9, repeat: Number.POSITIVE_INFINITY, ease: [0.42, 0, 0.18, 1] }}
             className="absolute left-1/2 top-1/2 h-[74%] max-h-72 -translate-x-1/2 -translate-y-1/2"
           >
-            <div className="relative h-full aspect-[1.586/1] overflow-hidden rounded-[1.5rem] border border-[#d0dafb] bg-[linear-gradient(130deg,#0f224f_0%,#173883_38%,#1f4ead_72%,#2a67d0_100%)] p-4 pb-11 text-white shadow-[0_24px_40px_rgba(21,47,122,0.5),inset_0_1px_0_rgba(255,255,255,0.55)] sm:p-5 sm:pb-12">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.33),transparent_34%),radial-gradient(circle_at_88%_92%,rgba(120,204,255,0.25),transparent_36%)]" />
+            <div className="relative h-full aspect-[1.586/1] overflow-hidden rounded-[1.5rem] border border-[#c9ddd8] bg-[linear-gradient(130deg,#123531_0%,#1b4f49_38%,#236861_72%,#2f7f76_100%)] p-4 pb-11 text-white shadow-[0_24px_40px_rgba(15,36,36,0.42),inset_0_1px_0_rgba(255,255,255,0.55)] sm:p-5 sm:pb-12">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.33),transparent_34%),radial-gradient(circle_at_88%_92%,rgba(128,193,183,0.25),transparent_36%)]" />
               <div className="absolute inset-0 opacity-12 [background:repeating-linear-gradient(145deg,rgba(255,255,255,0.22)_0px,rgba(255,255,255,0.22)_1px,transparent_1px,transparent_8px)]" />
               <motion.div
                 aria-hidden
-                animate={{ x: [-230, 260] }}
-                transition={{ duration: 5.8, repeat: Number.POSITIVE_INFINITY, ease: "linear", repeatDelay: 1.4 }}
-                className="pointer-events-none absolute inset-y-0 w-20 -skew-x-12 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.03)_30%,rgba(255,255,255,0.2)_50%,rgba(255,255,255,0.03)_70%,transparent_100%)]"
+                animate={{ left: ["-35%", "115%"] }}
+                transition={{ duration: 5.6, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                className="pointer-events-none absolute inset-y-0 left-[-35%] w-32 -skew-x-12 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.02)_32%,rgba(255,255,255,0.2)_50%,rgba(255,255,255,0.02)_68%,transparent_100%)]"
               />
               <div className="pointer-events-none absolute inset-0 opacity-18 bg-[radial-gradient(circle_at_50%_-18%,rgba(255,255,255,0.2),transparent_56%)]" />
               <div className="pointer-events-none absolute inset-0 opacity-24 [background:repeating-radial-gradient(circle_at_50%_-18%,rgba(255,255,255,0.34)_0px,rgba(255,255,255,0.34)_0.95px,transparent_0.95px,transparent_8.6px)]" />
 
               <div className="relative flex items-center justify-between">
-                <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#0f172a] sm:h-6 sm:w-6" aria-hidden>
-                  <path
-                    d="M12 3.5v7"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
+                <div className="inline-flex items-center gap-2">
+                  <FinloLogo
+                    size="sm"
+                    showWordmark={false}
+                    className="scale-[0.78] origin-left"
+                    markClassName="text-white"
                   />
-                  <path
-                    d="M7.2 6.6A7 7 0 1 0 16.8 6.6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                  />
-                </svg>
+                  <span className="font-heading text-sm font-semibold tracking-[0.06em] lowercase text-[#edf5f2]">finlo</span>
+                </div>
                 <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 text-[#0f172a]/85 sm:h-5 sm:w-5" aria-hidden>
                   <path
                     d="M4.5 12c2.1-2.9 4.3-4.3 6.8-4.3M4.5 16c3-4.1 6-6.1 9.4-6.1M4.5 8.1c1.2-1.6 2.5-2.6 4-3.2"
@@ -308,13 +301,13 @@ export default function HomePage() {
                 </svg>
               </div>
 
-              <p className="relative mt-17 font-heading text-base tracking-[0.22em] text-[#f2f6ff] drop-shadow-[0_2px_1px_rgba(0,0,0,0.25)] sm:mt-19 sm:text-[1.2rem]">
+              <p className="relative mt-17 font-heading text-base tracking-[0.22em] text-[#edf5f2] drop-shadow-[0_2px_1px_rgba(0,0,0,0.25)] sm:mt-19 sm:text-[1.2rem]">
                 **** 5678
               </p>
 
               <div className="relative mt-3 flex items-end justify-between sm:mt-4">
                 <div>
-                  <p className="text-[9px] uppercase tracking-[0.16em] text-[#d3defd]">JOHN DOE  05/24</p>
+                  <p className="text-[9px] uppercase tracking-[0.16em] text-[#d2ebe6]">JOHN DOE  05/24</p>
                 </div>
               </div>
 
@@ -328,7 +321,7 @@ export default function HomePage() {
           <motion.div
             animate={{ x: [0, 8, 0] }}
             transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-            className="absolute left-6 top-6 rounded-full border border-[#d6def7] bg-white/85 px-3 py-1 text-[11px] font-semibold text-[#2f5ae2]"
+            className="absolute left-6 top-6 rounded-full border border-[#cfe2dd] bg-white/85 px-3 py-1 text-[11px] font-semibold text-[#2b7d74]"
           >
             95% Faster
           </motion.div>
@@ -336,7 +329,7 @@ export default function HomePage() {
           <motion.div
             animate={{ x: [0, -8, 0] }}
             transition={{ duration: 8, delay: 1.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-            className="absolute bottom-6 right-6 rounded-full border border-[#d6def7] bg-white/85 px-3 py-1 text-[11px] font-semibold text-[#2f5ae2]"
+            className="absolute bottom-6 right-6 rounded-full border border-[#cfe2dd] bg-white/85 px-3 py-1 text-[11px] font-semibold text-[#2b7d74]"
           >
             2x Growth
           </motion.div>
@@ -348,14 +341,14 @@ export default function HomePage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mt-10 overflow-hidden rounded-[1.6rem] border border-[#2953dd] bg-[linear-gradient(130deg,#1134aa_0%,#245bff_50%,#2985ff_100%)] text-white"
+          className="mt-10 overflow-hidden rounded-[1.6rem] border border-[#2a746b] bg-[linear-gradient(130deg,#1f5c55_0%,#2f7f76_50%,#45a79d_100%)] text-white"
         >
-          <div className="grid gap-px bg-[#3f65de] sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-px bg-[#2a746b] sm:grid-cols-2 lg:grid-cols-4">
             {metrics.map((metric) => (
               <div key={metric.label} className="bg-transparent p-6">
                 <p className="font-heading text-[2rem] leading-none">{metric.value}</p>
                 <p className="mt-2 text-sm font-semibold">{metric.label}</p>
-                <p className="mt-1 text-xs text-[#d8e4ff]">{metric.detail}</p>
+                <p className="mt-1 text-xs text-[#d5e7e3]">{metric.detail}</p>
               </div>
             ))}
           </div>
@@ -363,14 +356,14 @@ export default function HomePage() {
 
         <section id="features" className="scroll-mt-24 mt-20 grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
           <motion.div custom={0.05} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#2b59e8]">Our capabilities</p>
-            <h2 className="mt-3 font-heading text-[clamp(1.9rem,5vw,3.2rem)] leading-tight text-[#111c36]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#287f75]">Our capabilities</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.9rem,5vw,3.2rem)] leading-tight text-[#0f2424]">
               Designed for people managing real expenses.
             </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-[#5f6b89]">
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-[#596d68]">
               From installment calendars to payoff planning, Finlo gives you practical tools to avoid missed due dates and reduce money stress.
             </p>
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#e9efff] px-4 py-2 text-xs font-semibold text-[#264dc6]">
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#e5f1ee] px-4 py-2 text-xs font-semibold text-[#1f6b63]">
               <CheckCircle2 size={14} /> Private by default with encrypted account data
             </div>
           </motion.div>
@@ -390,8 +383,8 @@ export default function HomePage() {
 
         <section id="how-it-works" className="scroll-mt-24 mt-20">
           <motion.div custom={0.08} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#2b59e8]">How it works</p>
-            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#111c36]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#287f75]">How it works</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#0f2424]">
               Three steps to clearer financial flow.
             </h2>
           </motion.div>
@@ -405,11 +398,11 @@ export default function HomePage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="rounded-2xl border border-[#d8dff5] bg-white/85 p-5"
+                className="rounded-2xl border border-[#d8e3df] bg-white/85 p-5"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#3a63e6]">Step {index + 1}</p>
-                <h3 className="mt-2 font-heading text-lg font-semibold text-[#132040]">{item.step}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#5b6785]">{item.detail}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2b7d74]">Step {index + 1}</p>
+                <h3 className="mt-2 font-heading text-lg font-semibold text-[#0f2424]">{item.step}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#546864]">{item.detail}</p>
               </motion.article>
             ))}
           </div>
@@ -417,8 +410,8 @@ export default function HomePage() {
 
         <section id="use-cases" className="scroll-mt-24 mt-20">
           <motion.div custom={0.1} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#2b59e8]">Use cases</p>
-            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#111c36]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#287f75]">Use cases</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#0f2424]">
               Built for real budgeting situations.
             </h2>
           </motion.div>
@@ -432,10 +425,10 @@ export default function HomePage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="rounded-2xl border border-[#d8dff5] bg-white/85 p-5"
+                className="rounded-2xl border border-[#d8e3df] bg-white/85 p-5"
               >
-                <h3 className="font-heading text-lg font-semibold text-[#132040]">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#5b6785]">{item.detail}</p>
+                <h3 className="font-heading text-lg font-semibold text-[#0f2424]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#546864]">{item.detail}</p>
               </motion.article>
             ))}
           </div>
@@ -443,8 +436,8 @@ export default function HomePage() {
 
         <section id="faq" className="scroll-mt-24 mt-20">
           <motion.div custom={0.12} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#2b59e8]">FAQ</p>
-            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#111c36]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#287f75]">FAQ</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#0f2424]">
               Common questions, quick answers.
             </h2>
           </motion.div>
@@ -458,37 +451,37 @@ export default function HomePage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="group rounded-2xl border border-[#d8dff5] bg-white/85 p-5"
+                className="group rounded-2xl border border-[#d8e3df] bg-white/85 p-5"
               >
-                <summary className="cursor-pointer list-none font-semibold text-[#12213f] marker:content-none">
+                <summary className="cursor-pointer list-none font-semibold text-[#0f2424] marker:content-none">
                   <span className="inline-flex items-center gap-2">
-                    <ChevronDown size={14} className="text-[#3a63e6] transition-transform group-open:rotate-180" />
+                    <ChevronDown size={14} className="text-[#2b7d74] transition-transform group-open:rotate-180" />
                     {item.question}
                   </span>
                 </summary>
-                <p className="mt-3 pl-6 text-sm leading-relaxed text-[#5b6785]">{item.answer}</p>
+                <p className="mt-3 pl-6 text-sm leading-relaxed text-[#546864]">{item.answer}</p>
               </motion.details>
             ))}
           </div>
         </section>
 
-        <footer className="mt-20 border-t border-[#d8dff5] pt-10">
+        <footer className="mt-20 border-t border-[#d8e3df] pt-10">
           <div className="grid gap-8 pb-8 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.75fr_0.75fr]">
             <div>
               <FinloLogo size="sm" />
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#5f6b89]">
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#596d68]">
                 Financial flow for everyday life. Track installments, manage cash flow, and spend with more confidence.
               </p>
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#315ce4]">Explore</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2b7d74]">Explore</p>
               <div className="mt-3 flex flex-col gap-2 text-sm">
                 {navItems.map((item) => (
                   <a
                     key={item.label}
                     href={item.href}
-                    className="text-[#4d5c82] transition-colors hover:text-[#1f3568]"
+                    className="text-[#4d615d] transition-colors hover:text-[#1a4742]"
                   >
                     {item.label}
                   </a>
@@ -497,22 +490,22 @@ export default function HomePage() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#315ce4]">Account</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2b7d74]">Account</p>
               <div className="mt-3 flex flex-col gap-2 text-sm">
-                <Link href="/register" className="text-[#4d5c82] transition-colors hover:text-[#1f3568]">
+                <Link href="/register" className="text-[#4d615d] transition-colors hover:text-[#1a4742]">
                   Create account
                 </Link>
-                <Link href="/login" className="text-[#4d5c82] transition-colors hover:text-[#1f3568]">
+                <Link href="/login" className="text-[#4d615d] transition-colors hover:text-[#1a4742]">
                   Login
                 </Link>
-                <Link href="/dashboard" className="text-[#4d5c82] transition-colors hover:text-[#1f3568]">
+                <Link href="/dashboard" className="text-[#4d615d] transition-colors hover:text-[#1a4742]">
                   Dashboard preview
                 </Link>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 border-t border-[#e4e9fb] py-5 text-xs text-[#7380a1] sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-2 border-t border-[#e6eeeb] py-5 text-xs text-[#6b807b] sm:flex-row sm:items-center sm:justify-between">
             <p>© {new Date().getFullYear()} Finlo. All rights reserved.</p>
             <p>Built for practical budgeting and installment planning.</p>
           </div>

@@ -32,15 +32,15 @@ export function QuickStats({
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       {/* Safe to Spend */}
-      <div className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-600 via-indigo-600 to-sky-600 p-5 text-white shadow-sm shadow-indigo-200">
+      <div className="rounded-3xl border border-[#d1e3df] bg-gradient-to-br from-[#2f7f76] via-[#2f7f76] to-[#45a79d] p-5 text-white shadow-sm shadow-[#d1e3df]">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-xs font-medium text-indigo-100">Safe to Spend</p>
+          <p className="text-xs font-medium text-[#d2ebe6]">Safe to Spend</p>
           <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${confidenceBg}`}>
             {confidence}
           </span>
         </div>
         <p className="text-2xl font-bold">{formatCurrency(safeToSpendToday)}</p>
-        <p className="mt-1 text-xs text-indigo-100">Available {formatCurrency(availableBalance)}</p>
+        <p className="mt-1 text-xs text-[#d2ebe6]">Available {formatCurrency(availableBalance)}</p>
       </div>
 
       {/* Monthly Income */}

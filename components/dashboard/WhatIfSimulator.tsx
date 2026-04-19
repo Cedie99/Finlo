@@ -43,16 +43,16 @@ export function WhatIfSimulator({ monthYear, targetDate }: WhatIfSimulatorProps)
     : false;
 
   return (
-    <section className="rounded-3xl border border-sky-100 bg-white p-5 shadow-sm">
+    <section className="rounded-3xl border border-[#d1e3df] bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
           <h3 className="flex items-center gap-2 text-base font-bold text-gray-900">
-            <Beaker size={16} className="text-sky-600" />
+            <Beaker size={16} className="text-[#2f7f76]" />
             What-If Cashflow Simulator
           </h3>
           <p className="mt-1 text-xs text-gray-500">Stress test salary delays, sudden expenses, and new debt before they happen.</p>
         </div>
-        <Button onClick={runSimulation} disabled={simulate.isPending} className="rounded-full bg-sky-600 hover:bg-sky-700">
+        <Button onClick={runSimulation} disabled={simulate.isPending} className="rounded-full bg-[#2f7f76] hover:bg-[#266a63]">
           {simulate.isPending ? "Simulating..." : "Run Simulation"}
         </Button>
       </div>
@@ -106,16 +106,16 @@ export function WhatIfSimulator({ monthYear, targetDate }: WhatIfSimulatorProps)
             </div>
           </div>
 
-          <div className="rounded-2xl border border-sky-100 bg-sky-50/60 p-3">
-            <p className="mb-2 flex items-center gap-2 text-sm font-semibold text-sky-800">
+          <div className="rounded-2xl border border-[#d1e3df] bg-[#edf5f2]/60 p-3">
+            <p className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#1f5c55]">
               <Sparkles size={14} /> Auto-Rescue Plan
             </p>
             <div className="space-y-2">
               {data.rescuePlan.map((item, idx) => (
-                <div key={`${item.title}-${idx}`} className="rounded-xl border border-sky-100 bg-white px-3 py-2">
+                <div key={`${item.title}-${idx}`} className="rounded-xl border border-[#d1e3df] bg-white px-3 py-2">
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-sm font-semibold text-gray-800">{item.title}</p>
-                    <p className="text-sm font-semibold text-sky-700">+{formatCurrency(item.impactAmount)}</p>
+                    <p className="text-sm font-semibold text-[#2b7d74]">+{formatCurrency(item.impactAmount)}</p>
                   </div>
                   <p className="text-xs text-gray-500">{item.description}</p>
                 </div>
@@ -132,7 +132,7 @@ export function WhatIfSimulator({ monthYear, targetDate }: WhatIfSimulatorProps)
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-emerald-600">+{formatCurrency(day.inflow)}</span>
                     <span className="text-red-500">-{formatCurrency(day.outflow)}</span>
-                    <span className="font-semibold text-indigo-700">{formatCurrency(day.projectedBalance)}</span>
+                    <span className="font-semibold text-[#266a63]">{formatCurrency(day.projectedBalance)}</span>
                   </div>
                 </div>
               ))}

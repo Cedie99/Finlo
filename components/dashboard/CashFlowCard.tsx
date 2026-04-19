@@ -38,11 +38,11 @@ export function CashFlowCard({ income, expenses }: CashFlowCardProps) {
       value: `${formatCurrency(net.abs().toString())}`,
       badge: isPositive ? "surplus" : "deficit",
       icon: isPositive ? TrendingUp : TrendingDown,
-      iconBg: isPositive ? "bg-indigo-100" : "bg-orange-100",
-      iconColor: isPositive ? "text-indigo-600" : "text-orange-500",
-      valuColor: isPositive ? "text-indigo-600" : "text-orange-500",
+      iconBg: isPositive ? "bg-[#e3f0ed]" : "bg-orange-100",
+      iconColor: isPositive ? "text-[#2f7f76]" : "text-orange-500",
+      valuColor: isPositive ? "text-[#2f7f76]" : "text-orange-500",
       bg: isPositive
-        ? "bg-gradient-to-br from-indigo-600 to-violet-600 text-white"
+        ? "bg-gradient-to-br from-[#2f7f76] to-[#45a79d] text-white"
         : "bg-white",
       light: isPositive,
     },
@@ -68,7 +68,7 @@ export function CashFlowCard({ income, expenses }: CashFlowCardProps) {
             {value}
           </p>
           {badge && (
-            <span className={`inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-full ${light ? "bg-white/20 text-white" : isPositive ? "bg-indigo-50 text-indigo-600" : "bg-orange-50 text-orange-500"}`}>
+            <span className={`inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-full ${light ? "bg-white/20 text-white" : isPositive ? "bg-[#edf5f2] text-[#2f7f76]" : "bg-orange-50 text-orange-500"}`}>
               {badge}
             </span>
           )}

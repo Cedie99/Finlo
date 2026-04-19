@@ -69,7 +69,7 @@ function PlanCard({
   const remaining = plan.totalMonths - plan.paidMonths;
 
   const colors = [
-    "#6366f1", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6", "#06b6d4",
+    "#2f7f76", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6", "#06b6d4",
   ];
   const color = colors[rank % colors.length];
 
@@ -112,7 +112,7 @@ function PlanCard({
                 setShowCalc((s) => !s);
                 setResult(null);
               }}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-[#2f7f76] hover:text-[#1f5c55] transition"
             >
               <Zap size={11} />
               Early payoff
@@ -143,13 +143,13 @@ function PlanCard({
                 value={extraAmount}
                 onChange={(e) => { setExtraAmount(e.target.value); setResult(null); }}
                 placeholder="500"
-                className="w-full rounded-xl border border-gray-200 pl-6 pr-3 py-2 text-sm font-medium outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100"
+                className="w-full rounded-xl border border-gray-200 pl-6 pr-3 py-2 text-sm font-medium outline-none focus:border-[#3d9187] focus:ring-1 focus:ring-[#d3e6e2]"
               />
             </div>
             <button
               onClick={handleCalc}
               disabled={isPending || !extraAmount}
-              className="rounded-xl bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-1 transition"
+              className="rounded-xl bg-[#2f7f76] px-3 py-2 text-xs font-semibold text-white hover:bg-[#266a63] disabled:opacity-50 flex items-center gap-1 transition"
             >
               {isPending ? <Loader2 size={12} className="animate-spin" /> : <Zap size={12} />}
               {isPending ? "" : "Calculate"}
@@ -166,7 +166,7 @@ function PlanCard({
               </div>
               <div className="rounded-xl bg-white border border-gray-100 px-2 py-1.5 text-center">
                 <p className="text-xs text-gray-400">Done by</p>
-                <p className="text-xs font-bold text-indigo-600">
+                <p className="text-xs font-bold text-[#2f7f76]">
                   {formatDate(result.newCompletionDate)}
                 </p>
               </div>
@@ -214,13 +214,13 @@ export function DebtPayoffRace() {
   return (
     <div className="space-y-4">
       {/* Header callout */}
-      <div className="rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 p-4 text-white">
+      <div className="rounded-2xl bg-gradient-to-r from-[#2f7f76] to-[#45a79d] p-4 text-white">
         <div className="flex items-center gap-2 mb-1">
           <Trophy size={16} className="text-yellow-300" />
           <p className="font-bold text-sm">Finishing soonest</p>
         </div>
         <p className="text-lg font-black">{finishingSoonest.name}</p>
-        <p className="text-indigo-200 text-sm mt-0.5">
+        <p className="text-[#b8ddd6] text-sm mt-0.5">
           {remaining} payment{remaining !== 1 ? "s" : ""} left ·{" "}
           {formatCurrency(finishingSoonest.monthlyAmount)}/mo
         </p>

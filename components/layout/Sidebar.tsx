@@ -43,19 +43,19 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          "fixed top-0 left-0 h-full w-64 border-r border-[#dbe3f9] bg-white/85 backdrop-blur-md z-40 transition-transform duration-300 flex flex-col",
+          "fixed top-0 left-0 h-full w-64 border-r border-[#d8e3df] bg-white/85 backdrop-blur-md z-40 transition-transform duration-300 flex flex-col",
           "lg:translate-x-0 lg:static lg:z-auto",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Brand */}
-        <div className="flex items-center justify-between h-16 px-5 border-b border-[#e1e7f9]">
+        <div className="flex items-center justify-between h-16 px-5 border-b border-[#d8e3df]">
           <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
             <FinloLogo size="md" />
           </Link>
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg hover:bg-[#eef3ff] text-[#6e7ca0]"
+            className="lg:hidden p-1.5 rounded-lg hover:bg-[#ebf3f0] text-[#667d78]"
           >
             <X size={16} />
           </button>
@@ -76,8 +76,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                   isActive
-                    ? "bg-[#245bff] text-white shadow-[0_12px_26px_rgba(36,91,255,0.25)]"
-                    : "text-[#5d6b8c] hover:bg-[#edf2ff] hover:text-[#1e355f]"
+                    ? "bg-[#2f7f76] text-white shadow-[0_12px_26px_rgba(47,127,118,0.25)]"
+                    : "text-[#586f6a] hover:bg-[#edf5f2] hover:text-[#194842]"
                 )}
               >
                 <Icon size={17} />
@@ -88,8 +88,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         {/* Bottom hint */}
-        <div className="p-4 border-t border-[#e1e7f9]">
-          <div className="rounded-xl border border-[#d8e1ff] bg-[#edf2ff] p-3 text-xs text-[#2d53c9] font-medium text-center">
+        <div className="p-4 border-t border-[#d8e3df]">
+          <div className="rounded-xl border border-[#d1e3df] bg-[#edf5f2] p-3 text-xs text-[#216f67] font-medium text-center">
             Your finances, under control.
           </div>
         </div>

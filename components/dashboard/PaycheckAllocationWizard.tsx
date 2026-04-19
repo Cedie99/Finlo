@@ -25,11 +25,11 @@ export function PaycheckAllocationWizard({ monthYear }: PaycheckAllocationWizard
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-2xl border border-dashed border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700 hover:bg-indigo-100 transition w-full"
+        className="flex items-center gap-2 rounded-2xl border border-dashed border-[#d1e3df] bg-[#edf5f2] px-4 py-3 text-sm font-semibold text-[#266a63] hover:bg-[#e3f0ed] transition w-full"
       >
         <Coins size={15} />
         Paycheck Allocation Wizard
-        <span className="ml-auto text-xs text-indigo-400 font-normal">
+        <span className="ml-auto text-xs text-[#66a99f] font-normal">
           {formatMonthYear(monthYear)}
         </span>
       </button>

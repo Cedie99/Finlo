@@ -31,8 +31,8 @@ export function BudgetSummaryRow({ items }: { items: BudgetItem[] }) {
     <div className="h-fit bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
       <div className="flex items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-[#edf2ff] rounded-xl flex items-center justify-center">
-            <PiggyBank size={16} className="text-[#2d53c9]" />
+          <div className="w-8 h-8 bg-[#edf5f2] rounded-xl flex items-center justify-center">
+            <PiggyBank size={16} className="text-[#216f67]" />
           </div>
           <h2 className="font-bold text-gray-900 text-base">Budget Overview</h2>
         </div>
@@ -43,7 +43,7 @@ export function BudgetSummaryRow({ items }: { items: BudgetItem[] }) {
           </div>
           <Link
             href="/budget"
-            className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+            className="text-xs font-semibold text-[#2f7f76] hover:text-[#266a63] transition-colors"
           >
             Manage →
           </Link>
@@ -66,10 +66,10 @@ export function BudgetSummaryRow({ items }: { items: BudgetItem[] }) {
           const remaining = new Decimal(item.limitAmount || "0").minus(item.spent || "0");
           const isOver = remaining.lt(0);
           const barColor =
-            pct >= 90 ? "#ef4444" : pct >= 70 ? "#f59e0b" : "#6366f1";
+            pct >= 90 ? "#ef4444" : pct >= 70 ? "#f59e0b" : "#2f7f76";
 
           return (
-            <Link key={item.categoryId} href="/budget" className="block rounded-2xl border border-gray-100 p-3.5 hover:border-indigo-100 hover:bg-indigo-50/30 transition-colors">
+            <Link key={item.categoryId} href="/budget" className="block rounded-2xl border border-gray-100 p-3.5 hover:border-[#d1e3df] hover:bg-[#edf5f2]/30 transition-colors">
               <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center gap-2">
                   <div

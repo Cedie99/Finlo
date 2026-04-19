@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Label } from "@/components/ui/label";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 
-const PRESET_COLORS = ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#3b82f6", "#ef4444", "#14b8a6"];
+const PRESET_COLORS = ["#2f7f76", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#3b82f6", "#ef4444", "#14b8a6"];
 
 export default function BudgetPage() {
   const [monthYear, setMonthYear] = useState(getMonthYear());
@@ -22,7 +22,7 @@ export default function BudgetPage() {
   const [newCategoryOpen, setNewCategoryOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [limitAmount, setLimitAmount] = useState("");
-  const [newCat, setNewCat] = useState({ name: "", icon: "tag", color: "#6366f1" });
+  const [newCat, setNewCat] = useState({ name: "", icon: "tag", color: "#2f7f76" });
 
   const { data: categories, isLoading } = useBudgetByMonth(monthYear);
   const setLimit = useSetBudgetLimit(monthYear);
@@ -44,7 +44,7 @@ export default function BudgetPage() {
     if (!newCat.name) return;
     await createCategory.mutateAsync(newCat);
     setNewCategoryOpen(false);
-    setNewCat({ name: "", icon: "tag", color: "#6366f1" });
+    setNewCat({ name: "", icon: "tag", color: "#2f7f76" });
   }
 
   return (
@@ -58,7 +58,7 @@ export default function BudgetPage() {
             <Button
               onClick={() => setNewCategoryOpen(true)}
               size="sm"
-              className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
+              className="rounded-full bg-[#2f7f76] hover:bg-[#266a63] shadow-[0_10px_24px_rgba(47,127,118,0.2)]"
             >
               <Plus size={14} className="mr-1" /> Category
             </Button>
@@ -100,7 +100,7 @@ export default function BudgetPage() {
             </div>
             <Button
               onClick={handleSetLimit}
-              className="w-full rounded-full bg-[#245bff] hover:bg-[#1a47cc] h-11"
+              className="w-full rounded-full bg-[#2f7f76] hover:bg-[#266a63] h-11"
               disabled={setLimit.isPending}
             >
               {setLimit.isPending ? "Saving..." : "Save Limit"}
@@ -141,7 +141,7 @@ export default function BudgetPage() {
             </div>
             <Button
               onClick={handleCreateCategory}
-              className="w-full rounded-full bg-[#245bff] hover:bg-[#1a47cc] h-11"
+              className="w-full rounded-full bg-[#2f7f76] hover:bg-[#266a63] h-11"
               disabled={createCategory.isPending}
             >
               {createCategory.isPending ? "Creating..." : "Create Category"}

@@ -36,7 +36,7 @@ export default function InstallmentsPage() {
         action={
           <Button
             onClick={() => setOpen(true)}
-            className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
+            className="rounded-full bg-[#2f7f76] hover:bg-[#266a63] shadow-[0_10px_24px_rgba(47,127,118,0.2)]"
           >
             <Plus size={15} className="mr-1" /> New Plan
           </Button>
@@ -51,7 +51,7 @@ export default function InstallmentsPage() {
           title="No installment plans"
           description="Add your first installment plan to start tracking"
           action={
-            <Button onClick={() => setOpen(true)} className="rounded-full bg-[#245bff] hover:bg-[#1a47cc]">
+            <Button onClick={() => setOpen(true)} className="rounded-full bg-[#2f7f76] hover:bg-[#266a63]">
               New Plan
             </Button>
           }
@@ -60,7 +60,7 @@ export default function InstallmentsPage() {
         <div className="space-y-3">
           {plans.map((plan) => (
             <Link key={plan.id} href={`/installments/${plan.id}`}>
-              <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:border-indigo-100 transition-all cursor-pointer">
+              <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:border-[#d1e3df] transition-all cursor-pointer">
                 <div className="flex items-center gap-4">
                   <ProgressRing paid={plan.paidMonths} total={plan.totalMonths} />
                   <div className="flex-1 min-w-0">

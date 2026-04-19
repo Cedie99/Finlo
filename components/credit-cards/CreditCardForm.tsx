@@ -131,7 +131,7 @@ export function CreditCardForm({ defaultValues, onSubmit, isLoading }: CreditCar
           </FormItem>
         )} />
 
-        <Button type="submit" disabled={isLoading} className="w-full rounded-full bg-[#245bff] hover:bg-[#1a47cc] h-11">
+        <Button type="submit" disabled={isLoading} className="w-full rounded-full bg-[#2f7f76] hover:bg-[#266a63] h-11">
           {isLoading ? "Saving..." : "Save Card"}
         </Button>
       </form>

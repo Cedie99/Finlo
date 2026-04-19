@@ -30,7 +30,7 @@ export default function CreditCardsPage() {
         action={
           <Button
             onClick={() => setOpen(true)}
-            className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
+            className="rounded-full bg-[#2f7f76] hover:bg-[#266a63] shadow-[0_10px_24px_rgba(47,127,118,0.2)]"
           >
             <Plus size={15} className="mr-1" /> Add Card
           </Button>
@@ -45,7 +45,7 @@ export default function CreditCardsPage() {
           title="No credit cards yet"
           description="Add your first credit card to track installment plans"
           action={
-            <Button onClick={() => setOpen(true)} className="rounded-full bg-[#245bff] hover:bg-[#1a47cc]">
+            <Button onClick={() => setOpen(true)} className="rounded-full bg-[#2f7f76] hover:bg-[#266a63]">
               Add Card
             </Button>
           }

@@ -2,24 +2,21 @@ import { cn } from "@/lib/utils";
 
 type FinloLogoSize = "sm" | "md" | "lg";
 
-const sizeMap: Record<FinloLogoSize, { mark: string; text: string; gap: string; stroke: string }> = {
+const sizeMap: Record<FinloLogoSize, { mark: string; text: string; gap: string }> = {
   sm: {
-    mark: "h-7 w-7 rounded-lg",
-    text: "text-sm",
+    mark: "h-6 w-6",
+    text: "text-base",
     gap: "gap-2",
-    stroke: "stroke-[1.7]",
   },
   md: {
-    mark: "h-8 w-8 rounded-xl",
-    text: "text-base",
+    mark: "h-7 w-7",
+    text: "text-lg",
     gap: "gap-2.5",
-    stroke: "stroke-[1.8]",
   },
   lg: {
-    mark: "h-9 w-9 rounded-xl",
-    text: "text-xl",
+    mark: "h-8 w-8",
+    text: "text-[1.45rem]",
     gap: "gap-2.5",
-    stroke: "stroke-[1.9]",
   },
 };
 
@@ -42,33 +39,28 @@ export function FinloLogo({
 
   return (
     <div className={cn("flex items-center", styles.gap, className)}>
-      <div
-        className={cn(
-          "relative isolate shrink-0 overflow-hidden border border-white/45 bg-[linear-gradient(145deg,#2451de_0%,#5f8cff_100%)] text-white shadow-[0_10px_24px_rgba(36,91,255,0.26)]",
-          styles.mark,
-          markClassName
-        )}
+      <svg
+        viewBox="0 0 56 56"
+        className={cn("shrink-0", styles.mark, markClassName)}
+        fill="none"
         aria-hidden
       >
-        <div className="absolute inset-0 opacity-45 bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.55),transparent_54%)]" />
-        <svg viewBox="0 0 24 24" className="absolute inset-0 m-auto h-[70%] w-[70%]" fill="none">
-          <path
-            d="M2.8 8.4c2-2 5.2-2 7.2 0s5.2 2 7.2 0"
-            className={cn("text-white/90", styles.stroke)}
-            stroke="currentColor"
-            strokeLinecap="round"
-          />
-          <path
-            d="M2.8 13.8c2-2 5.2-2 7.2 0s5.2 2 7.2 0"
-            className={cn("text-white/85", styles.stroke)}
-            stroke="currentColor"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
+        <path
+          d="M34.5 8c0-2.9-2.3-5.2-5.2-5.2h-5.2c-8 0-14.5 6.5-14.5 14.5V21H6.8A3.8 3.8 0 0 0 3 24.8c0 2.1 1.7 3.8 3.8 3.8h2.8v18.6c0 2.9 2.3 5.2 5.2 5.2s5.2-2.3 5.2-5.2V28.6h9.8a3.8 3.8 0 1 0 0-7.6h-9.8v-3.7c0-2.2 1.8-4 4-4h5.2c2.9 0 5.2-2.3 5.2-5.2Z"
+          fill="#0f2424"
+        />
+        <path
+          d="M9.6 47.5c6.7 0 12.8-2.3 18-7"
+          stroke="#2f7f76"
+          strokeWidth="6"
+          strokeLinecap="round"
+        />
+      </svg>
 
       {showWordmark ? (
-        <span className={cn("font-heading font-semibold tracking-wide text-[#15203d]", styles.text, wordmarkClassName)}>FINLO</span>
+        <span className={cn("font-heading font-semibold lowercase leading-none tracking-tight text-[#0f2424]", styles.text, wordmarkClassName)}>
+          finlo
+        </span>
       ) : null}
     </div>
   );

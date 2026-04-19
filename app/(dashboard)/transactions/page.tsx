@@ -111,13 +111,13 @@ export default function TransactionsPage() {
                 className="rounded-full border-gray-200 text-gray-600 hover:bg-gray-50 flex items-center gap-1.5"
               >
                 <Filter size={13} /> Filter
-                {hasFilters && <span className="w-2 h-2 bg-indigo-500 rounded-full" />}
+                {hasFilters && <span className="w-2 h-2 bg-[#edf5f2]0 rounded-full" />}
               </Button>
             )}
             <Button
               size="sm"
               onClick={() => setOpen(true)}
-              className="rounded-full bg-[#245bff] hover:bg-[#1a47cc] shadow-[0_10px_24px_rgba(36,91,255,0.2)]"
+              className="rounded-full bg-[#2f7f76] hover:bg-[#266a63] shadow-[0_10px_24px_rgba(47,127,118,0.2)]"
             >
               <Plus size={14} className="mr-1" />
               {tab === "recurring" ? "Add Recurring" : "Add"}
@@ -132,7 +132,7 @@ export default function TransactionsPage() {
           <TabsTrigger value="recurring" className="rounded-xl text-xs flex items-center gap-1.5">
             <RefreshCw size={11} /> Recurring
             {recurring.filter(r => r.isActive).length > 0 && (
-              <span className="bg-indigo-100 text-indigo-600 text-[10px] font-bold rounded-full px-1.5 py-0">
+              <span className="bg-[#e3f0ed] text-[#2f7f76] text-[10px] font-bold rounded-full px-1.5 py-0">
                 {recurring.filter(r => r.isActive).length}
               </span>
             )}
@@ -185,7 +185,7 @@ export default function TransactionsPage() {
               title="No transactions"
               description="Add your first transaction to get started"
               action={
-                <Button onClick={() => setOpen(true)} className="rounded-full bg-[#245bff] hover:bg-[#1a47cc]">
+                <Button onClick={() => setOpen(true)} className="rounded-full bg-[#2f7f76] hover:bg-[#266a63]">
                   Add Transaction
                 </Button>
               }
@@ -215,7 +215,7 @@ export default function TransactionsPage() {
               title="No recurring transactions"
               description="Set up automatic transactions for rent, subscriptions, salary, and more"
               action={
-                <Button onClick={() => setOpen(true)} className="rounded-full bg-[#245bff] hover:bg-[#1a47cc]">
+                <Button onClick={() => setOpen(true)} className="rounded-full bg-[#2f7f76] hover:bg-[#266a63]">
                   Add Recurring
                 </Button>
               }

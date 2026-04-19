@@ -46,8 +46,8 @@ export function UpcomingPayments({
   return (
     <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
       <div className="flex items-center gap-2.5 mb-5">
-        <div className="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center">
-          <Calendar size={16} className="text-indigo-600" />
+        <div className="w-8 h-8 bg-[#edf5f2] rounded-xl flex items-center justify-center">
+          <Calendar size={16} className="text-[#2f7f76]" />
         </div>
         <h2 className="font-bold text-gray-900 text-base">Upcoming Events</h2>
       </div>
@@ -72,7 +72,7 @@ export function UpcomingPayments({
                     {e.kind === "recurring" ? (
                       <div
                         className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: "#6366f120", color: "#6366f1" }}
+                        style={{ backgroundColor: "#2f7f7620", color: "#2f7f76" }}
                       >
                         <RefreshCw size={11} />
                       </div>
@@ -90,7 +90,7 @@ export function UpcomingPayments({
                       />
                     )}
                     <div>
-                      <p className="text-sm font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors">
+                      <p className="text-sm font-semibold text-gray-800 group-hover:text-[#2f7f76] transition-colors">
                         {e.label}
                       </p>
                       <p className="text-xs text-gray-400">

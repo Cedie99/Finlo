@@ -80,7 +80,7 @@ export function PaydayCalendar({ monthYear, paydays, dueDates, inline = false }:
                   key={day}
                   className={`min-h-[90px] p-1.5 flex flex-col gap-1 ${
                     isCurrentDay
-                      ? "bg-indigo-50/50"
+                      ? "bg-[#edf5f2]/50"
                       : isWeekend
                       ? "bg-gray-50/70"
                       : "bg-white hover:bg-slate-50/60"
@@ -91,7 +91,7 @@ export function PaydayCalendar({ monthYear, paydays, dueDates, inline = false }:
                     <span
                       className={`text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full ${
                         isCurrentDay
-                          ? "bg-indigo-600 text-white shadow-sm"
+                          ? "bg-[#2f7f76] text-white shadow-sm"
                           : isWeekend
                           ? "text-gray-400"
                           : "text-gray-500"
@@ -166,10 +166,10 @@ export function PaydayCalendar({ monthYear, paydays, dueDates, inline = false }:
 
   const calendarPopover = (
     <Popover>
-      <PopoverTrigger className="group inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-2 text-sm font-semibold text-indigo-700 shadow-sm transition-all hover:bg-indigo-100 hover:border-indigo-300 hover:shadow-md active:scale-95">
-        <CalendarDays size={14} className="text-indigo-500 shrink-0" />
+      <PopoverTrigger className="group inline-flex items-center gap-2 rounded-full border border-[#d1e3df] bg-[#edf5f2] px-3.5 py-2 text-sm font-semibold text-[#266a63] shadow-sm transition-all hover:bg-[#e3f0ed] hover:border-[#c1d8d2] hover:shadow-md active:scale-95">
+        <CalendarDays size={14} className="text-[#2b7d74] shrink-0" />
         {format(firstDay, "MMMM yyyy")}
-        <ChevronDown size={13} className="text-indigo-400 transition-transform group-hover:translate-y-0.5" />
+        <ChevronDown size={13} className="text-[#66a99f] transition-transform group-hover:translate-y-0.5" />
       </PopoverTrigger>
 
       <PopoverContent
@@ -188,7 +188,7 @@ export function PaydayCalendar({ monthYear, paydays, dueDates, inline = false }:
           </div>
           <div className="flex items-center gap-3 text-xs text-gray-400">
             <span className="flex items-center gap-1.5">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#2f7f76] text-[10px] font-bold text-white">
                 {new Date().getDate()}
               </span>
               Today

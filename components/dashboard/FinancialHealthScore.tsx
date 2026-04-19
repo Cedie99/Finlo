@@ -6,7 +6,7 @@ import { useHealthScore } from "@/lib/hooks/useHealthScore";
 
 const gradeConfig = {
   A: { color: "text-emerald-600", bg: "bg-emerald-50", ring: "ring-emerald-300", bar: "bg-emerald-500" },
-  B: { color: "text-sky-600", bg: "bg-sky-50", ring: "ring-sky-300", bar: "bg-sky-500" },
+  B: { color: "text-[#2f7f76]", bg: "bg-[#edf5f2]", ring: "ring-[#9bc7c0]", bar: "bg-[#edf5f2]0" },
   C: { color: "text-amber-600", bg: "bg-amber-50", ring: "ring-amber-300", bar: "bg-amber-500" },
   D: { color: "text-orange-600", bg: "bg-orange-50", ring: "ring-orange-300", bar: "bg-orange-500" },
   F: { color: "text-red-600", bg: "bg-red-50", ring: "ring-red-300", bar: "bg-red-500" },
@@ -100,7 +100,7 @@ export function FinancialHealthScore() {
             <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 space-y-2">
               {data.insights.slice(1).map((insight, i) => (
                 <div key={i} className="flex items-start gap-2">
-                  <Info size={12} className="text-indigo-400 shrink-0 mt-0.5" />
+                  <Info size={12} className="text-[#66a99f] shrink-0 mt-0.5" />
                   <p className="text-xs text-gray-600">{insight}</p>
                 </div>
               ))}

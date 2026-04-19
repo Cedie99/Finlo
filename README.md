@@ -1,6 +1,6 @@
 # Finlo — Installment & Budget Tracker
 
-**Finlo** is a personal finance web app built for real-life budgeting. It helps you track installments, manage cash flow, and decide what is safe to spend so you can stay in control every month.
+**Finlo** is a personal finance web app built with TypeScript for real-life budgeting. It helps you track installments, manage cash flow, and decide what is safe to spend so you can stay in control every month.
 
 ---
 
@@ -40,6 +40,7 @@
 | Layer | Technology |
 |---|---|
 | Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
 | UI | React 19, Tailwind CSS 4, Framer Motion, Recharts, lucide-react |
 | Forms | React Hook Form, Zod |
 | Data Fetching | TanStack React Query 5 |

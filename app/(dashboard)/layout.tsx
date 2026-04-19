@@ -45,8 +45,8 @@ export default function DashboardLayout({
   }, []);
 
   return (
-    <div className="relative flex h-screen overflow-hidden bg-[#f6f8ff] text-[#151d34]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(45,95,255,0.12),transparent_40%),radial-gradient(circle_at_8%_90%,rgba(64,186,255,0.11),transparent_44%)]" />
+    <div className="relative flex h-screen overflow-hidden bg-[#f4f2ec] text-[#142929]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(47,127,118,0.12),transparent_40%),radial-gradient(circle_at_8%_90%,rgba(69,167,157,0.11),transparent_44%)]" />
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}

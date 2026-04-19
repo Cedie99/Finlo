@@ -73,13 +73,13 @@ export default function DashboardPage() {
         action={
           <div className="flex items-center gap-2">
             <Link href="/transactions">
-              <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-[#d7def4] bg-white/80 hover:bg-[#eff3ff] text-[#274887]">
+              <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-[#d3e0dc] bg-white/80 hover:bg-[#edf5f2] text-[#225c56]">
                 <Plus size={13} />
                 Add Transaction
               </Button>
             </Link>
             <div className="flex items-center gap-1">
-              <Button variant="outline" size="icon" onClick={prevMonth} className="border-[#d7def4] bg-white/80 hover:bg-[#eff3ff] text-[#274887]">
+              <Button variant="outline" size="icon" onClick={prevMonth} className="border-[#d3e0dc] bg-white/80 hover:bg-[#edf5f2] text-[#225c56]">
                 <ChevronLeft size={14} />
               </Button>
               {cashFlow ? (
@@ -90,9 +90,9 @@ export default function DashboardPage() {
                   dueDates={cashFlow.calendar.dueDates}
                 />
               ) : (
-                <span className="text-sm font-medium px-2 text-[#41557f]">{formatMonthYear(monthYear)}</span>
+                <span className="text-sm font-medium px-2 text-[#4f635f]">{formatMonthYear(monthYear)}</span>
               )}
-              <Button variant="outline" size="icon" onClick={nextMonth} className="border-[#d7def4] bg-white/80 hover:bg-[#eff3ff] text-[#274887]">
+              <Button variant="outline" size="icon" onClick={nextMonth} className="border-[#d3e0dc] bg-white/80 hover:bg-[#edf5f2] text-[#225c56]">
                 <ChevronRight size={14} />
               </Button>
             </div>
@@ -174,16 +174,16 @@ export default function DashboardPage() {
           {/* Simulator CTA */}
           <Link
             href="/simulator"
-            className="block rounded-2xl border border-dashed border-[#a8bdfb] bg-linear-to-r from-[#edf2ff] to-[#f4f8ff] p-5 hover:from-[#e6eeff] hover:to-[#eef4ff] transition-colors"
+            className="block rounded-2xl border border-dashed border-[#a9cbc5] bg-linear-to-r from-[#edf5f2] to-[#f2f7f5] p-5 hover:from-[#e4f0ed] hover:to-[#ecf5f2] transition-colors"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-semibold text-[#1e3570]">Stress test your finances</p>
-                <p className="text-sm text-[#4863a0] mt-0.5">
+                <p className="font-semibold text-[#1f5c55]">Stress test your finances</p>
+                <p className="text-sm text-[#5b6f6a] mt-0.5">
                   See how salary delays, unexpected expenses, or income drops affect your cash flow.
                 </p>
               </div>
-              <ChevronRight className="text-[#4b68ad] shrink-0" />
+              <ChevronRight className="text-[#2b7d74] shrink-0" />
             </div>
           </Link>
         </div>
