@@ -26,6 +26,7 @@ import { generatePaymentSchedule } from "@/lib/utils/installments";
 import { formatCurrency } from "@/lib/utils/currency";
 import { formatDate } from "@/lib/utils/dates";
 import type { CreditCard } from "@/lib/hooks/useCreditCards";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 
 interface InstallmentFormProps {
   creditCards: CreditCard[];
@@ -76,7 +77,7 @@ export function InstallmentForm({
   if (step === 1) {
     return (
       <div className="space-y-4">
-        <h3 className="font-medium text-sm text-muted-foreground">Step 1 of 3 — Select Type</h3>
+        <h3 className="font-medium text-sm text-white/50">Step 1 of 3 — Select Type</h3>
         <div className="grid grid-cols-3 gap-3">
           {[
             { value: "CREDIT_CARD", label: "Credit Card", desc: "Card installment" },
@@ -90,10 +91,10 @@ export function InstallmentForm({
                 form.setValue("type", t.value as InstallmentInput["type"]);
                 setStep(2);
               }}
-              className="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-indigo-500 text-left transition-colors"
+              className="p-4 rounded-lg border-2 border-white/[0.07] hover:border-[#b4f03a]/40 bg-[#111118] text-left transition-colors"
             >
-              <div className="font-medium text-sm">{t.label}</div>
-              <div className="text-xs text-muted-foreground">{t.desc}</div>
+              <div className="font-medium text-sm text-white">{t.label}</div>
+              <div className="text-xs text-white/40">{t.desc}</div>
             </button>
           ))}
         </div>
@@ -104,18 +105,18 @@ export function InstallmentForm({
   if (step === 3) {
     return (
       <div className="space-y-4">
-        <h3 className="font-medium text-sm text-muted-foreground">Step 3 of 3 — Preview Schedule</h3>
-        <div className="max-h-64 overflow-y-auto border rounded-lg divide-y text-sm">
+        <h3 className="font-medium text-sm text-white/50">Step 3 of 3 — Preview Schedule</h3>
+        <div className="max-h-64 overflow-y-auto border border-white/[0.07] bg-[#111118] rounded-lg divide-y divide-white/[0.04] text-sm">
           {preview.slice(0, 6).map((p) => (
             <div key={p.monthNumber} className="flex justify-between px-3 py-2">
-              <span className="text-muted-foreground">
+              <span className="text-white/50">
                 Month {p.monthNumber} — {formatDate(p.dueDate)}
               </span>
-              <span className="font-medium">{formatCurrency(p.amount)}</span>
+              <span className="font-medium text-white">{formatCurrency(p.amount)}</span>
             </div>
           ))}
           {preview.length > 6 && (
-            <div className="px-3 py-2 text-muted-foreground text-xs">
+            <div className="px-3 py-2 text-white/40 text-xs">
               +{preview.length - 6} more months...
             </div>
           )}
@@ -149,12 +150,12 @@ export function InstallmentForm({
           <button
             type="button"
             onClick={() => setStep(1)}
-            className="text-xs text-indigo-600 hover:underline"
+            className="text-xs text-[#b4f03a] hover:underline"
           >
             ← Change type
           </button>
-          <span className="text-xs text-muted-foreground">
-            Step 2 of 3 — Type: <strong>{type}</strong>
+          <span className="text-xs text-white/50">
+            Step 2 of 3 — Type: <strong className="text-white">{type}</strong>
           </span>
         </div>
 
@@ -177,7 +178,14 @@ export function InstallmentForm({
                 <SelectContent>
                   {creditCards.map((c) => (
                     <SelectItem key={c.id} value={c.id}>
-                      {c.bankName} — {c.cardName}
+                      <span className="inline-flex items-center gap-1.5">
+                        <BrandLogo
+                          name={`${c.bankName} ${c.cardName}`}
+                          size={14}
+                          className="bg-white/10 text-white/70"
+                        />
+                        {c.bankName} — {c.cardName}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>

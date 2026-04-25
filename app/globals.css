@@ -81,6 +81,8 @@
   --sidebar-accent-foreground: oklch(0.34 0.04 180);
   --sidebar-border: oklch(0.89 0.012 170);
   --sidebar-ring: oklch(0.58 0.08 182);
+  --brand-accent: #b4f03a;
+  --brand-accent-hover: #ccff52;
 }
 
 .dark {
@@ -115,12 +117,41 @@
   --sidebar-accent-foreground: oklch(0.97 0.004 140);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.74 0.07 182);
+  --brand-accent: #b4f03a;
+  --brand-accent-hover: #ccff52;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  a[href],
+  button,
+  summary,
+  [role="button"],
+  [role="menuitem"],
+  [role="menuitemcheckbox"],
+  [role="menuitemradio"],
+  [aria-haspopup="menu"],
+  [aria-haspopup="listbox"],
+  [aria-haspopup="dialog"],
+  [data-slot$="-trigger"],
+  [data-radix-collection-item],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  input:disabled,
+  select:disabled,
+  textarea:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -140,4 +171,31 @@ html.lenis body {
 
 .lenis.lenis-stopped {
   overflow: clip;
+}
+
+@layer components {
+  .dashboard-surface {
+    @apply rounded-2xl border border-white/[0.07] bg-[#111118];
+  }
+
+  .dashboard-surface-muted {
+    @apply rounded-2xl border border-white/[0.07] bg-[#0c0c10];
+  }
+
+  .dashboard-input {
+    @apply rounded-xl border-white/[0.07] bg-[#0a0a0f] text-white placeholder:text-white/25 focus-visible:border-[#b4f03a] focus-visible:ring-[#b4f03a]/20;
+  }
+
+  .dashboard-accent-btn {
+    @apply rounded-full bg-[#b4f03a] text-[#0c0c10] hover:bg-[#ccff52];
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

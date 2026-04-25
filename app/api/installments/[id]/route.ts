@@ -59,10 +59,33 @@ export async function DELETE(
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
 
-  const result = await prisma.installmentPlan.deleteMany({
-    where: { id, userId: session.user.id },
-  });
+  try {
+    const existing = await prisma.installmentPlan.findFirst({
+      where: { id, userId: session.user.id },
+      select: { id: true },
+    });
 
-  if (result.count === 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json({ success: true });
+    if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    await prisma.$transaction([
+      prisma.transaction.updateMany({
+        where: { installmentPlanId: id, userId: session.user.id },
+        data: { installmentPlanId: null },
+      }),
+      prisma.installmentPayment.deleteMany({
+        where: { installmentPlanId: id },
+      }),
+      prisma.installmentPlan.deleteMany({
+        where: { id, userId: session.user.id },
+      }),
+    ]);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Delete installment failed", error);
+    return NextResponse.json(
+      { error: "Failed to delete installment. Please try again." },
+      { status: 500 }
+    );
+  }
 }

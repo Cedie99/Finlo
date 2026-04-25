@@ -26,6 +26,8 @@ interface FinloLogoProps {
   className?: string;
   markClassName?: string;
   wordmarkClassName?: string;
+  /** Use on dark backgrounds — swaps logo colors to light palette */
+  dark?: boolean;
 }
 
 export function FinloLogo({
@@ -34,6 +36,7 @@ export function FinloLogo({
   className,
   markClassName,
   wordmarkClassName,
+  dark = false,
 }: FinloLogoProps) {
   const styles = sizeMap[size];
 
@@ -47,18 +50,18 @@ export function FinloLogo({
       >
         <path
           d="M34.5 8c0-2.9-2.3-5.2-5.2-5.2h-5.2c-8 0-14.5 6.5-14.5 14.5V21H6.8A3.8 3.8 0 0 0 3 24.8c0 2.1 1.7 3.8 3.8 3.8h2.8v18.6c0 2.9 2.3 5.2 5.2 5.2s5.2-2.3 5.2-5.2V28.6h9.8a3.8 3.8 0 1 0 0-7.6h-9.8v-3.7c0-2.2 1.8-4 4-4h5.2c2.9 0 5.2-2.3 5.2-5.2Z"
-          fill="#0f2424"
+          fill={dark ? "#ffffff" : "#0f2424"}
         />
         <path
           d="M9.6 47.5c6.7 0 12.8-2.3 18-7"
-          stroke="#2f7f76"
+          stroke={dark ? "#b4f03a" : "#2f7f76"}
           strokeWidth="6"
           strokeLinecap="round"
         />
       </svg>
 
       {showWordmark ? (
-        <span className={cn("font-heading font-semibold lowercase leading-none tracking-tight text-[#0f2424]", styles.text, wordmarkClassName)}>
+        <span className={cn("font-heading font-semibold lowercase leading-none tracking-tight", styles.text, dark ? "text-white" : "text-[#0f2424]", wordmarkClassName)}>
           finlo
         </span>
       ) : null}

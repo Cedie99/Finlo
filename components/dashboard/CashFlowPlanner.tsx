@@ -26,16 +26,16 @@ export function CashFlowPlanner({ obligations, income, dtiRatio }: CashFlowPlann
     return Math.min(amount.abs().div(totalIncome.abs()).times(100).toNumber(), 100);
   };
 
-  let dtiBarColor = "bg-emerald-500";
-  let dtiTextColor = "text-emerald-600";
+  let dtiBarColor = "bg-[#34d399]";
+  let dtiTextColor = "text-[#34d399]";
   let dtiLabel = "Healthy";
   if (dtiRatio > 43) {
-    dtiBarColor = "bg-red-500";
-    dtiTextColor = "text-red-600";
+    dtiBarColor = "bg-[#ef4444]";
+    dtiTextColor = "text-[#ef4444]";
     dtiLabel = "Critical";
   } else if (dtiRatio >= 30) {
-    dtiBarColor = "bg-amber-500";
-    dtiTextColor = "text-amber-600";
+    dtiBarColor = "bg-[#f59e0b]";
+    dtiTextColor = "text-[#f59e0b]";
     dtiLabel = "Watch Out";
   }
 
@@ -44,57 +44,57 @@ export function CashFlowPlanner({ obligations, income, dtiRatio }: CashFlowPlann
       label: "Income",
       amount: totalIncome,
       prefix: "+",
-      barColor: "bg-emerald-500",
-      textColor: "text-emerald-600",
+      barColor: "bg-[#34d399]",
+      textColor: "text-[#34d399]",
       width: 100,
     },
     {
       label: "Installments",
       amount: totalInstallments,
       prefix: "-",
-      barColor: "bg-red-500",
-      textColor: "text-red-500",
+      barColor: "bg-[#ef4444]",
+      textColor: "text-[#ef4444]",
       width: barWidth(totalInstallments),
     },
     {
       label: "Budget Allocations",
       amount: totalBudgetLimits,
       prefix: "-",
-      barColor: "bg-amber-500",
-      textColor: "text-amber-500",
+      barColor: "bg-[#f59e0b]",
+      textColor: "text-[#f59e0b]",
       width: barWidth(totalBudgetLimits),
     },
   ];
 
   return (
-    <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm">
-      <h3 className="text-sm font-semibold text-gray-700 mb-4">Monthly Cash Flow Breakdown</h3>
+    <div className="rounded-2xl border border-white/[0.07] bg-[#111118] p-5">
+      <h3 className="mb-4 text-sm font-semibold text-white">Monthly Cash Flow Breakdown</h3>
 
       <div className="space-y-3">
         {rows.map(({ label, amount, prefix, barColor, textColor, width }) => (
           <div key={label} className="flex items-center gap-3">
-            <span className="text-sm text-gray-500 w-36 shrink-0">{label}</span>
-            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+            <span className="w-36 shrink-0 text-xs text-white/50">{label}</span>
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.07]">
               <div
-                className={cn("h-full rounded-full transition-all duration-300", barColor)}
+                className={cn("h-full rounded-full transition-all duration-500", barColor)}
                 style={{ width: `${width}%` }}
               />
             </div>
-            <span className={cn("text-sm font-medium tabular-nums w-32 text-right", textColor)}>
+            <span className={cn("w-32 text-right text-xs font-semibold tabular-nums", textColor)}>
               {prefix}{formatCurrency(amount.toString())}
             </span>
           </div>
         ))}
 
-        <hr className="border-gray-200" />
+        <div className="my-1 border-t border-white/[0.07]" />
 
         <div className="flex items-center gap-3">
-          <span className="text-sm font-semibold text-gray-700 w-36 shrink-0">Free Cash</span>
+          <span className="w-36 shrink-0 text-xs font-semibold text-white">Free Cash</span>
           <div className="flex-1" />
           <span
             className={cn(
-              "text-sm font-bold tabular-nums w-32 text-right",
-              freeCashPositive ? "text-emerald-600" : "text-red-500"
+              "w-32 text-right text-sm font-bold tabular-nums",
+              freeCashPositive ? "text-[#34d399]" : "text-[#ef4444]"
             )}
           >
             {formatCurrency(freeCash.toString())}
@@ -102,20 +102,20 @@ export function CashFlowPlanner({ obligations, income, dtiRatio }: CashFlowPlann
         </div>
       </div>
 
-      <div className="mt-5 pt-4 border-t border-gray-100">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-500">Debt-to-Income Ratio</span>
-          <span className={cn("text-sm font-semibold", dtiTextColor)}>
+      <div className="mt-4 border-t border-white/[0.07] pt-4">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-xs text-white/50">Debt-to-Income Ratio</span>
+          <span className={cn("text-xs font-semibold", dtiTextColor)}>
             {dtiRatio.toFixed(1)}% — {dtiLabel}
           </span>
         </div>
-        <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.07]">
           <div
-            className={cn("h-full rounded-full transition-all duration-300", dtiBarColor)}
+            className={cn("h-full rounded-full transition-all duration-500", dtiBarColor)}
             style={{ width: `${Math.min(dtiRatio, 100)}%` }}
           />
         </div>
-        <p className="text-xs text-gray-400 mt-1">
+        <p className="mt-1.5 text-xs text-white/30">
           {dtiRatio < 30
             ? "Your debt load is manageable."
             : dtiRatio <= 43

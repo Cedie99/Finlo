@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { Coins, X, CheckCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/utils/currency";
 import { formatMonthYear } from "@/lib/utils/dates";
@@ -25,126 +26,129 @@ export function PaycheckAllocationWizard({ monthYear }: PaycheckAllocationWizard
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-2xl border border-dashed border-[#d1e3df] bg-[#edf5f2] px-4 py-3 text-sm font-semibold text-[#266a63] hover:bg-[#e3f0ed] transition w-full"
+        className="flex w-full items-center gap-2.5 rounded-2xl border border-dashed border-white/[0.07] bg-[#111118] px-4 py-3.5 text-sm font-semibold text-[#b4f03a] transition hover:border-[#b4f03a]/40 hover:bg-white/[0.04]"
       >
         <Coins size={15} />
         Paycheck Allocation Wizard
-        <span className="ml-auto text-xs text-[#66a99f] font-normal">
+        <span className="ml-auto text-xs font-normal text-white/30">
           {formatMonthYear(monthYear)}
         </span>
       </button>
 
-      {open && (
-        <div
-          className="fixed inset-0 z-50 bg-black/40 flex items-end sm:items-center justify-center p-4"
-          onClick={() => setOpen(false)}
-        >
+      {open &&
+        createPortal(
           <div
-            className="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-4 backdrop-blur-sm sm:items-center"
+            onClick={() => setOpen(false)}
           >
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <p className="font-bold text-gray-900">Paycheck Allocation</p>
-                <p className="text-xs text-gray-400 mt-0.5">{formatMonthYear(monthYear)}</p>
-              </div>
-              <button
-                onClick={() => setOpen(false)}
-                className="p-1.5 rounded-full hover:bg-gray-100 text-gray-400"
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            {isLoading ? (
-              <div className="h-32 flex items-center justify-center text-sm text-gray-400">
-                Loading…
-              </div>
-            ) : data ? (
-              <>
-                {/* Income summary */}
-                <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-4 mb-4">
-                  <p className="text-xs text-emerald-600 font-medium mb-1">Total Income</p>
-                  <p className="text-2xl font-black text-emerald-700">
-                    {formatCurrency(data.totalIncome)}
-                  </p>
-                  {Number(data.alreadySpent) > 0 && (
-                    <p className="text-xs text-emerald-500 mt-1">
-                      {formatCurrency(data.alreadySpent)} already spent this month
-                    </p>
-                  )}
+            <div
+              className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-white/[0.07] bg-[#111118] p-6 shadow-[0_32px_64px_rgba(0,0,0,0.6)]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="mb-5 flex items-center justify-between">
+                <div>
+                  <p className="font-bold text-white">Paycheck Allocation</p>
+                  <p className="mt-0.5 text-xs text-white/30">{formatMonthYear(monthYear)}</p>
                 </div>
-
-                {/* Allocation list */}
-                <div className="space-y-2 mb-4">
-                  {data.allocations.map((alloc, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-3 rounded-2xl border border-gray-100 px-3 py-2.5"
-                    >
-                      <span className="text-base shrink-0">
-                        {categoryIcon[alloc.category] ?? "📌"}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <p className="text-xs font-semibold text-gray-700 truncate">
-                            {alloc.label}
-                          </p>
-                          <p className="text-xs font-bold text-gray-800 ml-2">
-                            {formatCurrency(alloc.amount)}
-                          </p>
-                        </div>
-                        <div className="h-1 rounded-full bg-gray-100">
-                          <div
-                            className="h-1 rounded-full transition-all"
-                            style={{
-                              width: `${Math.min(100, alloc.percentage)}%`,
-                              backgroundColor: alloc.color,
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <span className="text-xs text-gray-400 shrink-0">
-                        {alloc.percentage}%
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Unallocated */}
-                <div
-                  className={`rounded-2xl border p-3 flex items-center gap-3 ${
-                    Number(data.unallocated) > 0
-                      ? "bg-emerald-50 border-emerald-100"
-                      : "bg-gray-50 border-gray-100"
-                  }`}
+                <button
+                  onClick={() => setOpen(false)}
+                  className="rounded-full p-1.5 text-white/50 transition hover:bg-white/[0.05] hover:text-white"
                 >
-                  <CheckCircle
-                    size={16}
-                    className={
-                      Number(data.unallocated) > 0 ? "text-emerald-500" : "text-gray-300"
-                    }
-                  />
-                  <div>
-                    <p className="text-xs font-semibold text-gray-700">Unallocated (Free)</p>
-                    <p
-                      className={`text-sm font-bold ${
-                        Number(data.unallocated) > 0 ? "text-emerald-600" : "text-gray-400"
-                      }`}
-                    >
-                      {formatCurrency(data.unallocated)}
-                    </p>
-                  </div>
-                </div>
+                  <X size={16} />
+                </button>
+              </div>
 
-                <p className="text-xs text-gray-400 text-center mt-4">
-                  Allocations are based on your active obligations and budget limits.
-                </p>
-              </>
-            ) : null}
-          </div>
-        </div>
-      )}
+              {isLoading ? (
+                <div className="flex h-32 items-center justify-center text-sm text-white/30">
+                  Loading…
+                </div>
+              ) : data ? (
+                <>
+                  {/* Income summary */}
+                  <div className="mb-4 rounded-xl border border-[#34d399]/20 bg-[#34d399]/8 p-4">
+                    <p className="mb-1 text-xs font-medium text-[#34d399]">Total Income</p>
+                    <p className="font-heading text-2xl font-black text-[#34d399]">
+                      {formatCurrency(data.totalIncome)}
+                    </p>
+                    {Number(data.alreadySpent) > 0 && (
+                      <p className="mt-1 text-xs text-[#2aab7a]">
+                        {formatCurrency(data.alreadySpent)} already spent this month
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Allocation rows */}
+                  <div className="mb-4 space-y-2">
+                    {data.allocations.map((alloc, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-3 rounded-xl border border-white/[0.07] px-3 py-3"
+                      >
+                        <span className="shrink-0 text-base">
+                          {categoryIcon[alloc.category] ?? "📌"}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="mb-1.5 flex items-center justify-between">
+                            <p className="truncate text-xs font-semibold text-white">
+                              {alloc.label}
+                            </p>
+                            <p className="ml-2 text-xs font-bold text-white">
+                              {formatCurrency(alloc.amount)}
+                            </p>
+                          </div>
+                          <div className="h-1 overflow-hidden rounded-full bg-white/[0.07]">
+                            <div
+                              className="h-full rounded-full transition-all"
+                              style={{
+                                width: `${Math.min(100, alloc.percentage)}%`,
+                                backgroundColor: alloc.color,
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <span className="shrink-0 text-xs text-white/30">
+                          {alloc.percentage}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Unallocated */}
+                  <div
+                    className={`flex items-center gap-3 rounded-xl border p-3 ${
+                      Number(data.unallocated) > 0
+                        ? "border-[#34d399]/20 bg-[#34d399]/8"
+                        : "border-white/[0.07] bg-[#0c0c10]"
+                    }`}
+                  >
+                    <CheckCircle
+                      size={16}
+                      className={
+                        Number(data.unallocated) > 0 ? "text-[#34d399]" : "text-white/20"
+                      }
+                    />
+                    <div>
+                      <p className="text-xs font-semibold text-white">Unallocated (Free)</p>
+                      <p
+                        className={`text-sm font-bold ${
+                          Number(data.unallocated) > 0 ? "text-[#34d399]" : "text-white/30"
+                        }`}
+                      >
+                        {formatCurrency(data.unallocated)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="mt-4 text-center text-xs text-white/30">
+                    Allocations based on your active obligations and budget limits.
+                  </p>
+                </>
+              ) : null}
+            </div>
+          </div>,
+          document.body
+        )}
     </>
   );
 }

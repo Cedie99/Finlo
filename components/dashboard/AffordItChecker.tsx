@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { DollarSign, X, CheckCircle, AlertCircle, XCircle, Loader2 } from "lucide-react";
+import { DollarSign, CheckCircle, AlertCircle, XCircle, Loader2, X } from "lucide-react";
 import { formatCurrency, parseCurrency } from "@/lib/utils/currency";
 import { formatMonthYear } from "@/lib/utils/dates";
 import { useAffordIt } from "@/lib/hooks/useAffordIt";
 import type { AffordItResult } from "@/lib/hooks/useAffordIt";
+import { cn } from "@/lib/utils";
 
-export function AffordItChecker() {
+export function AffordItChecker({ collapsed }: { collapsed?: boolean }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [input, setInput] = useState("");
@@ -24,165 +24,149 @@ export function AffordItChecker() {
     const amount = parseCurrency(input);
     if (!amount || amount <= 0) return;
     setResult(null);
-    mutate(amount, {
-      onSuccess: (data) => setResult(data),
-    });
-  }
-
-  function handleClose() {
-    setOpen(false);
-    setResult(null);
-    setInput("");
+    mutate(amount, { onSuccess: (data) => setResult(data) });
   }
 
   const verdictConfig = result
     ? {
         YES: {
           icon: CheckCircle,
-          color: "text-emerald-600",
-          bg: "bg-emerald-50 border-emerald-200",
-          pill: "bg-emerald-100 text-emerald-700",
+          color: "text-[#34d399]",
+          bg: "border-[#34d399]/20 bg-[#34d399]/8",
+          pill: "bg-[#34d399]/15 text-[#34d399]",
         },
         TIGHT: {
           icon: AlertCircle,
-          color: "text-amber-600",
-          bg: "bg-amber-50 border-amber-200",
-          pill: "bg-amber-100 text-amber-700",
+          color: "text-[#f59e0b]",
+          bg: "border-[#f59e0b]/20 bg-[#f59e0b]/8",
+          pill: "bg-[#f59e0b]/15 text-[#f59e0b]",
         },
         NO: {
           icon: XCircle,
-          color: "text-red-500",
-          bg: "bg-red-50 border-red-200",
-          pill: "bg-red-100 text-red-600",
+          color: "text-[#ef4444]",
+          bg: "border-[#ef4444]/20 bg-[#ef4444]/8",
+          pill: "bg-[#ef4444]/15 text-[#ef4444]",
         },
       }[result.verdict]
     : null;
 
-  if (!mounted) return null;
+  const triggerButton = (
+    <button
+      onClick={() => setOpen(true)}
+      className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all hover:bg-white/[0.05]"
+    >
+      <span className="flex-1 text-left text-white/45 group-hover:text-white">Can I afford it?</span>
+    </button>
+  );
+
+  if (!mounted) return triggerButton;
 
   return createPortal(
     <>
-      {/* Floating button */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-24 right-5 lg:bottom-6 lg:right-6 z-30 flex items-center gap-2 rounded-full bg-[#2f7f76] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_24px_rgba(47,127,118,0.28)] hover:bg-[#266a63] transition-all active:scale-95"
-        type="button"
-      >
-        <DollarSign size={16} />
-        Can I afford it?
-      </button>
-
-      {/* Modal backdrop */}
+      {triggerButton}
       {open && (
-        <div
-          className="fixed inset-0 z-220 bg-black/40 flex items-end sm:items-center justify-center p-4"
-          onClick={handleClose}
-        >
-          <div
-            className="w-full max-w-sm rounded-3xl border border-[#d1e3df] bg-white p-6 shadow-[0_30px_70px_rgba(15,36,36,0.18)]"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-2xl border border-white/8 bg-[#111118] shadow-[0_24px_60px_rgba(0,0,0,0.6)] overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <p className="font-bold text-gray-900 text-base">Can I afford it?</p>
-                <p className="text-xs text-gray-400 mt-0.5">Enter any price for an instant check</p>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#b4f03a]/15">
+                  <DollarSign size={18} className="text-[#b4f03a]" />
+                </div>
+                <div>
+                  <h2 className="text-base font-bold text-white">Can I afford it?</h2>
+                  <p className="text-xs text-white/40">Check if a purchase fits your budget</p>
+                </div>
               </div>
               <button
-                onClick={handleClose}
-                className="p-1.5 rounded-full hover:bg-gray-100 text-gray-400"
+                onClick={() => setOpen(false)}
+                className="rounded-lg p-2 text-white/40 transition-colors hover:bg-white/5 hover:text-white"
               >
-                <X size={16} />
+                <X size={18} />
               </button>
             </div>
 
-            {/* Input */}
-            <div className="relative mb-4">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold text-sm">
-                ₱
-              </span>
-              <input
-                type="number"
-                min="1"
-                step="any"
-                value={input}
-                onChange={(e) => {
-                  setInput(e.target.value);
-                  setResult(null);
-                }}
-                onKeyDown={(e) => e.key === "Enter" && handleCheck()}
-                placeholder="0.00"
-                className="w-full rounded-2xl border border-[#d3e0dc] pl-8 pr-4 py-3 text-lg font-bold text-gray-900 outline-none focus:border-[#3d9187] focus:ring-2 focus:ring-[#d3e6e2]"
-              />
-            </div>
+            {/* Content */}
+            <div className="p-5 space-y-4">
+              <div className="relative">
+                <label className="block text-xs font-semibold uppercase tracking-wide text-white/40 mb-2">
+                  Enter amount
+                </label>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-white/40">
+                  ₱
+                </span>
+                <input
+                  type="number"
+                  min="1"
+                  step="any"
+                  value={input}
+                  onChange={(e) => { setInput(e.target.value); setResult(null); }}
+                  onKeyDown={(e) => e.key === "Enter" && handleCheck()}
+                  placeholder="0.00"
+                  className="w-full rounded-xl border border-white/[0.06] bg-[#0a0a0f] py-3 pl-10 pr-4 text-base font-bold text-white outline-none placeholder:text-white/20 focus:border-[#b4f03a] focus:ring-2 focus:ring-[#b4f03a]/20 transition"
+                />
+              </div>
 
-            <button
-              onClick={handleCheck}
-              disabled={isPending || !input}
-              className="w-full rounded-2xl bg-[#2f7f76] py-3 text-sm font-semibold text-white hover:bg-[#266a63] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition"
-            >
-              {isPending ? (
-                <>
-                  <Loader2 size={15} className="animate-spin" /> Checking…
-                </>
-              ) : (
-                "Check Now"
-              )}
-            </button>
-
-            {/* Result */}
-            {result && verdictConfig && (
-              <div
-                className={`mt-4 rounded-2xl border p-4 ${verdictConfig.bg}`}
+              <button
+                onClick={handleCheck}
+                disabled={isPending || !input}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#b4f03a] py-3 text-sm font-bold text-[#0c0c10] transition hover:bg-[#ccff52] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <div className="flex items-start gap-3">
-                  <verdictConfig.icon
-                    size={20}
-                    className={`${verdictConfig.color} shrink-0 mt-0.5`}
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span
-                        className={`text-xs font-bold px-2 py-0.5 rounded-full ${verdictConfig.pill}`}
-                      >
-                        {result.verdict}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        Uses {result.impactPercent}% of safe-to-spend
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-700">{result.message}</p>
+                {isPending ? (
+                  <><Loader2 size={16} className="animate-spin" /> Checking…</>
+                ) : (
+                  "Check affordability"
+                )}
+              </button>
 
-                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                      <div className="rounded-xl bg-white/60 px-3 py-2">
-                        <p className="text-gray-400">Safe to Spend</p>
-                        <p className="font-bold text-gray-800">
-                          {formatCurrency(result.safeToSpendToday)}
-                        </p>
+              {result && verdictConfig && (
+                <div className={cn("rounded-xl border p-4", verdictConfig.bg)}>
+                  <div className="flex items-start gap-3">
+                    <verdictConfig.icon
+                      size={20}
+                      className={cn("mt-0.5 shrink-0", verdictConfig.color)}
+                    />
+                    <div className="flex-1">
+                      <div className="mb-2 flex items-center gap-2">
+                        <span className={cn("rounded-full px-2.5 py-1 text-xs font-bold", verdictConfig.pill)}>
+                          {result.verdict}
+                        </span>
+                        <span className="text-xs text-white/30">
+                          {result.impactPercent}% impact
+                        </span>
                       </div>
-                      <div className="rounded-xl bg-white/60 px-3 py-2">
-                        <p className="text-gray-400">After Purchase</p>
-                        <p
-                          className={`font-bold ${
-                            Number(result.afterAmount) >= 0
-                              ? "text-emerald-600"
-                              : "text-red-500"
-                          }`}
-                        >
-                          {formatCurrency(result.afterAmount)}
-                        </p>
-                      </div>
-                    </div>
+                      <p className="text-sm text-white/70 leading-relaxed">{result.message}</p>
 
-                    {result.suggestedMonth && result.verdict !== "YES" && (
-                      <p className="mt-3 text-xs text-[#2f7f76] font-medium">
-                        Comfortably affordable in {formatMonthYear(result.suggestedMonth)}
-                      </p>
-                    )}
+                      <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+                        <div className="rounded-lg border border-white/[0.06] bg-[#0c0c10] px-3 py-3">
+                          <p className="text-xs text-white/40">Safe to spend</p>
+                          <p className="mt-1 text-lg font-bold text-white">
+                            {formatCurrency(result.safeToSpendToday)}
+                          </p>
+                        </div>
+                        <div className="rounded-lg border border-white/[0.06] bg-[#0c0c10] px-3 py-3">
+                          <p className="text-xs text-white/40">Remaining after</p>
+                          <p
+                            className={cn(
+                              "mt-1 text-lg font-bold",
+                              Number(result.afterAmount) >= 0 ? "text-[#34d399]" : "text-[#ef4444]"
+                            )}
+                          >
+                            {formatCurrency(result.afterAmount)}
+                          </p>
+                        </div>
+                      </div>
+
+                      {result.suggestedMonth && result.verdict !== "YES" && (
+                        <p className="mt-3 text-sm font-medium text-[#b4f03a]">
+                          💡 Try {formatMonthYear(result.suggestedMonth)} instead
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}

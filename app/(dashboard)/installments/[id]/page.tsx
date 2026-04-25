@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Trash2 } from "lucide-react";
@@ -12,11 +12,13 @@ import {
 import { ProgressRing } from "@/components/installments/ProgressRing";
 import { TypeBadge, StatusBadge } from "@/components/installments/TypeBadge";
 import { PaymentSchedule } from "@/components/installments/PaymentSchedule";
+import { CelebrationModal } from "@/components/dashboard/CelebrationModal";
+import { TrueCostBreakdown } from "@/components/dashboard/TrueCostBreakdown";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 import { FullPageSpinner } from "@/components/shared/LoadingSpinner";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils/currency";
 import { formatDate } from "@/lib/utils/dates";
 import Decimal from "decimal.js";
@@ -29,10 +31,24 @@ export default function InstallmentDetailPage({
   const { id } = use(params);
   const router = useRouter();
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const { data: plan, isLoading } = useInstallment(id);
   const markPayment = useMarkPayment(id);
   const deletePlan = useDeleteInstallment();
+
+  // Check if plan is fully paid after marking a payment
+  const handleMarkPaid = useCallback(async (paymentId: string, isPaid: boolean) => {
+    // Count unpaid payments before marking
+    const unpaidBefore = plan?.payments?.filter((p) => !p.isPaid).length || 0;
+    
+    await markPayment.mutateAsync({ paymentId, isPaid, paidDate: isPaid ? new Date().toISOString() : undefined });
+    
+    // If this was the last unpaid payment and we're marking it as paid, show celebration
+    if (isPaid && unpaidBefore === 1) {
+      setShowCelebration(true);
+    }
+  }, [markPayment, plan?.payments]);
 
   if (isLoading) return <FullPageSpinner />;
   if (!plan) return <div className="p-4">Plan not found</div>;
@@ -53,7 +69,7 @@ export default function InstallmentDetailPage({
     <div>
       <Link
         href="/installments"
-        className="flex items-center gap-1 text-sm text-muted-foreground mb-4 hover:text-foreground"
+        className="mb-4 inline-flex items-center gap-1 text-sm text-white/50 transition-colors hover:text-white"
       >
         <ArrowLeft size={14} /> Back to Installments
       </Link>
@@ -62,86 +78,70 @@ export default function InstallmentDetailPage({
         title={plan.name}
         action={
           <Button
-            variant="destructive"
             size="sm"
             onClick={() => setDeleteOpen(true)}
+            className="rounded-full border border-red-500/30 bg-red-500/10 text-red-400 hover:bg-red-500/20"
           >
             <Trash2 size={14} className="mr-1" /> Delete
           </Button>
         }
       />
 
-      <div className="flex items-center gap-3 mb-6 flex-wrap">
+      <div className="mb-6 flex flex-wrap items-center gap-3">
         <TypeBadge type={plan.type} />
         <StatusBadge status={plan.status} />
         {plan.creditCard && (
-          <span className="text-sm text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 text-sm text-white/45">
+            <BrandLogo
+              name={`${plan.creditCard.bankName} ${plan.creditCard.cardName}`}
+              size={16}
+              className="bg-white/10 text-white/70"
+            />
             {plan.creditCard.bankName} — {plan.creditCard.cardName}
           </span>
         )}
         {plan.lenderName && (
-          <span className="text-sm text-muted-foreground">{plan.lenderName}</span>
+          <span className="inline-flex items-center gap-1.5 text-sm text-white/45">
+            <BrandLogo
+              name={plan.lenderName}
+              size={16}
+              className="bg-white/10 text-white/70"
+            />
+            {plan.lenderName}
+          </span>
         )}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-muted-foreground">
-              Total Amount
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl font-bold">
-              {formatCurrency(plan.totalAmount)}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-muted-foreground">
-              Monthly
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl font-bold">
-              {formatCurrency(plan.monthlyAmount)}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-muted-foreground">
-              Remaining
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xl font-bold text-orange-600">
-              {formatCurrency(remaining)}
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-muted-foreground">
-              Progress
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-center gap-2">
+      <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="dashboard-surface p-4">
+          <p className="mb-1 text-xs font-medium text-white/45">Total Amount</p>
+          <p className="text-xl font-bold text-white">{formatCurrency(plan.totalAmount)}</p>
+        </div>
+        <div className="dashboard-surface p-4">
+          <p className="mb-1 text-xs font-medium text-white/45">Monthly</p>
+          <p className="text-xl font-bold text-white">{formatCurrency(plan.monthlyAmount)}</p>
+        </div>
+        <div className="dashboard-surface p-4">
+          <p className="mb-1 text-xs font-medium text-white/45">Remaining</p>
+          <p className="text-xl font-bold text-amber-300">{formatCurrency(remaining)}</p>
+        </div>
+        <div className="dashboard-surface p-4">
+          <p className="mb-2 text-xs font-medium text-white/45">Progress</p>
+          <div className="flex items-center gap-2">
             <ProgressRing
               paid={plan.paidMonths}
               total={plan.totalMonths}
               size={48}
             />
-            <span className="text-sm">
+            <span className="text-sm text-white/70">
               {plan.paidMonths}/{plan.totalMonths} mo
             </span>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {plan.nextDueDate && (
-        <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-6 text-sm text-amber-800 dark:text-amber-200">
+        <div className="mb-6 rounded-xl border border-amber-500/35 bg-amber-500/10 p-3 text-sm text-amber-300">
           Next payment due:{" "}
           <strong>{formatDate(plan.nextDueDate)}</strong> —{" "}
           {formatCurrency(plan.monthlyAmount)}
@@ -149,26 +149,31 @@ export default function InstallmentDetailPage({
       )}
 
       {plan.notes && (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 mb-6 text-sm text-muted-foreground">
+        <div className="dashboard-surface-muted mb-6 p-3 text-sm text-white/60">
           {plan.notes}
         </div>
       )}
 
+      {/* True Cost Breakdown */}
+      <TrueCostBreakdown
+        originalAmount={Number(plan.totalAmount)}
+        monthlyAmount={Number(plan.monthlyAmount)}
+        totalMonths={plan.totalMonths}
+        paidMonths={plan.paidMonths}
+        interestRate={plan.interestRate ? Number(plan.interestRate) : null}
+      />
+
       {plan.payments && plan.payments.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment Schedule</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="dashboard-surface p-5">
+          <h3 className="mb-4 font-semibold text-white">Payment Schedule</h3>
+          <div>
             <PaymentSchedule
               payments={plan.payments}
               planId={plan.id}
-              onMarkPaid={async (paymentId, isPaid) => {
-                await markPayment.mutateAsync({ paymentId, isPaid });
-              }}
+              onMarkPaid={handleMarkPaid}
             />
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       <ConfirmDialog
@@ -182,6 +187,17 @@ export default function InstallmentDetailPage({
           router.push("/installments");
         }}
         destructive
+      />
+
+      {/* Celebration Modal when plan is paid off */}
+      <CelebrationModal
+        isOpen={showCelebration}
+        onClose={() => setShowCelebration(false)}
+        type="PLAN_PAID_OFF"
+        planName={plan.name}
+        amountPaid={Number(plan.totalAmount)}
+        monthsPaid={plan.totalMonths}
+        totalDebtReduced={Number(plan.totalAmount)}
       />
     </div>
   );

@@ -108,16 +108,16 @@ export default function TransactionsPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="rounded-full border-gray-200 text-gray-600 hover:bg-gray-50 flex items-center gap-1.5"
+                className="flex items-center gap-1.5 rounded-full border-white/[0.07] bg-[#111118] text-white/70 hover:bg-white/[0.05]"
               >
                 <Filter size={13} /> Filter
-                {hasFilters && <span className="w-2 h-2 bg-[#edf5f2]0 rounded-full" />}
+                {hasFilters && <span className="h-2 w-2 rounded-full bg-[#b4f03a]" />}
               </Button>
             )}
             <Button
               size="sm"
               onClick={() => setOpen(true)}
-              className="rounded-full bg-[#2f7f76] hover:bg-[#266a63] shadow-[0_10px_24px_rgba(47,127,118,0.2)]"
+              className="dashboard-accent-btn shadow-[0_8px_24px_rgba(180,240,58,0.25)]"
             >
               <Plus size={14} className="mr-1" />
               {tab === "recurring" ? "Add Recurring" : "Add"}
@@ -127,12 +127,20 @@ export default function TransactionsPage() {
       />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)} className="space-y-4">
-        <TabsList className="rounded-2xl bg-gray-100 p-1">
-          <TabsTrigger value="transactions" className="rounded-xl text-xs">Transactions</TabsTrigger>
-          <TabsTrigger value="recurring" className="rounded-xl text-xs flex items-center gap-1.5">
+        <TabsList className="rounded-2xl border border-white/[0.07] bg-[#111118] p-1">
+          <TabsTrigger
+            value="transactions"
+            className="rounded-xl text-xs text-white/60 data-[state=active]:bg-[#b4f03a]/15 data-[state=active]:text-[#b4f03a]"
+          >
+            Transactions
+          </TabsTrigger>
+          <TabsTrigger
+            value="recurring"
+            className="flex items-center gap-1.5 rounded-xl text-xs text-white/60 data-[state=active]:bg-[#b4f03a]/15 data-[state=active]:text-[#b4f03a]"
+          >
             <RefreshCw size={11} /> Recurring
             {recurring.filter(r => r.isActive).length > 0 && (
-              <span className="bg-[#e3f0ed] text-[#2f7f76] text-[10px] font-bold rounded-full px-1.5 py-0">
+              <span className="rounded-full bg-[#b4f03a]/20 px-1.5 py-0 text-[10px] font-bold text-[#b4f03a]">
                 {recurring.filter(r => r.isActive).length}
               </span>
             )}
@@ -141,10 +149,10 @@ export default function TransactionsPage() {
 
         <TabsContent value="transactions" className="space-y-4">
           {showFilters && (
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5 space-y-3">
+            <div className="dashboard-surface space-y-3 p-5">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <Select value={filters.type ?? "all"} onValueChange={(v) => setFilters((f) => ({ ...f, type: v === "all" ? null : v as "INCOME" | "EXPENSE" }))}>
-                  <SelectTrigger className="h-9 text-xs rounded-xl border-gray-200"><SelectValue placeholder="Type" /></SelectTrigger>
+                  <SelectTrigger className="dashboard-input h-9 text-xs"><SelectValue placeholder="Type" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All types</SelectItem>
                     <SelectItem value="INCOME">Income</SelectItem>
@@ -152,24 +160,24 @@ export default function TransactionsPage() {
                   </SelectContent>
                 </Select>
                 <Select value={filters.categoryId ?? "all"} onValueChange={(v) => setFilters((f) => ({ ...f, categoryId: v === "all" ? null : v }))}>
-                  <SelectTrigger className="h-9 text-xs rounded-xl border-gray-200"><SelectValue placeholder="Category" /></SelectTrigger>
+                  <SelectTrigger className="dashboard-input h-9 text-xs"><SelectValue placeholder="Category" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All categories</SelectItem>
                     {categories.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
-                <Input className="h-9 text-xs rounded-xl border-gray-200" type="date" value={filters.dateFrom ?? ""} onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value || null }))} />
-                <Input className="h-9 text-xs rounded-xl border-gray-200" type="date" value={filters.dateTo ?? ""} onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value || null }))} />
+                <Input className="dashboard-input h-9 text-xs" type="date" value={filters.dateFrom ?? ""} onChange={(e) => setFilters((f) => ({ ...f, dateFrom: e.target.value || null }))} />
+                <Input className="dashboard-input h-9 text-xs" type="date" value={filters.dateTo ?? ""} onChange={(e) => setFilters((f) => ({ ...f, dateTo: e.target.value || null }))} />
               </div>
               <div className="flex gap-2">
                 <Input
-                  className="h-9 text-xs flex-1 rounded-xl border-gray-200"
+                  className="dashboard-input h-9 flex-1 text-xs"
                   placeholder="Search description..."
                   value={filters.search ?? ""}
                   onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value || null }))}
                 />
                 {hasFilters && (
-                  <button onClick={clearFilters} className="w-9 h-9 rounded-xl hover:bg-gray-100 flex items-center justify-center text-gray-400">
+                  <button onClick={clearFilters} className="flex h-9 w-9 items-center justify-center rounded-xl text-white/40 hover:bg-white/[0.06] hover:text-white/70">
                     <X size={14} />
                   </button>
                 )}
@@ -185,19 +193,19 @@ export default function TransactionsPage() {
               title="No transactions"
               description="Add your first transaction to get started"
               action={
-                <Button onClick={() => setOpen(true)} className="rounded-full bg-[#2f7f76] hover:bg-[#266a63]">
+                <Button onClick={() => setOpen(true)} className="dashboard-accent-btn">
                   Add Transaction
                 </Button>
               }
             />
           ) : (
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm divide-y divide-gray-50 px-2">
+            <div className="dashboard-surface divide-y divide-white/[0.04] px-2">
               {transactions.map((tx) => (
                 <TransactionRow key={tx.id} transaction={tx} onDelete={(id) => remove.mutate(id)} />
               ))}
               {hasNextPage && (
                 <div className="p-4 text-center">
-                  <Button variant="outline" size="sm" className="rounded-full" onClick={() => fetchNextPage()}>
+                  <Button variant="outline" size="sm" className="rounded-full border-white/[0.08] bg-[#111118] text-white/80 hover:bg-white/[0.06]" onClick={() => fetchNextPage()}>
                     Load more
                   </Button>
                 </div>
@@ -215,13 +223,13 @@ export default function TransactionsPage() {
               title="No recurring transactions"
               description="Set up automatic transactions for rent, subscriptions, salary, and more"
               action={
-                <Button onClick={() => setOpen(true)} className="rounded-full bg-[#2f7f76] hover:bg-[#266a63]">
+                <Button onClick={() => setOpen(true)} className="dashboard-accent-btn">
                   Add Recurring
                 </Button>
               }
             />
           ) : (
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm divide-y divide-gray-50 px-2">
+            <div className="dashboard-surface divide-y divide-white/[0.04] px-2">
               {recurring.map((r) => (
                 <RecurringTransactionRow
                   key={r.id}
@@ -236,9 +244,9 @@ export default function TransactionsPage() {
       </Tabs>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="rounded-3xl">
+        <DialogContent className="rounded-2xl border-white/[0.07] bg-[#111118] text-white">
           <DialogHeader>
-            <DialogTitle className="font-bold">
+            <DialogTitle className="font-bold text-white">
               {tab === "recurring" ? "Add Recurring Transaction" : "Add Transaction"}
             </DialogTitle>
           </DialogHeader>

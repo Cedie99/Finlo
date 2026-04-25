@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, ChevronDown, PlayCircle, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronDown, CheckCircle2, Sparkles } from "lucide-react";
 import { FinloLogo } from "@/components/layout/FinloLogo";
 
 const navItems = [
@@ -13,12 +13,37 @@ const navItems = [
   { label: "Use Cases", href: "#use-cases" },
   { label: "FAQ", href: "#faq" },
 ];
-const metrics = [
-  { label: "Installments tracked", value: "120K+", detail: "Across cards, BNPL, and personal plans." },
-  { label: "Average safe-to-spend", value: "PHP 48K", detail: "Calculated from your real commitments." },
-  { label: "On-time payment confidence", value: "95%", detail: "With alerts and overlap detection." },
-  { label: "Debt payoff plans created", value: "50K+", detail: "Built by users reducing financial stress." },
+
+const metricPills = [
+  {
+    label: "500 Goal",
+    value: "₱24,000",
+    sub: "₱14,000 paid",
+    dot: "bg-red-400",
+    textColor: "text-red-400",
+    bg: "bg-red-500/8",
+    border: "border-red-500/15",
+  },
+  {
+    label: "Safe to Spend",
+    value: "₱4,300",
+    sub: "This week",
+    dot: "bg-emerald-400",
+    textColor: "text-emerald-400",
+    bg: "bg-emerald-500/8",
+    border: "border-emerald-500/15",
+  },
+  {
+    label: "Health Score",
+    value: "4.1",
+    sub: "Good standing",
+    dot: "bg-indigo-400",
+    textColor: "text-indigo-400",
+    bg: "bg-indigo-500/8",
+    border: "border-indigo-500/15",
+  },
 ];
+
 const capabilities = [
   {
     title: "Smart Installment Tracking",
@@ -56,14 +81,20 @@ const howItWorks = [
   {
     step: "Connect your money view",
     detail: "Set your monthly income, recurring bills, cards, and installment commitments in one place.",
+    color: "border-indigo-500/30 bg-indigo-500/5",
+    label: "text-indigo-400",
   },
   {
     step: "Track upcoming obligations",
     detail: "Finlo organizes due dates and highlights overlaps so you know what needs attention first.",
+    color: "border-amber-500/30 bg-amber-500/5",
+    label: "text-amber-400",
   },
   {
     step: "Make safer spending decisions",
     detail: "Use safe-to-spend signals and what-if planning to spend confidently without breaking your budget.",
+    color: "border-emerald-500/30 bg-emerald-500/5",
+    label: "text-emerald-400",
   },
 ];
 
@@ -71,14 +102,17 @@ const useCases = [
   {
     title: "Credit card installment tracking",
     detail: "Ideal for people managing multiple installment purchases across one or more cards.",
+    icon: "💳",
   },
   {
     title: "BNPL and recurring bill planning",
     detail: "Great for balancing BNPL commitments with utilities, subscriptions, and monthly essentials.",
+    icon: "📅",
   },
   {
     title: "Paycheck-to-paycheck cash flow",
     detail: "Useful for planning spending between salary dates and avoiding end-of-month surprises.",
+    icon: "💰",
   },
 ];
 
@@ -93,7 +127,8 @@ const faqs = [
   },
   {
     question: "How is safe-to-spend calculated?",
-    answer: "Finlo uses your available balance, expected income, and upcoming obligations to estimate a safer spending amount.",
+    answer:
+      "Finlo uses your available balance, expected income, and upcoming obligations to estimate a safer spending amount.",
   },
 ];
 
@@ -110,6 +145,70 @@ const riseIn = {
   }),
 };
 
+// ─── Phone mockup ─────────────────────────────────────────────────────────────
+function AppMockup() {
+  const bars = [0.3, 0.5, 0.7, 0.4, 0.8, 0.6, 0.55, 0.75, 0.45, 0.65, 1, 0.88];
+  const items = [
+    { name: "iPhone 16 Pro", amount: "₱2,500", color: "bg-blue-400" },
+    { name: "Macbook Air", amount: "₱4,100", color: "bg-amber-400" },
+    { name: "Airpods Pro", amount: "₱1,200", color: "bg-[#b4f03a]" },
+    { name: "Samsung TV", amount: "₱1,800", color: "bg-violet-400" },
+  ];
+
+  return (
+    <div className="relative w-[220px] sm:w-[248px]">
+      <div className="pointer-events-none absolute inset-0 scale-110 rounded-[3rem] bg-indigo-500/8 blur-3xl" />
+      <div className="relative rounded-[2.8rem] border-2 border-white/[0.08] bg-[#0a0a10] p-[4px] shadow-[0_48px_120px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.06)]">
+        <div className="overflow-hidden rounded-[2.4rem] bg-[#09090b]">
+          <div className="flex justify-center pt-3 pb-1">
+            <div className="h-[20px] w-[80px] rounded-full bg-[#0a0a10]" />
+          </div>
+          <div className="flex flex-col px-5 pt-3 pb-4">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-white/50">Safe to Spend</p>
+            <p className="mt-1 font-heading text-[2rem] font-bold leading-none text-white">₱18,450</p>
+            <p className="mt-1 text-[10px] text-white/40">Updated just now</p>
+            <div className="my-4 h-px bg-white/[0.06]" />
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/50">Monthly Spend</p>
+            <div className="flex h-14 items-end gap-[3px]">
+              {bars.map((h, i) => (
+                <div
+                  key={i}
+                  className="flex-1 rounded-sm"
+                  style={{
+                    height: `${h * 100}%`,
+                    background:
+                      i === bars.length - 2 ? "#b4f03a"
+                        : i === bars.length - 1 ? "#8ab82c"
+                          : "rgba(255,255,255,0.08)",
+                  }}
+                />
+              ))}
+            </div>
+            <div className="my-4 h-px bg-white/[0.06]" />
+            <p className="mb-2.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/50">Active Plans</p>
+            <div className="space-y-3">
+              {items.map((item) => (
+                <div key={item.name} className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${item.color}`} />
+                    <span className="text-sm text-white/60">{item.name}</span>
+                  </div>
+                  <span className="text-sm font-semibold text-white">{item.amount}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6" />
+          </div>
+          <div className="flex justify-center pb-3">
+            <span className="h-[3px] w-16 rounded-full bg-white/[0.08]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Capability card ──────────────────────────────────────────────────────────
 function CapabilityCard({
   title,
   description,
@@ -130,33 +229,31 @@ function CapabilityCard({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="rounded-2xl border border-[#d8e3df] bg-white/85 p-6 backdrop-blur-sm"
+      className="rounded-2xl border border-white/[0.07] bg-[#111118] p-6"
     >
-      <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#e7f3f0] text-[#2f7f76]">
+      <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400">
         <Sparkles size={18} />
       </div>
-      <h3 className="font-heading text-xl font-semibold text-[#0f2424]">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-[#546864]">{description}</p>
+      <h3 className="font-heading text-lg font-semibold text-white">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-white/60">{description}</p>
 
       <button
         type="button"
         onClick={() => setExpanded((prev) => !prev)}
         aria-expanded={expanded}
-        className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#2f7f76] transition-colors hover:text-[#225f58]"
+        className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#b4f03a] transition-colors hover:text-[#c8f55a]"
       >
         {expanded ? "Hide details" : "Read more"}
-        <ChevronDown size={14} className={`transition-transform duration-250 ${expanded ? "rotate-180" : "rotate-0"}`} />
+        <ChevronDown size={14} className={`transition-transform duration-250 ${expanded ? "rotate-180" : ""}`} />
       </button>
 
-      <div
-        className={`grid transition-all duration-300 ease-out ${expanded ? "mt-4 grid-rows-[1fr] opacity-100" : "mt-0 grid-rows-[0fr] opacity-0"}`}
-      >
+      <div className={`grid transition-all duration-300 ease-out ${expanded ? "mt-4 grid-rows-[1fr] opacity-100" : "mt-0 grid-rows-[0fr] opacity-0"}`}>
         <div className="overflow-hidden">
-          <div className="rounded-xl border border-[#e6eeeb] bg-[#f3f8f6] p-4">
+          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
             <ul className="space-y-2">
               {dropdown.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-xs leading-relaxed text-[#4d625e]">
-                  <span className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[#2f7f76]" />
+                <li className="flex items-start gap-2 text-sm leading-relaxed text-white/55">
+                  <span className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -168,50 +265,42 @@ function CapabilityCard({
   );
 }
 
+// ─── Page ──────────────────────────────────────────────────────────────────────
 export default function HomePage() {
   const { data: session } = useSession();
   const userName = session?.user?.name;
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f4f2ec] text-[#142929]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(47,127,118,0.15),transparent_42%),radial-gradient(circle_at_10%_70%,rgba(69,167,157,0.16),transparent_38%)]" />
-
-      <header className="relative z-20 px-4 pt-5 sm:px-8">
-        <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between rounded-full border border-[#d8e3df] bg-white/85 px-6 backdrop-blur-md">
+    <div className="min-h-screen overflow-x-hidden bg-[#09090b] text-white">
+      {/* ── Navigation ── */}
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-5 sm:px-8 bg-[#09090b]/90 backdrop-blur-md border-b border-white/[0.06]">
+        <nav className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between mb-2 ">
           <Link href="/" className="flex items-center gap-2">
-            <FinloLogo size="sm" />
+            <FinloLogo size="sm" markClassName="[filter:brightness(0)_invert(1)]" wordmarkClassName="text-white" />
           </Link>
-
           <div className="hidden items-center gap-7 lg:flex">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-sm font-medium text-[#4f635f] transition-colors hover:text-[#1a4742]"
-              >
+              <a key={item.label} href={item.href}
+                className="text-sm text-white/60 transition-colors hover:text-white">
                 {item.label}
               </a>
             ))}
           </div>
-
           <div className="flex items-center gap-3">
             {userName ? (
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-full bg-[#2f7f76] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#266a63]"
-              >
+              <Link href="/dashboard"
+                className="inline-flex items-center gap-2 rounded-full bg-[#b4f03a] px-4 py-2 text-sm font-semibold text-[#09090b] transition-colors hover:bg-[#c8f55a]">
                 Enter dashboard <ArrowRight size={14} />
               </Link>
             ) : (
               <>
-                <Link href="/login" className="hidden text-sm font-medium text-[#516561] sm:inline-block">
+                <Link href="/login"
+                  className="hidden text-sm text-white/45 transition-colors hover:text-white sm:block">
                   Login
                 </Link>
-                <Link
-                  href="/register"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#2f7f76] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#266a63]"
-                >
-                  Explore <ArrowRight size={14} />
+                <Link href="/register"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-[#b4f03a] px-4 py-2 text-sm font-semibold text-[#09090b] transition-colors hover:bg-[#c8f55a]">
+                  Create an account
                 </Link>
               </>
             )}
@@ -219,152 +308,140 @@ export default function HomePage() {
         </nav>
       </header>
 
-      <main className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-20 pt-10 sm:px-8 sm:pt-16">
-        <section className="grid items-start gap-10 lg:grid-cols-[1.35fr_0.8fr]">
-          <motion.div custom={0} variants={riseIn} initial="hidden" animate="visible">
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d3e0dc] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#2f7f76]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#2f7f76]" />
-              Built for real-life budgeting
-            </p>
-            <h1 className="font-heading text-[clamp(2.2rem,7vw,4.7rem)] leading-[0.95] tracking-tight text-[#0f2424]">
-              Turn Monthly Chaos
-              <br />
-              into <span className="bg-linear-to-r from-[#2f7f76] to-[#45a79d] bg-clip-text text-transparent">Financial Clarity</span>
-            </h1>
+      {/* ── Hero (centered) ── */}
+      <section className="relative px-4 pb-24 pt-20 sm:px-8 lg:pt-28">
+        {/* Background glows — multi-color */}
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-indigo-600/6 blur-[120px]" />
+        <div className="pointer-events-none absolute left-1/4 top-20 h-64 w-64 rounded-full bg-[#b4f03a]/4 blur-[80px]" />
+        <div className="pointer-events-none absolute right-1/4 top-32 h-48 w-48 rounded-full bg-violet-600/5 blur-[80px]" />
+
+        <div className="relative mx-auto max-w-4xl text-center">
+          <motion.p
+            custom={0}
+            variants={riseIn}
+            initial="hidden"
+            animate="visible"
+            className="mb-6 text-xs font-semibold uppercase tracking-[0.22em] text-[#b4f03a]"
+          >
+            # Built for real-life budgeting
+          </motion.p>
+
+          <motion.h1
+            custom={0.06}
+            variants={riseIn}
+            initial="hidden"
+            animate="visible"
+            className="font-heading text-[clamp(2.8rem,7vw,5rem)] font-bold leading-[0.92] tracking-tight text-white"
+          >
+            Manage the chaos
+            <br />
+            <span className="bg-gradient-to-r from-[#b4f03a] via-[#34d399] to-[#6366f1] bg-clip-text text-transparent">
+              of your installments
+            </span>
+          </motion.h1>
+
+          <motion.p
+            custom={0.12}
+            variants={riseIn}
+            initial="hidden"
+            animate="visible"
+            className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/50"
+          >
+            Finlo tracks every due date, calculates your safe-to-spend, and helps you
+            pay off debt faster — all in one clear, focused dashboard.
+          </motion.p>
+
+          <motion.div
+            custom={0.17}
+            variants={riseIn}
+            initial="hidden"
+            animate="visible"
+            className="mt-8 flex flex-wrap items-center justify-center gap-4"
+          >
+            <Link href="/register"
+              className="inline-flex items-center gap-2 rounded-full bg-[#b4f03a] px-7 py-3 text-sm font-bold text-[#09090b] transition-colors hover:bg-[#c8f55a]">
+              Get Started
+            </Link>
+            <Link href="/dashboard"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-6 py-3 text-sm font-semibold text-white/70 transition-colors hover:border-white/20 hover:text-white">
+              View dashboard <ArrowRight size={14} />
+            </Link>
           </motion.div>
 
-          <motion.div custom={0.08} variants={riseIn} initial="hidden" animate="visible" className="pt-2">
-            <p className="max-w-sm text-sm leading-relaxed text-[#596d68]">
-              Finlo helps you track installments, plan bills, and decide what is safe to spend so you can stay in control every month.
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link
-                href="/register"
-                className="inline-flex items-center gap-2 rounded-full bg-[#2f7f76] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#266a63]"
+          {/* Metric pills — centered row */}
+          <motion.div
+            custom={0.22}
+            variants={riseIn}
+            initial="hidden"
+            animate="visible"
+            className="mt-10 flex flex-wrap items-center justify-center gap-3"
+          >
+            {metricPills.map((pill) => (
+              <div
+                key={pill.label}
+                className={`inline-flex items-center gap-3 rounded-2xl border px-4 py-2.5 ${pill.bg} ${pill.border}`}
               >
-                Start free <ArrowRight size={14} />
-              </Link>
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-full border border-[#c9ddd8] bg-white px-5 py-2.5 text-sm font-semibold text-[#1c4f49] transition-colors hover:bg-[#edf5f2]"
-              >
-                <PlayCircle size={15} /> View dashboard
-              </Link>
-            </div>
-          </motion.div>
-        </section>
-
-        <motion.section
-          custom={0.16}
-          variants={riseIn}
-          initial="hidden"
-          animate="visible"
-          className="relative mt-10 h-68 overflow-hidden rounded-[2.2rem] border border-[#d7e4df] bg-white/80 shadow-[0_18px_60px_rgba(24,73,67,0.14)] sm:h-80"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(60,137,127,0.2),transparent_45%),radial-gradient(circle_at_10%_90%,rgba(118,185,176,0.25),transparent_45%)]" />
-
-          <motion.div
-            animate={{ y: [0, -7, 0], rotate: [-0.45, 0.45, -0.45], scale: [1, 1.008, 1] }}
-            transition={{ duration: 9, repeat: Number.POSITIVE_INFINITY, ease: [0.42, 0, 0.18, 1] }}
-            className="absolute left-1/2 top-1/2 h-[74%] max-h-72 -translate-x-1/2 -translate-y-1/2"
-          >
-            <div className="relative h-full aspect-[1.586/1] overflow-hidden rounded-[1.5rem] border border-[#c9ddd8] bg-[linear-gradient(130deg,#123531_0%,#1b4f49_38%,#236861_72%,#2f7f76_100%)] p-4 pb-11 text-white shadow-[0_24px_40px_rgba(15,36,36,0.42),inset_0_1px_0_rgba(255,255,255,0.55)] sm:p-5 sm:pb-12">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.33),transparent_34%),radial-gradient(circle_at_88%_92%,rgba(128,193,183,0.25),transparent_36%)]" />
-              <div className="absolute inset-0 opacity-12 [background:repeating-linear-gradient(145deg,rgba(255,255,255,0.22)_0px,rgba(255,255,255,0.22)_1px,transparent_1px,transparent_8px)]" />
-              <motion.div
-                aria-hidden
-                animate={{ left: ["-35%", "115%"] }}
-                transition={{ duration: 5.6, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                className="pointer-events-none absolute inset-y-0 left-[-35%] w-32 -skew-x-12 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.02)_32%,rgba(255,255,255,0.2)_50%,rgba(255,255,255,0.02)_68%,transparent_100%)]"
-              />
-              <div className="pointer-events-none absolute inset-0 opacity-18 bg-[radial-gradient(circle_at_50%_-18%,rgba(255,255,255,0.2),transparent_56%)]" />
-              <div className="pointer-events-none absolute inset-0 opacity-24 [background:repeating-radial-gradient(circle_at_50%_-18%,rgba(255,255,255,0.34)_0px,rgba(255,255,255,0.34)_0.95px,transparent_0.95px,transparent_8.6px)]" />
-
-              <div className="relative flex items-center justify-between">
-                <div className="inline-flex items-center gap-2">
-                  <FinloLogo
-                    size="sm"
-                    showWordmark={false}
-                    className="scale-[0.78] origin-left"
-                    markClassName="text-white"
-                  />
-                  <span className="font-heading text-sm font-semibold tracking-[0.06em] lowercase text-[#edf5f2]">finlo</span>
+                <span className={`h-2 w-2 shrink-0 rounded-full ${pill.dot}`} />
+                <div className="flex items-baseline gap-2">
+                  <span className="text-[10px] text-white/40">{pill.label}</span>
+                  <span className={`text-sm font-bold ${pill.textColor}`}>{pill.value}</span>
                 </div>
-                <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 text-[#0f172a]/85 sm:h-5 sm:w-5" aria-hidden>
-                  <path
-                    d="M4.5 12c2.1-2.9 4.3-4.3 6.8-4.3M4.5 16c3-4.1 6-6.1 9.4-6.1M4.5 8.1c1.2-1.6 2.5-2.6 4-3.2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-
-              <p className="relative mt-17 font-heading text-base tracking-[0.22em] text-[#edf5f2] drop-shadow-[0_2px_1px_rgba(0,0,0,0.25)] sm:mt-19 sm:text-[1.2rem]">
-                **** 5678
-              </p>
-
-              <div className="relative mt-3 flex items-end justify-between sm:mt-4">
-                <div>
-                  <p className="text-[9px] uppercase tracking-[0.16em] text-[#d2ebe6]">JOHN DOE  05/24</p>
-                </div>
-              </div>
-
-              <div className="absolute bottom-2 right-3 flex items-center sm:bottom-3 sm:right-4">
-                <span className="h-6 w-6 rounded-full bg-[#0f172a]/92 sm:h-7 sm:w-7" />
-                <span className="-ml-2 h-6 w-6 rounded-full bg-[#d4d4d8]/75 sm:h-7 sm:w-7" />
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            animate={{ x: [0, 8, 0] }}
-            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-            className="absolute left-6 top-6 rounded-full border border-[#cfe2dd] bg-white/85 px-3 py-1 text-[11px] font-semibold text-[#2b7d74]"
-          >
-            95% Faster
-          </motion.div>
-
-          <motion.div
-            animate={{ x: [0, -8, 0] }}
-            transition={{ duration: 8, delay: 1.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-            className="absolute bottom-6 right-6 rounded-full border border-[#cfe2dd] bg-white/85 px-3 py-1 text-[11px] font-semibold text-[#2b7d74]"
-          >
-            2x Growth
-          </motion.div>
-        </motion.section>
-
-        <motion.section
-          custom={0.2}
-          variants={riseIn}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="mt-10 overflow-hidden rounded-[1.6rem] border border-[#2a746b] bg-[linear-gradient(130deg,#1f5c55_0%,#2f7f76_50%,#45a79d_100%)] text-white"
-        >
-          <div className="grid gap-px bg-[#2a746b] sm:grid-cols-2 lg:grid-cols-4">
-            {metrics.map((metric) => (
-              <div key={metric.label} className="bg-transparent p-6">
-                <p className="font-heading text-[2rem] leading-none">{metric.value}</p>
-                <p className="mt-2 text-sm font-semibold">{metric.label}</p>
-                <p className="mt-1 text-xs text-[#d5e7e3]">{metric.detail}</p>
+                <span className="text-[10px] text-white/30">{pill.sub}</span>
               </div>
             ))}
-          </div>
-        </motion.section>
+          </motion.div>
 
+          {/* Phone mockup — centered below */}
+          <motion.div
+            custom={0.28}
+            variants={riseIn}
+            initial="hidden"
+            animate="visible"
+            className="mt-14 flex justify-center"
+          >
+            <AppMockup />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Metrics band ── */}
+      <section className="border-y border-white/[0.05] bg-[#0c0c10]">
+        <div className="mx-auto grid max-w-7xl gap-px bg-white/[0.04] sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { value: "120K+", label: "Installments tracked", sub: "Across cards, BNPL, and personal plans.", color: "text-indigo-400" },
+            { value: "PHP 48K", label: "Average safe-to-spend", sub: "Calculated from your real commitments.", color: "text-[#b4f03a]" },
+            { value: "95%", label: "On-time payment confidence", sub: "With alerts and overlap detection.", color: "text-emerald-400" },
+            { value: "50K+", label: "Debt payoff plans created", sub: "Built by users reducing financial stress.", color: "text-amber-400" },
+          ].map((m) => (
+            <div key={m.label} className="bg-[#0c0c10] px-8 py-7">
+              <p className={`font-heading text-[2rem] leading-none ${m.color}`}>{m.value}</p>
+              <p className="mt-2 text-sm font-semibold text-white">{m.label}</p>
+              <p className="mt-1 text-xs text-white/35">{m.sub}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-7xl px-4 pb-24 sm:px-8">
+        {/* ── Features ── */}
         <section id="features" className="scroll-mt-24 mt-20 grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-          <motion.div custom={0.05} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#287f75]">Our capabilities</p>
-            <h2 className="mt-3 font-heading text-[clamp(1.9rem,5vw,3.2rem)] leading-tight text-[#0f2424]">
+          <motion.div
+            custom={0.05}
+            variants={riseIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-indigo-400">Our capabilities</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.9rem,5vw,3.2rem)] leading-tight text-white">
               Designed for people managing real expenses.
             </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-[#596d68]">
-              From installment calendars to payoff planning, Finlo gives you practical tools to avoid missed due dates and reduce money stress.
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/60">
+              From installment calendars to payoff planning, Finlo gives you practical tools to avoid missed due dates
+              and reduce money stress.
             </p>
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#e5f1ee] px-4 py-2 text-xs font-semibold text-[#1f6b63]">
-              <CheckCircle2 size={14} /> Private by default with encrypted account data
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/60">
+              <CheckCircle2 size={14} className="text-emerald-400" /> Private by default with encrypted account data
             </div>
           </motion.div>
 
@@ -381,10 +458,11 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── How it works ── */}
         <section id="how-it-works" className="scroll-mt-24 mt-20">
           <motion.div custom={0.08} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#287f75]">How it works</p>
-            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#0f2424]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-amber-400">How it works</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-white">
               Three steps to clearer financial flow.
             </h2>
           </motion.div>
@@ -398,20 +476,21 @@ export default function HomePage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="rounded-2xl border border-[#d8e3df] bg-white/85 p-5"
+                className={`rounded-2xl border p-5 ${item.color}`}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2b7d74]">Step {index + 1}</p>
-                <h3 className="mt-2 font-heading text-lg font-semibold text-[#0f2424]">{item.step}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#546864]">{item.detail}</p>
+                <p className={`text-xs font-semibold uppercase tracking-[0.14em] ${item.label}`}>Step {index + 1}</p>
+                <h3 className="mt-2 font-heading text-base font-semibold text-white">{item.step}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/60">{item.detail}</p>
               </motion.article>
             ))}
           </div>
         </section>
 
+        {/* ── Use cases ── */}
         <section id="use-cases" className="scroll-mt-24 mt-20">
           <motion.div custom={0.1} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#287f75]">Use cases</p>
-            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#0f2424]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-violet-400">Use cases</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-white">
               Built for real budgeting situations.
             </h2>
           </motion.div>
@@ -425,19 +504,21 @@ export default function HomePage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="rounded-2xl border border-[#d8e3df] bg-white/85 p-5"
+                className="rounded-2xl border border-white/[0.07] bg-[#111118] p-6"
               >
-                <h3 className="font-heading text-lg font-semibold text-[#0f2424]">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#546864]">{item.detail}</p>
+                <span className="text-2xl">{item.icon}</span>
+                <h3 className="mt-3 font-heading text-base font-semibold text-white">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/60">{item.detail}</p>
               </motion.article>
             ))}
           </div>
         </section>
 
+        {/* ── FAQ ── */}
         <section id="faq" className="scroll-mt-24 mt-20">
           <motion.div custom={0.12} variants={riseIn} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#287f75]">FAQ</p>
-            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-[#0f2424]">
+            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#b4f03a]">FAQ</p>
+            <h2 className="mt-3 font-heading text-[clamp(1.8rem,4.6vw,2.8rem)] leading-tight text-white">
               Common questions, quick answers.
             </h2>
           </motion.div>
@@ -451,38 +532,36 @@ export default function HomePage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="group rounded-2xl border border-[#d8e3df] bg-white/85 p-5"
+                className="group rounded-2xl border border-white/[0.07] bg-[#111118] p-5"
               >
-                <summary className="cursor-pointer list-none font-semibold text-[#0f2424] marker:content-none">
+                <summary className="cursor-pointer list-none font-semibold text-white marker:content-none">
                   <span className="inline-flex items-center gap-2">
-                    <ChevronDown size={14} className="text-[#2b7d74] transition-transform group-open:rotate-180" />
+                    <ChevronDown size={14} className="text-[#b4f03a] transition-transform group-open:rotate-180" />
                     {item.question}
                   </span>
                 </summary>
-                <p className="mt-3 pl-6 text-sm leading-relaxed text-[#546864]">{item.answer}</p>
+                <p className="mt-3 pl-6 text-sm leading-relaxed text-white/60">{item.answer}</p>
               </motion.details>
             ))}
           </div>
         </section>
 
-        <footer className="mt-20 border-t border-[#d8e3df] pt-10">
+        {/* ── Footer ── */}
+        <footer className="mt-20 border-t border-white/[0.06] pt-10">
           <div className="grid gap-8 pb-8 sm:grid-cols-2 lg:grid-cols-[1.25fr_0.75fr_0.75fr]">
             <div>
-              <FinloLogo size="sm" />
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-[#596d68]">
+              <FinloLogo size="sm" markClassName="[filter:brightness(0)_invert(1)]" wordmarkClassName="text-white" />
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/60">
                 Financial flow for everyday life. Track installments, manage cash flow, and spend with more confidence.
               </p>
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2b7d74]">Explore</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">Explore</p>
               <div className="mt-3 flex flex-col gap-2 text-sm">
                 {navItems.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="text-[#4d615d] transition-colors hover:text-[#1a4742]"
-                  >
+                  <a key={item.label} href={item.href}
+                    className="text-white/60 transition-colors hover:text-white">
                     {item.label}
                   </a>
                 ))}
@@ -490,27 +569,21 @@ export default function HomePage() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2b7d74]">Account</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">Account</p>
               <div className="mt-3 flex flex-col gap-2 text-sm">
-                <Link href="/register" className="text-[#4d615d] transition-colors hover:text-[#1a4742]">
-                  Create account
-                </Link>
-                <Link href="/login" className="text-[#4d615d] transition-colors hover:text-[#1a4742]">
-                  Login
-                </Link>
-                <Link href="/dashboard" className="text-[#4d615d] transition-colors hover:text-[#1a4742]">
-                  Dashboard preview
-                </Link>
+                <Link href="/register" className="text-white/60 transition-colors hover:text-white">Create account</Link>
+                <Link href="/login" className="text-white/60 transition-colors hover:text-white">Login</Link>
+                <Link href="/dashboard" className="text-white/60 transition-colors hover:text-white">Dashboard preview</Link>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 border-t border-[#e6eeeb] py-5 text-xs text-[#6b807b] sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-2 border-t border-white/[0.05] py-5 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
             <p>© {new Date().getFullYear()} Finlo. All rights reserved.</p>
             <p>Built for practical budgeting and installment planning.</p>
           </div>
         </footer>
-      </main>
+      </div>
     </div>
   );
 }

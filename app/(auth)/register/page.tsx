@@ -16,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { AlertCircle, ArrowRight } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function RegisterPage() {
 
     if (!res.ok) {
       const json = await res.json();
-      setError(json.error || "Registration failed");
+      setError(json.error || "Registration failed. Please try again.");
       return;
     }
 
@@ -45,17 +46,27 @@ export default function RegisterPage() {
 
   return (
     <div>
+      {/* Header */}
       <div className="mb-8">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#287f75]">Register</p>
-        <h1 className="font-heading text-3xl font-semibold text-[#0f2424] mb-1.5">Create your account</h1>
-        <p className="text-[#5d6a89] text-sm">Start tracking your finances with Finlo for free.</p>
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.07] bg-white/[0.04] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#b4f03a]">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#b4f03a]" />
+          Get started
+        </span>
+        <h1 className="mt-4 font-heading text-3xl font-semibold leading-tight text-white">
+          Create your account
+        </h1>
+        <p className="mt-1.5 text-sm text-white/50">
+          Start tracking your finances with Finlo — free, forever.
+        </p>
       </div>
 
-      <div className="rounded-[1.7rem] border border-[#d8e3df] bg-white/90 shadow-[0_18px_55px_rgba(15,36,36,0.11)] p-8 backdrop-blur-sm">
+      {/* Form card */}
+      <div className="rounded-2xl border border-white/[0.07] bg-[#111118] p-7">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             {error && (
-              <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl border border-red-100">
+              <div className="flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                <AlertCircle size={15} className="mt-0.5 shrink-0" />
                 {error}
               </div>
             )}
@@ -65,15 +76,15 @@ export default function RegisterPage() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#37476d] text-sm font-medium">Full name</FormLabel>
+                  <FormLabel className="text-sm font-medium text-white/50">Full name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Juan dela Cruz"
-                      className="rounded-xl border-[#d3e0dc] bg-white h-11 text-[#1a3d39] placeholder:text-[#819690] focus:border-[#3d9187] focus:ring-[#3d9187]/20"
+                      className="h-12 rounded-xl border-white/[0.07] bg-[#0a0a0f] text-white placeholder:text-white/20 focus-visible:border-[#b4f03a] focus-visible:ring-[#b4f03a]/20"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -83,16 +94,16 @@ export default function RegisterPage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#37476d] text-sm font-medium">Email</FormLabel>
+                  <FormLabel className="text-sm font-medium text-white/50">Email address</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder="you@example.com"
-                      className="rounded-xl border-[#d3e0dc] bg-white h-11 text-[#1a3d39] placeholder:text-[#819690] focus:border-[#3d9187] focus:ring-[#3d9187]/20"
+                      className="h-12 rounded-xl border-white/[0.07] bg-[#0a0a0f] text-white placeholder:text-white/20 focus-visible:border-[#b4f03a] focus-visible:ring-[#b4f03a]/20"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -103,16 +114,16 @@ export default function RegisterPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#37476d] text-sm font-medium">Password</FormLabel>
+                    <FormLabel className="text-sm font-medium text-white/50">Password</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         placeholder="Min. 8 chars"
-                        className="rounded-xl border-[#d3e0dc] bg-white h-11 text-[#1a3d39] placeholder:text-[#819690] focus:border-[#3d9187] focus:ring-[#3d9187]/20"
+                        className="h-12 rounded-xl border-white/[0.07] bg-[#0a0a0f] text-white placeholder:text-white/20 focus-visible:border-[#b4f03a] focus-visible:ring-[#b4f03a]/20"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -122,16 +133,16 @@ export default function RegisterPage() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#37476d] text-sm font-medium">Confirm</FormLabel>
+                    <FormLabel className="text-sm font-medium text-white/50">Confirm</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         placeholder="••••••••"
-                        className="rounded-xl border-[#d3e0dc] bg-white h-11 text-[#1a3d39] placeholder:text-[#819690] focus:border-[#3d9187] focus:ring-[#3d9187]/20"
+                        className="h-12 rounded-xl border-white/[0.07] bg-[#0a0a0f] text-white placeholder:text-white/20 focus-visible:border-[#b4f03a] focus-visible:ring-[#b4f03a]/20"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -140,17 +151,23 @@ export default function RegisterPage() {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="w-full h-11 rounded-full bg-[#2f7f76] hover:bg-[#266a63] font-semibold text-sm shadow-[0_10px_28px_rgba(47,127,118,0.3)]"
+              className="mt-2 h-12 w-full rounded-full bg-[#b4f03a] font-bold text-[#0c0c10] shadow-[0_8px_24px_rgba(180,240,58,0.25)] transition-colors hover:bg-[#ccff52] disabled:opacity-60"
             >
-              {form.formState.isSubmitting ? "Creating account..." : "Create free account"}
+              {form.formState.isSubmitting ? (
+                "Creating account..."
+              ) : (
+                <span className="inline-flex items-center gap-2">
+                  Create free account <ArrowRight size={15} />
+                </span>
+              )}
             </Button>
           </form>
         </Form>
       </div>
 
-      <p className="text-center text-sm text-[#6d7b9e] mt-6">
+      <p className="mt-6 text-center text-sm text-white/50">
         Already have an account?{" "}
-        <Link href="/login" className="text-[#2f7f76] hover:underline font-semibold">
+        <Link href="/login" className="font-semibold text-[#b4f03a] hover:text-[#ccff52]">
           Sign in
         </Link>
       </p>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PiggyBank } from "lucide-react";
 import { formatCurrency } from "@/lib/utils/currency";
 import Decimal from "decimal.js";
+import { cn } from "@/lib/utils";
 
 interface BudgetItem {
   categoryId: string;
@@ -28,81 +29,88 @@ export function BudgetSummaryRow({ items }: { items: BudgetItem[] }) {
     : 0;
 
   return (
-    <div className="h-fit bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <div className="flex items-center justify-between gap-3 mb-5">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-[#edf5f2] rounded-xl flex items-center justify-center">
-            <PiggyBank size={16} className="text-[#216f67]" />
-          </div>
-          <h2 className="font-bold text-gray-900 text-base">Budget Overview</h2>
-        </div>
+    <div className="rounded-2xl border border-white/[0.07] bg-[#111118] p-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#b4f03a]/10 text-[#b4f03a]">
+            <PiggyBank size={15} />
+          </div>
+          <h2 className="text-sm font-semibold text-white">Budget Overview</h2>
+        </div>
+        <div className="flex items-center gap-4">
           <div className="text-right">
-            <p className="text-[11px] uppercase tracking-wide text-gray-400">Total Used</p>
-            <p className="text-sm font-bold text-gray-800">{totalPct.toFixed(0)}%</p>
+            <p className="text-[10px] uppercase tracking-wider text-white/30">Total Used</p>
+            <p className="text-sm font-bold text-white">{totalPct.toFixed(0)}%</p>
           </div>
           <Link
             href="/budget"
-            className="text-xs font-semibold text-[#2f7f76] hover:text-[#266a63] transition-colors"
+            className="text-xs font-semibold text-[#b4f03a] transition hover:text-[#ccff52]"
           >
             Manage →
           </Link>
         </div>
       </div>
 
-      <div className="mb-4 rounded-2xl border border-gray-100 bg-gray-50 px-3 py-2.5">
-        <p className="text-xs text-gray-500">Spent vs budget</p>
-        <p className="text-sm font-semibold text-gray-800">
+      <div className="mb-4 rounded-xl border border-white/[0.07] bg-[#0c0c10] px-3 py-2.5">
+        <p className="text-xs text-white/30">Spent vs budget</p>
+        <p className="text-sm font-semibold text-white">
           {formatCurrency(totals.spent.toString())} / {formatCurrency(totals.limit.toString())}
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         {items.map((item) => {
           const pct = new Decimal(item.limitAmount || "0").gt(0)
-            ? new Decimal(item.spent || "0").div(item.limitAmount || "0").times(100).toNumber()
+            ? new Decimal(item.spent || "0")
+                .div(item.limitAmount || "0")
+                .times(100)
+                .toNumber()
             : 0;
           const capped = Math.min(pct, 100);
           const remaining = new Decimal(item.limitAmount || "0").minus(item.spent || "0");
           const isOver = remaining.lt(0);
           const barColor =
-            pct >= 90 ? "#ef4444" : pct >= 70 ? "#f59e0b" : "#2f7f76";
+            pct >= 90 ? "#ef4444" : pct >= 70 ? "#f59e0b" : "#b4f03a";
 
           return (
-            <Link key={item.categoryId} href="/budget" className="block rounded-2xl border border-gray-100 p-3.5 hover:border-[#d1e3df] hover:bg-[#edf5f2]/30 transition-colors">
-              <div className="flex justify-between items-start mb-2">
-                <div className="flex items-center gap-2">
+            <Link
+              key={item.categoryId}
+              href="/budget"
+              className="block rounded-xl border border-white/[0.07] p-3 transition-colors hover:border-[#b4f03a]/30 hover:bg-white/[0.04]"
+            >
+              <div className="mb-1.5 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
                   <div
-                    className="w-2 h-2 rounded-full shrink-0"
+                    className="h-2 w-2 shrink-0 rounded-full"
                     style={{ backgroundColor: item.categoryColor }}
                   />
-                  <span className="text-sm font-semibold text-gray-800">{item.categoryName}</span>
+                  <span className="text-xs font-semibold text-white">
+                    {item.categoryName}
+                  </span>
                 </div>
-                <div className="text-right leading-tight">
-                  <span className="text-xs text-gray-500">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-white/30">
                     {formatCurrency(item.spent)} / {formatCurrency(item.limitAmount)}
+                  </span>
+                  <span
+                    className={cn(
+                      "rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
+                      isOver
+                        ? "bg-[#ef4444]/15 text-[#ef4444]"
+                        : "bg-[#34d399]/15 text-[#34d399]"
+                    )}
+                  >
+                    {isOver
+                      ? `${formatCurrency(remaining.abs().toString())} over`
+                      : `${formatCurrency(remaining.toString())} left`}
                   </span>
                 </div>
               </div>
-              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{ width: `${capped}%`, backgroundColor: barColor }}
                 />
-              </div>
-              <div className="mt-2 flex items-center justify-between">
-                <p className="text-xs text-gray-500">{pct.toFixed(0)}% used</p>
-                <span
-                  className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                    isOver
-                      ? "bg-red-100 text-red-600"
-                      : "bg-emerald-100 text-emerald-700"
-                  }`}
-                >
-                  {isOver
-                    ? `${formatCurrency(remaining.abs().toString())} over`
-                    : `${formatCurrency(remaining.toString())} left`}
-                </span>
               </div>
             </Link>
           );

@@ -1,65 +1,92 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, BarChart3, CreditCard } from "lucide-react";
+import { ArrowLeft, ShieldCheck, BarChart3, CreditCard } from "lucide-react";
 import { RouteTransition } from "@/components/layout/RouteTransition";
 import { FinloLogo } from "@/components/layout/FinloLogo";
 
+const features = [
+  { icon: CreditCard, text: "Track cards, loans, and BNPL in one unified timeline" },
+  { icon: BarChart3, text: "See cash flow and payment risk before it hits you" },
+  { icon: ShieldCheck, text: "Private by default — your data stays encrypted" },
+];
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#f4f2ec] text-[#142929]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_8%,rgba(47,127,118,0.14),transparent_40%),radial-gradient(circle_at_15%_92%,rgba(69,167,157,0.14),transparent_44%)]" />
+    <div className="relative min-h-screen overflow-hidden bg-[#09090b] text-white">
+      {/* Subtle radial glow — matches dashboard */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_75%_10%,rgba(99,102,241,0.07),transparent_55%)]" />
 
-      <div className="relative z-10 flex min-h-screen lg:gap-8 xl:gap-10">
-        <div className="hidden lg:flex lg:w-[48%] flex-col justify-between p-12">
-          <Link href="/" className="flex items-center gap-2.5 w-fit">
-            <FinloLogo size="lg" />
+      <div className="relative z-10 flex min-h-screen">
+        {/* ── Left panel: branding ── */}
+        <div className="hidden lg:flex lg:w-[52%] shrink-0 flex-col justify-between border-r border-white/[0.07] p-12 xl:p-16">
+          <Link href="/" className="flex w-fit items-center gap-2.5">
+            <FinloLogo
+              size="lg"
+              markClassName="[filter:brightness(0)_invert(1)]"
+              wordmarkClassName="text-white"
+            />
           </Link>
 
-          <div className="max-w-lg rounded-[2rem] border border-[#d8e3df] bg-white/80 p-10 backdrop-blur-md shadow-[0_24px_70px_rgba(15,36,36,0.12)] lg:ml-auto">
-            <h2 className="font-heading text-4xl leading-tight text-[#0f2424]">
+          <div className="max-w-md">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[#b4f03a]">
+              Your financial command center
+            </p>
+            <h2 className="font-heading text-[3.2rem] leading-[1.0] text-white">
               Budget better,
               <br />
-              pay smarter.
+              pay{" "}
+              <span className="text-[#b4f03a]">smarter</span>.
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-[#596d68]">
-              Stay on top of installments, avoid due-date pileups, and get a daily safe-to-spend signal based on your actual commitments.
+            <p className="mt-5 text-sm leading-relaxed text-white/50">
+              Stay on top of every installment, avoid due-date pileups, and get a daily
+              safe-to-spend signal based on your actual commitments.
             </p>
 
-            <div className="mt-8 space-y-4">
-              {[
-                { icon: CreditCard, text: "Track cards, loans, and BNPL in one timeline" },
-                { icon: BarChart3, text: "See cash flow and payment risk before it happens" },
-                { icon: ShieldCheck, text: "Private by default with encrypted financial records" },
-              ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-start gap-3 rounded-xl border border-[#e1e7f9] bg-white/85 p-3">
-                  <div className="mt-0.5 h-8 w-8 rounded-lg bg-[#e6f1ee] text-[#287f75] flex items-center justify-center shrink-0">
-                    <Icon size={15} />
+            <div className="mt-10 space-y-3">
+              {features.map(({ icon: Icon, text }) => (
+                <div
+                  key={text}
+                  className="flex items-start gap-4 rounded-2xl border border-white/[0.07] bg-[#111118] p-4"
+                >
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#b4f03a]/10 text-[#b4f03a]">
+                    <Icon size={16} />
                   </div>
-                  <span className="text-sm text-[#324367] leading-relaxed">{text}</span>
+                  <span className="text-sm leading-relaxed text-[#b0c8b0]">{text}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <p className="text-xs text-[#65739a]">© {new Date().getFullYear()} Finlo. All rights reserved.</p>
+          <p className="text-xs text-white/30">© {new Date().getFullYear()} Finlo. All rights reserved.</p>
         </div>
 
-        <div className="flex-1 flex flex-col lg:pr-10">
-          <div className="flex items-center justify-end px-6 py-5 sm:px-8">
+        {/* ── Right panel: form ── */}
+        <div className="flex flex-1 flex-col min-w-0">
+          {/* Top bar */}
+          <div className="flex items-center justify-between border-b border-white/[0.07] px-6 py-4 sm:px-10">
+            {/* Mobile logo */}
             <Link href="/" className="flex items-center gap-2 lg:hidden">
-              <FinloLogo size="sm" />
+              <FinloLogo
+                size="sm"
+                markClassName="[filter:brightness(0)_invert(1)]"
+                wordmarkClassName="text-white"
+              />
+            </Link>
+            <div className="hidden lg:block" />
+
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-white/50 transition-colors hover:text-white"
+            >
+              <ArrowLeft size={12} />
+              Back to home
             </Link>
           </div>
 
-          <div className="flex-1 flex flex-col items-center justify-center px-6 pb-14 sm:px-8 lg:items-start lg:pl-2">
-            <div className="w-full max-w-md">
+          {/* Centered form */}
+          <div className="flex flex-1 flex-col items-center justify-center px-6 py-12 sm:px-10">
+            <div className="w-full max-w-[420px]">
               <RouteTransition>{children}</RouteTransition>
             </div>
-            <Link
-              href="/"
-              className="mt-5 inline-flex items-center gap-1 text-xs font-medium text-[#60746f] transition-colors hover:text-[#1c4f49]"
-            >
-              Home <ArrowRight size={12} />
-            </Link>
           </div>
         </div>
       </div>

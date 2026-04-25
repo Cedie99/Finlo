@@ -43,73 +43,80 @@ export function UpcomingPayments({
     })
     .sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime());
 
+  const kindDot: Record<string, string> = {
+    payday: "#34d399",
+    installment: "#ef4444",
+    recurring: "#f59e0b",
+  };
+
   return (
-    <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-      <div className="flex items-center gap-2.5 mb-5">
-        <div className="w-8 h-8 bg-[#edf5f2] rounded-xl flex items-center justify-center">
-          <Calendar size={16} className="text-[#2f7f76]" />
+    <div className="rounded-2xl border border-white/[0.07] bg-[#111118] p-5">
+      <div className="mb-5 flex items-center gap-3">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#b4f03a]/10 text-[#b4f03a]">
+          <Calendar size={16} />
         </div>
-        <h2 className="font-bold text-gray-900 text-base">Upcoming Events</h2>
+        <h2 className="font-semibold text-white">Upcoming Events</h2>
       </div>
 
       {events.length === 0 ? (
-        <div className="text-center py-8">
-          <p className="text-sm text-gray-400">No events this month</p>
+        <div className="py-10 text-center">
+          <p className="text-sm text-white/30">No events this month</p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-1">
           {events.map((e, idx) => {
             const daysUntil = differenceInDays(parseISO(e.date), new Date());
-            const isUrgent = daysUntil <= 3;
-            const isWarning = daysUntil <= 7 && !isUrgent;
-            const dueTxt = daysUntil === 0 ? "Today!" : daysUntil < 0 ? "Overdue" : `${daysUntil}d left`;
+            const isUrgent = daysUntil >= 0 && daysUntil <= 3;
+            const isWarning = daysUntil > 3 && daysUntil <= 7;
+            const dueTxt =
+              daysUntil === 0
+                ? "Today!"
+                : daysUntil < 0
+                ? "Overdue"
+                : `${daysUntil}d left`;
             const href = e.kind === "installment" ? "/installments" : "/transactions";
 
             return (
               <Link key={`${e.kind}-${e.date}-${idx}`} href={href}>
-                <div className="flex items-center justify-between px-4 py-3 rounded-2xl hover:bg-gray-50 transition-colors group">
+                <div className="flex items-center justify-between rounded-xl px-3 py-3 transition-colors hover:bg-white/[0.05]">
                   <div className="flex items-center gap-3">
                     {e.kind === "recurring" ? (
-                      <div
-                        className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                        style={{ backgroundColor: "#2f7f7620", color: "#2f7f76" }}
-                      >
-                        <RefreshCw size={11} />
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#f59e0b]/10 text-[#f59e0b]">
+                        <RefreshCw size={13} />
                       </div>
                     ) : (
                       <div
-                        className="w-2.5 h-2.5 rounded-full shrink-0"
-                        style={{
-                          backgroundColor:
-                            e.kind === "payday"
-                              ? "#10b981"
-                              : e.kind === "installment"
-                              ? "#ef4444"
-                              : "#f59e0b",
-                        }}
+                        className="h-2.5 w-2.5 shrink-0 rounded-full"
+                        style={{ background: kindDot[e.kind] }}
                       />
                     )}
                     <div>
-                      <p className="text-sm font-semibold text-gray-800 group-hover:text-[#2f7f76] transition-colors">
-                        {e.label}
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        {formatDate(e.date)}
-                        <span> · {e.kind === "payday" ? "Payday" : e.kind === "installment" ? "Installment" : "Recurring"}</span>
+                      <p className="text-sm font-semibold text-white">{e.label}</p>
+                      <p className="mt-0.5 text-xs text-white/30">
+                        {formatDate(e.date)} ·{" "}
+                        {e.kind === "payday"
+                          ? "Payday"
+                          : e.kind === "installment"
+                          ? "Installment"
+                          : "Recurring"}
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-gray-800">
+                  <div className="shrink-0 text-right">
+                    <p className={cn("text-sm font-bold", e.kind === "payday" ? "text-[#34d399]" : "text-white")}>
                       {e.kind === "payday" ? "+" : "-"}
                       {formatCurrency(e.amount)}
                     </p>
-                    <span className={cn(
-                      "text-xs font-semibold px-2 py-0.5 rounded-full",
-                      isUrgent ? "bg-red-100 text-red-600" :
-                      isWarning ? "bg-amber-100 text-amber-600" :
-                      "bg-gray-100 text-gray-500"
-                    )}>
+                    <span
+                      className={cn(
+                        "mt-0.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                        isUrgent
+                          ? "bg-[#ef4444]/15 text-[#ef4444]"
+                          : isWarning
+                          ? "bg-[#f59e0b]/15 text-[#f59e0b]"
+                          : "bg-white/[0.07] text-white/50"
+                      )}
+                    >
                       {dueTxt}
                     </span>
                   </div>

@@ -30,7 +30,7 @@ export default function CreditCardsPage() {
         action={
           <Button
             onClick={() => setOpen(true)}
-            className="rounded-full bg-[#2f7f76] hover:bg-[#266a63] shadow-[0_10px_24px_rgba(47,127,118,0.2)]"
+            className="rounded-full bg-[#b4f03a] text-[#0c0c10] hover:bg-[#ccff52] shadow-[0_8px_24px_rgba(180,240,58,0.25)]"
           >
             <Plus size={15} className="mr-1" /> Add Card
           </Button>
@@ -45,7 +45,7 @@ export default function CreditCardsPage() {
           title="No credit cards yet"
           description="Add your first credit card to track installment plans"
           action={
-            <Button onClick={() => setOpen(true)} className="rounded-full bg-[#2f7f76] hover:bg-[#266a63]">
+            <Button onClick={() => setOpen(true)} className="rounded-full bg-[#b4f03a] text-[#0c0c10] hover:bg-[#ccff52]">
               Add Card
             </Button>
           }
@@ -55,9 +55,9 @@ export default function CreditCardsPage() {
       )}
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="rounded-3xl">
+        <DialogContent className="rounded-2xl border-white/[0.07] bg-[#111118] text-white">
           <DialogHeader>
-            <DialogTitle className="font-bold">Add Credit Card</DialogTitle>
+            <DialogTitle className="font-bold text-white">Add Credit Card</DialogTitle>
           </DialogHeader>
           <CreditCardForm onSubmit={handleCreate} isLoading={createCard.isPending} />
         </DialogContent>

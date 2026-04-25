@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { Heart, ChevronDown, ChevronUp, Info } from "lucide-react";
 import { useHealthScore } from "@/lib/hooks/useHealthScore";
+import { cn } from "@/lib/utils";
 
 const gradeConfig = {
-  A: { color: "text-emerald-600", bg: "bg-emerald-50", ring: "ring-emerald-300", bar: "bg-emerald-500" },
-  B: { color: "text-[#2f7f76]", bg: "bg-[#edf5f2]", ring: "ring-[#9bc7c0]", bar: "bg-[#edf5f2]0" },
-  C: { color: "text-amber-600", bg: "bg-amber-50", ring: "ring-amber-300", bar: "bg-amber-500" },
-  D: { color: "text-orange-600", bg: "bg-orange-50", ring: "ring-orange-300", bar: "bg-orange-500" },
-  F: { color: "text-red-600", bg: "bg-red-50", ring: "ring-red-300", bar: "bg-red-500" },
+  A: { color: "text-[#34d399]", ring: "border-[#34d399]/40", bg: "bg-[#34d399]/10", bar: "bg-[#34d399]", badge: "bg-[#34d399]/15 text-[#34d399]" },
+  B: { color: "text-[#b4f03a]", ring: "border-[#b4f03a]/40", bg: "bg-[#b4f03a]/10", bar: "bg-[#b4f03a]", badge: "bg-[#b4f03a]/15 text-[#b4f03a]" },
+  C: { color: "text-[#f59e0b]", ring: "border-[#f59e0b]/40", bg: "bg-[#f59e0b]/10", bar: "bg-[#f59e0b]", badge: "bg-[#f59e0b]/15 text-[#f59e0b]" },
+  D: { color: "text-[#f97316]", ring: "border-[#f97316]/40", bg: "bg-[#f97316]/10", bar: "bg-[#f97316]", badge: "bg-[#f97316]/15 text-[#f97316]" },
+  F: { color: "text-[#ef4444]", ring: "border-[#ef4444]/40", bg: "bg-[#ef4444]/10", bar: "bg-[#ef4444]", badge: "bg-[#ef4444]/15 text-[#ef4444]" },
 };
 
 const breakdownLabels = {
@@ -25,45 +26,48 @@ export function FinancialHealthScore() {
 
   if (!data) return null;
 
-  const config = gradeConfig[data.grade];
+  const cfg = gradeConfig[data.grade];
 
   return (
-    <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-          <Heart size={15} className="text-rose-500" />
-          Financial Health Score
+    <div className="rounded-2xl border border-white/[0.07] bg-[#111118] p-5">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400">
+            <Heart size={16} />
+          </div>
+          <span className="text-sm font-semibold text-white">Financial Health Score</span>
         </div>
         <button
           onClick={() => setExpanded((s) => !s)}
-          className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 hover:bg-gray-200 transition"
+          className="inline-flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-white/50 transition hover:border-[#b4f03a]/30 hover:text-white"
         >
           {expanded ? "Hide" : "Details"}
           {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
         </button>
       </div>
 
-      {/* Score ring + number */}
-      <div className="flex items-center gap-5">
+      {/* Score ring + bar */}
+      <div className="mt-4 flex items-center gap-4">
         <div
-          className={`relative flex h-20 w-20 shrink-0 items-center justify-center rounded-full ring-4 ${config.ring} ${config.bg}`}
+          className={cn(
+            "relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4",
+            cfg.ring,
+            cfg.bg
+          )}
         >
           <div className="text-center">
-            <p className={`text-2xl font-black ${config.color}`}>{data.score}</p>
-            <p className={`text-xs font-bold ${config.color}`}>{data.grade}</p>
+            <p className={cn("text-xl font-black leading-none", cfg.color)}>{data.score}</p>
+            <p className={cn("text-xs font-bold", cfg.color)}>{data.grade}</p>
           </div>
         </div>
-
         <div className="flex-1">
-          {/* Score bar */}
-          <div className="h-2 rounded-full bg-gray-100 mb-3">
+          <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
             <div
-              className={`h-2 rounded-full ${config.bar} transition-all duration-700`}
+              className={cn("h-full rounded-full transition-all duration-700", cfg.bar)}
               style={{ width: `${data.score}%` }}
             />
           </div>
-          {/* Top insight */}
-          <p className="text-xs text-gray-500 leading-relaxed">{data.insights[0]}</p>
+          <p className="text-xs leading-relaxed text-white/50">{data.insights[0]}</p>
         </div>
       </div>
 
@@ -71,37 +75,30 @@ export function FinancialHealthScore() {
       {expanded && (
         <div className="mt-4 space-y-3">
           <div className="grid grid-cols-2 gap-2">
-            {(
-              Object.entries(data.breakdown) as [
-                keyof typeof breakdownLabels,
-                number,
-              ][]
-            ).map(([key, value]) => (
-              <div
-                key={key}
-                className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2"
-              >
-                <p className="text-xs text-gray-400 mb-1">{breakdownLabels[key]}</p>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 h-1.5 rounded-full bg-gray-200">
-                    <div
-                      className={`h-1.5 rounded-full ${config.bar}`}
-                      style={{ width: `${(value / 25) * 100}%` }}
-                    />
+            {(Object.entries(data.breakdown) as [keyof typeof breakdownLabels, number][]).map(
+              ([key, value]) => (
+                <div key={key} className="rounded-xl border border-white/[0.07] bg-[#0c0c10] px-3 py-2.5">
+                  <p className="mb-1.5 text-[10px] text-white/30">{breakdownLabels[key]}</p>
+                  <div className="flex items-center gap-2">
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.07]">
+                      <div
+                        className={cn("h-full rounded-full", cfg.bar)}
+                        style={{ width: `${(value / 25) * 100}%` }}
+                      />
+                    </div>
+                    <span className={cn("text-xs font-bold", cfg.color)}>{value}/25</span>
                   </div>
-                  <span className="text-xs font-bold text-gray-700">{value}/25</span>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
 
-          {/* All insights */}
           {data.insights.length > 1 && (
-            <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 space-y-2">
+            <div className="rounded-xl border border-white/[0.07] bg-[#0c0c10] p-3 space-y-2">
               {data.insights.slice(1).map((insight, i) => (
                 <div key={i} className="flex items-start gap-2">
-                  <Info size={12} className="text-[#66a99f] shrink-0 mt-0.5" />
-                  <p className="text-xs text-gray-600">{insight}</p>
+                  <Info size={12} className="mt-0.5 shrink-0 text-[#b4f03a]" />
+                  <p className="text-xs text-white/50">{insight}</p>
                 </div>
               ))}
             </div>

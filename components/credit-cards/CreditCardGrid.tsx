@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils/currency";
 import type { CreditCard } from "@/lib/hooks/useCreditCards";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 
 function CreditCardDisplay({ card }: { card: CreditCard }) {
   const utilization =
@@ -24,7 +25,10 @@ function CreditCardDisplay({ card }: { card: CreditCard }) {
           className="absolute bottom-0 left-0 w-24 h-24 rounded-full opacity-10"
           style={{ background: "white", transform: "translate(-30%, 30%)" }}
         />
-        <div className="text-xs opacity-75 mb-3">{card.bankName}</div>
+        <div className="mb-3 flex items-center gap-2">
+          <BrandLogo name={`${card.bankName} ${card.cardName}`} size={20} className="bg-white/20 text-white/90" />
+          <div className="text-xs opacity-75">{card.bankName}</div>
+        </div>
         <div className="text-lg font-semibold">{card.cardName}</div>
         {card.lastFourDigits && (
           <div className="text-sm opacity-75 mt-1 font-mono">

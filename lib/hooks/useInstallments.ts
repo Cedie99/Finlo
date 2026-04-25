@@ -125,7 +125,16 @@ export function useDeleteInstallment() {
   return useMutation({
     mutationFn: async (id: string) => {
       const res = await fetch(`/api/installments/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed to delete");
+      if (!res.ok) {
+        let message = "Failed to delete";
+        try {
+          const err = (await res.json()) as { error?: string };
+          if (err?.error) message = err.error;
+        } catch {
+          // ignore malformed json; keep fallback message
+        }
+        throw new Error(message);
+      }
       return res.json();
     },
     onSuccess: () => {

@@ -1,28 +1,47 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Topbar } from "@/components/layout/Topbar";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { RouteTransition } from "@/components/layout/RouteTransition";
+import { FinanceCalculator } from "@/components/shared/FinanceCalculator";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const mainRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!mainRef.current || !contentRef.current) return;
 
+    const hasNativeScrollableAncestor = (node: EventTarget | null): boolean => {
+      let current = node instanceof HTMLElement ? node : null;
+
+      while (current && current !== mainRef.current) {
+        const style = window.getComputedStyle(current);
+        const canScrollY =
+          (style.overflowY === "auto" || style.overflowY === "scroll") &&
+          current.scrollHeight > current.clientHeight;
+        const canScrollX =
+          (style.overflowX === "auto" || style.overflowX === "scroll") &&
+          current.scrollWidth > current.clientWidth;
+
+        if (canScrollX || canScrollY) return true;
+        current = current.parentElement;
+      }
+
+      return false;
+    };
+
     const lenis = new Lenis({
       wrapper: mainRef.current,
       content: contentRef.current,
       eventsTarget: mainRef.current,
+      prevent: (node) => hasNativeScrollableAncestor(node),
       autoRaf: false,
       smoothWheel: true,
       wheelMultiplier: 0.95,
@@ -45,20 +64,20 @@ export default function DashboardLayout({
   }, []);
 
   return (
-    <div className="relative flex h-screen overflow-hidden bg-[#f4f2ec] text-[#142929]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(47,127,118,0.12),transparent_40%),radial-gradient(circle_at_8%_90%,rgba(69,167,157,0.11),transparent_44%)]" />
-      <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
-      <div className="relative z-10 flex flex-col flex-1 min-w-0">
-        <Topbar onMenuClick={() => setSidebarOpen(true)} />
-        <main ref={mainRef} className="flex-1 overflow-auto p-4 pb-24 lg:pb-5">
-          <div ref={contentRef} className="max-w-6xl mx-auto">
+    <div className="relative flex h-screen overflow-hidden bg-[#09090b] text-white">
+      {/* Subtle radial glow */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_75%_10%,rgba(99,102,241,0.07),transparent_55%)]" />
+
+      <Sidebar />
+
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col">
+        <main ref={mainRef} className="flex-1 overflow-auto pb-24 lg:pb-0">
+          <div ref={contentRef} className="w-full px-5 py-6 sm:px-8">
             <RouteTransition>{children}</RouteTransition>
           </div>
         </main>
       </div>
+
       <MobileNav />
     </div>
   );
