@@ -252,7 +252,7 @@ function CapabilityCard({
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
             <ul className="space-y-2">
               {dropdown.map((item) => (
-                <li className="flex items-start gap-2 text-sm leading-relaxed text-white/55">
+                <li key={item} className="flex items-start gap-2 text-sm leading-relaxed text-white/55">
                   <span className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full bg-indigo-400" />
                   <span>{item}</span>
                 </li>

@@ -14,6 +14,7 @@ export interface InstallmentPlan {
   startDate: string;
   nextDueDate: string | null;
   interestRate: string | null;
+  processingFee: string | null;
   lenderName: string | null;
   notes: string | null;
   creditCard?: { bankName: string; cardName: string; color: string } | null;

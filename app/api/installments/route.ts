@@ -42,6 +42,7 @@ export async function POST(request: Request) {
       totalMonths,
       creditCardId,
       interestRate,
+      processingFee,
       ...rest
     } = parsed.data;
 
@@ -49,33 +50,35 @@ export async function POST(request: Request) {
     const schedule = generatePaymentSchedule(start, totalAmount, monthlyAmount, totalMonths);
     const nextDueDate = schedule[0]?.dueDate ?? null;
 
-    const plan = await prisma.$transaction(async (tx: typeof prisma) => {
-      const created = await tx.installmentPlan.create({
-        data: {
-          ...rest,
-          userId: session.user!.id!,
-          creditCardId: creditCardId || null,
-          totalAmount: totalAmount.toString(),
-          monthlyAmount: monthlyAmount.toString(),
-          totalMonths,
-          startDate: start,
-          nextDueDate,
-          interestRate: interestRate != null ? interestRate.toString() : null,
-          payments: {
-            create: schedule.map((s) => ({
-              amount: s.amount,
-              dueDate: s.dueDate,
-              isPaid: false,
-            })),
-          },
+    const plan = await prisma.installmentPlan.create({
+      data: {
+        ...rest,
+        userId: session.user!.id!,
+        creditCardId: creditCardId || null,
+        totalAmount: totalAmount.toString(),
+        monthlyAmount: monthlyAmount.toString(),
+        totalMonths,
+        startDate: start,
+        nextDueDate,
+        interestRate: interestRate != null ? interestRate.toString() : null,
+        processingFee: processingFee != null ? processingFee.toString() : null,
+        payments: {
+          create: schedule.map((s) => ({
+            amount: s.amount,
+            dueDate: s.dueDate,
+            isPaid: false,
+          })),
         },
-      });
-      return created;
+      },
     });
 
     return NextResponse.json(plan, { status: 201 });
   } catch (e) {
-    console.error(e);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    const message = e instanceof Error ? e.message : String(e);
+    console.error("[POST /api/installments]", e);
+    return NextResponse.json(
+      { error: process.env.NODE_ENV === "development" ? message : "Internal server error" },
+      { status: 500 }
+    );
   }
 }

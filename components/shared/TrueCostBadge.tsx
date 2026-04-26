@@ -12,10 +12,12 @@ import {
 interface TrueCostBadgeProps {
   originalAmount: number;
   totalPayments: number;
+  processingFee?: number | null;
 }
 
-export function TrueCostBadge({ originalAmount, totalPayments }: TrueCostBadgeProps) {
-  const extra = totalPayments - originalAmount;
+export function TrueCostBadge({ originalAmount, totalPayments, processingFee }: TrueCostBadgeProps) {
+  const fee = processingFee ?? 0;
+  const extra = totalPayments + fee - originalAmount;
   if (extra <= 0.01) return null;
 
   const pct = ((extra / originalAmount) * 100).toFixed(1);
@@ -41,6 +43,12 @@ export function TrueCostBadge({ originalAmount, totalPayments }: TrueCostBadgePr
               <span>Total payments</span>
               <span className="font-medium text-white">{formatCurrency(totalPayments)}</span>
             </div>
+            {fee > 0 && (
+              <div className="flex justify-between gap-4">
+                <span>Processing fee</span>
+                <span className="font-medium text-amber-300">+{formatCurrency(fee)}</span>
+              </div>
+            )}
             <div className="flex justify-between gap-4 border-t border-white/[0.07] pt-1">
               <span>Extra paid</span>
               <span className="font-bold text-amber-300">+{formatCurrency(extra)}</span>

@@ -10,6 +10,7 @@ interface TrueCostBreakdownProps {
   totalMonths: number;
   paidMonths?: number;
   interestRate?: number | null;
+  processingFee?: number | null;
 }
 
 export function TrueCostBreakdown({
@@ -18,11 +19,13 @@ export function TrueCostBreakdown({
   totalMonths,
   paidMonths = 0,
   interestRate,
+  processingFee,
 }: TrueCostBreakdownProps) {
   const totalPayments = monthlyAmount * totalMonths;
   const totalPaid = monthlyAmount * paidMonths;
   const remaining = totalPayments - totalPaid;
-  const extra = totalPayments - originalAmount;
+  const fee = processingFee ?? 0;
+  const extra = totalPayments + fee - originalAmount;
   const extraPct = originalAmount > 0 ? (extra / originalAmount) * 100 : 0;
   const isFree = extra <= 0.01;
 
@@ -50,6 +53,13 @@ export function TrueCostBreakdown({
           </span>
           <span className="font-bold text-white">{formatCurrency(totalPayments)}</span>
         </div>
+
+        {fee > 0 && (
+          <div className="flex items-center justify-between rounded-xl bg-amber-500/5 border border-amber-500/20 px-4 py-3">
+            <span className="text-sm text-amber-300">Processing Fee</span>
+            <span className="font-bold text-amber-300">+{formatCurrency(fee)}</span>
+          </div>
+        )}
 
         {paidMonths > 0 && (
           <div className="flex items-center justify-between rounded-xl bg-emerald-500/5 border border-emerald-500/20 px-4 py-3">

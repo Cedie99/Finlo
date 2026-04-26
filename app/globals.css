@@ -183,7 +183,36 @@ html.lenis body {
   }
 
   .dashboard-input {
-    @apply rounded-xl border-white/[0.07] bg-[#0a0a0f] text-white placeholder:text-white/25 focus-visible:border-[#b4f03a] focus-visible:ring-[#b4f03a]/20;
+    @apply rounded-xl border-white/[0.07] bg-[#0a0a0f] text-white placeholder:text-white/25;
+  }
+
+  .dashboard-input:focus,
+  .dashboard-input:focus-visible {
+    outline: none;
+    border-color: #b4f03a !important;
+    box-shadow: 0 0 0 3px rgba(180, 240, 58, 0.15) !important;
+  }
+
+  /* Style the date picker calendar icon */
+  .dashboard-input::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(0.6);
+    cursor: pointer;
+    opacity: 0.5;
+  }
+
+  .dashboard-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+    filter: invert(85%) sepia(60%) saturate(400%) hue-rotate(40deg);
+  }
+
+  /* Hide number input spinners globally */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 
   .dashboard-accent-btn {

@@ -75,7 +75,7 @@ export default function MyDebtPage() {
               onClick={() => setCardOpen(true)}
               size="sm"
               variant="outline"
-              className="rounded-full border-white/[0.07] bg-[#111118] text-white hover:bg-white/[0.05]"
+              className="rounded-full border-[#b4f03a]/20 bg-[#111118] text-white hover:bg-[#b4f03a]/10 hover:border-[#b4f03a]/40 hover:text-[#b4f03a] transition-colors"
             >
               <CreditCard size={14} className="mr-1" /> Add Card
             </Button>
@@ -167,6 +167,7 @@ export default function MyDebtPage() {
                           <TrueCostBadge
                             originalAmount={Number(plan.totalAmount)}
                             totalPayments={totalCost}
+                            processingFee={plan.processingFee != null ? Number(plan.processingFee) : null}
                           />
                         </div>
                         {plan.creditCard && (
@@ -233,7 +234,7 @@ export default function MyDebtPage() {
 
       {/* Dialogs */}
       <Dialog open={installmentOpen} onOpenChange={setInstallmentOpen}>
-        <DialogContent className="max-w-lg rounded-2xl border-white/[0.07] bg-[#111118] text-white">
+        <DialogContent className="max-w-lg rounded-3xl border-white/[0.07] bg-[#111118] text-white max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold text-white">
               New Installment Plan

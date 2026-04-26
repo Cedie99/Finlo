@@ -3,93 +3,49 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
+// Google Favicon Service is the most reliable free source.
+// Format: https://www.google.com/s2/favicons?domain=DOMAIN&sz=64
+// Fallback: DuckDuckGo favicon proxy
+function g(domain: string): string[] {
+  return [
+    `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+  ];
+}
+
 const BRAND_LOGO_SOURCES: Array<{ keywords: string[]; sources: string[] }> = [
-  {
-    keywords: ["bpi", "bank of the philippine islands", "bpi bank"],
-    sources: [
-      "https://logo.clearbit.com/bpi.com.ph",
-      "https://logo.clearbit.com/www.bpi.com.ph",
-      "https://icons.duckduckgo.com/ip3/bpi.com.ph.ico",
-    ],
-  },
-  {
-    keywords: ["bdo", "banco de oro", "bdo bank", "bdounibank"],
-    sources: [
-      "https://logo.clearbit.com/bdo.com.ph",
-      "https://logo.clearbit.com/www.bdo.com.ph",
-      "https://icons.duckduckgo.com/ip3/bdo.com.ph.ico",
-    ],
-  },
-  {
-    keywords: ["metrobank", "metropolitan bank", "metro bank"],
-    sources: [
-      "https://logo.clearbit.com/metrobank.com.ph",
-      "https://icons.duckduckgo.com/ip3/metrobank.com.ph.ico",
-    ],
-  },
-  {
-    keywords: ["rcbc", "rizal commercial banking"],
-    sources: [
-      "https://logo.clearbit.com/rcbc.com",
-      "https://icons.duckduckgo.com/ip3/rcbc.com.ico",
-    ],
-  },
-  {
-    keywords: ["unionbank", "union bank", "ubp"],
-    sources: [
-      "https://logo.clearbit.com/unionbankph.com",
-      "https://icons.duckduckgo.com/ip3/unionbankph.com.ico",
-    ],
-  },
-  {
-    keywords: ["security bank", "securitybank"],
-    sources: [
-      "https://logo.clearbit.com/securitybank.com",
-      "https://icons.duckduckgo.com/ip3/securitybank.com.ico",
-    ],
-  },
-  {
-    keywords: ["atome"],
-    sources: [
-      "https://logo.clearbit.com/atome.ph",
-      "https://icons.duckduckgo.com/ip3/atome.ph.ico",
-    ],
-  },
-  {
-    keywords: ["billease", "bill ease"],
-    sources: [
-      "https://logo.clearbit.com/billease.ph",
-      "https://icons.duckduckgo.com/ip3/billease.ph.ico",
-    ],
-  },
-  {
-    keywords: ["spaylater", "spay", "shopee"],
-    sources: [
-      "https://logo.clearbit.com/shopee.ph",
-      "https://icons.duckduckgo.com/ip3/shopee.ph.ico",
-    ],
-  },
-  {
-    keywords: ["home credit"],
-    sources: [
-      "https://logo.clearbit.com/homecredit.ph",
-      "https://icons.duckduckgo.com/ip3/homecredit.ph.ico",
-    ],
-  },
-  {
-    keywords: ["maya"],
-    sources: [
-      "https://logo.clearbit.com/maya.ph",
-      "https://icons.duckduckgo.com/ip3/maya.ph.ico",
-    ],
-  },
-  {
-    keywords: ["gcash", "g cash"],
-    sources: [
-      "https://logo.clearbit.com/gcash.com",
-      "https://icons.duckduckgo.com/ip3/gcash.com.ico",
-    ],
-  },
+  // ── Credit Cards ─────────────────────────────────────────────────────────
+  { keywords: ["bpi", "bank of the philippine islands"], sources: g("bpi.com.ph") },
+  { keywords: ["bdo", "banco de oro", "bdounibank"],     sources: g("bdo.com.ph") },
+  { keywords: ["metrobank", "metropolitan bank"],         sources: g("metrobank.com.ph") },
+  { keywords: ["rcbc", "rizal commercial banking"],       sources: g("rcbc.com") },
+  { keywords: ["unionbank", "union bank", "ubp"],         sources: g("unionbankph.com") },
+  { keywords: ["security bank", "securitybank"],          sources: g("securitybank.com") },
+  { keywords: ["eastwest", "east west bank"],             sources: g("eastwestbanker.com") },
+  { keywords: ["pnb", "philippine national bank"],        sources: g("pnb.com.ph") },
+  { keywords: ["chinabank", "china bank", "cbc"],         sources: g("chinabank.ph") },
+
+  // ── BNPL ─────────────────────────────────────────────────────────────────
+  { keywords: ["atome"],                sources: g("atome.ph") },
+  { keywords: ["billease", "bill ease"], sources: g("billease.ph") },
+  { keywords: ["akulaku"],              sources: g("akulaku.com") },
+  { keywords: ["tendopay", "tendo pay"], sources: g("tendopay.ph") },
+  { keywords: ["cashalo"],              sources: g("cashalo.com") },
+  { keywords: ["tala"],                 sources: g("tala.co") },
+  { keywords: ["tonik"],                sources: g("tonikbank.com") },
+
+  // ── Loans ────────────────────────────────────────────────────────────────
+  { keywords: ["sss", "social security system"],      sources: g("sss.gov.ph") },
+  { keywords: ["pag-ibig", "pagibig", "hdmf"],        sources: g("pagibigfund.gov.ph") },
+  { keywords: ["home credit"],                        sources: g("homecredit.ph") },
+  { keywords: ["juanhand", "juan hand"],              sources: g("juanhand.com") },
+  { keywords: ["gcash", "g cash", "gloan"],           sources: g("gcash.com") },
+  { keywords: ["robinsons bank", "robinson bank"],    sources: g("robinsonsbank.com.ph") },
+  { keywords: ["cimb"],                               sources: g("cimbbank.com.ph") },
+
+  // ── Others ───────────────────────────────────────────────────────────────
+  { keywords: ["maya"],                sources: g("maya.ph") },
+  { keywords: ["spaylater", "shopee"], sources: g("shopee.ph") },
 ];
 
 function normalizeBrandText(value: string): string {
@@ -98,11 +54,9 @@ function normalizeBrandText(value: string): string {
 
 function resolveBrandLogos(name: string): string[] {
   const normalized = normalizeBrandText(name);
-
   const match = BRAND_LOGO_SOURCES.find((item) =>
     item.keywords.some((kw) => normalized.includes(normalizeBrandText(kw)))
   );
-
   return match?.sources ?? [];
 }
 
@@ -112,7 +66,6 @@ function getInitials(name: string): string {
     .filter(Boolean)
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() ?? "");
-
   return parts.join("") || "?";
 }
 

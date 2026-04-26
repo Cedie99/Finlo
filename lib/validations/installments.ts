@@ -10,6 +10,7 @@ export const installmentSchema = z.object({
   totalMonths: z.number().int().min(1).max(360),
   startDate: z.string().min(1, "Start date is required"),
   interestRate: z.number().min(0).max(100).optional().nullable(),
+  processingFee: z.number().min(0).optional().nullable(),
   lenderName: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
 });
